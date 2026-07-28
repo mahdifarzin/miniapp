@@ -2,94 +2,333 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تست مینی آپ آپامد</title>
-    <!-- ۱. کتابخانه رسمی تلگرام -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Apamed Mini App</title>
+    <!-- ۱. اسکریپت رسمی تلگرام -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
+        :root {
+            /* استفاده از متغیرهای خود تلگرام برای هماهنگی با تم روشن و تاریک */
+            --bg-color: var(--tg-theme-bg-color, #f4f5f7);
+            --secondary-bg: var(--tg-theme-secondary-bg-color, #ffffff);
+            --text-color: var(--tg-theme-text-color, #1c1c1e);
+            --hint-color: var(--tg-theme-hint-color, #8e8e93);
+            --accent-color: var(--tg-theme-button-color, #2abee8);
+            --accent-text: var(--tg-theme-button-text-color, #ffffff);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         body {
-            font-family: Tahoma, sans-serif;
-            text-align: center;
-            padding: 20px;
-            direction: rtl;
-            background-color: var(--tg-theme-bg-color, #ffffff);
-            color: var(--tg-theme-text-color, #000000);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding-bottom: 80px; /* برای نرفتن محتوا زیر تب‌بار پایینی */
+            user-select: none;
         }
+
+        /* هدر اپلیکیشن */
+        .app-header {
+            background-color: var(--secondary-bg);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            margin-bottom: 16px;
+        }
+
+        .user-info h3 {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .user-info p {
+            font-size: 12px;
+            color: var(--hint-color);
+            margin-top: 2px;
+        }
+
+        .avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2abee8, #1181c8);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        /* کانتینر اصلی بخش‌ها */
+        .container {
+            padding: 0 16px;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.2s ease-in-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* کارت‌ها */
         .card {
-            border: 1px solid #ddd;
-            padding: 15px;
+            background-color: var(--secondary-bg);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 14px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--hint-color);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .card-value {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text-color);
+            margin-bottom: 6px;
+        }
+
+        .card-desc {
+            font-size: 13px;
+            color: var(--hint-color);
+            line-height: 1.4;
+        }
+
+        /* کارت آمار چالش‌ها */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .stat-box {
+            background: rgba(0, 0, 0, 0.02);
+            padding: 10px;
             border-radius: 12px;
-            margin-top: 15px;
-            text-align: right;
-            background-color: var(--tg-theme-secondary-bg-color, #f9f9f9);
-            word-break: break-word;
         }
-        button {
-            padding: 12px 20px;
-            font-size: 15px;
-            background-color: var(--tg-theme-button-color, #0088cc);
-            color: var(--tg-theme-button-text-color, #ffffff);
-            border: none;
-            border-radius: 8px;
+
+        .stat-box .num {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .stat-box .label {
+            font-size: 11px;
+            color: var(--hint-color);
+            margin-top: 2px;
+        }
+
+        /* لیست فعالیت‌ها در ردیاب زمان */
+        .activity-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        /* تب بار پایین (Bottom Navigation) */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--secondary-bg);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.05);
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: var(--hint-color);
+            font-size: 11px;
             cursor: pointer;
-            margin: 8px 0;
-            width: 100%;
-            max-width: 320px;
+            width: 25%;
+            transition: color 0.2s;
         }
-        .success { color: green; font-weight: bold; }
-        .error { color: red; font-weight: bold; }
+
+        .nav-item.active {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        .nav-icon {
+            font-size: 20px;
+        }
+
+        /* حالت لودینگ */
+        .loading-skeleton {
+            opacity: 0.6;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
 
-    <h2>تست مینی‌اپ Apamed</h2>
-    <p id="user-display">در حال فراخوانی اطلاعات تلگرام...</p>
+    <!-- هدر بالای صفحه -->
+    <div class="app-header">
+        <div class="user-info">
+            <h3 id="user-name">در حال دریافت...</h3>
+            <p id="user-status">مینی اپ هوشمند آپامد</p>
+        </div>
+        <div class="avatar" id="user-avatar">A</div>
+    </div>
 
-    <!-- دکمه‌ها برای تست -->
-    <button onclick="testHealth()">۱. تست سلامت API (Health Check)</button><br>
-    <button onclick="testDashboard()">۲. دریافت اطلاعات کاربر (Dashboard)</button>
+    <!-- محتوای زبانه‌ها -->
+    <div class="container">
 
-    <div id="result" class="card" style="display:none;"></div>
+        <!-- زبانه ۱: داشبورد اصلی -->
+        <div id="tab-dashboard" class="tab-content active">
+            
+            <!-- کارت هوش مصنوعی -->
+            <div class="card">
+                <div class="card-title">🤖 وضعیت هوش مصنوعی (AI)</div>
+                <div class="card-value" id="ai-count">0 سوال</div>
+                <div class="card-desc" id="ai-text">در حال بارگذاری اطلاعات...</div>
+            </div>
+
+            <!-- کارت چالش بالینی -->
+            <div class="card">
+                <div class="card-title">🩺 چالش‌های بالینی</div>
+                <div class="card-desc" id="challenge-text" style="margin-bottom:12px;">در حال بارگذاری...</div>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="num" id="ch-total">0</div>
+                        <div class="label">کل پاسخ‌ها</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="num" style="color:#34c759;" id="ch-correct">0</div>
+                        <div class="label">درست</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="num" style="color:#ff3b30;" id="ch-incorrect">0</div>
+                        <div class="label">نادرست</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- زبانه ۲: ردیاب زمان (Tracker) -->
+        <div id="tab-tracker" class="tab-content">
+            <div class="card">
+                <div class="card-title">⏱️ مجموع زمان مطالعه امروز</div>
+                <div class="card-value" id="total-time">00:00:00</div>
+                <div class="card-desc" id="active-status">فعالیت در حال اجرا: ندارد</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">📋 جزئیات فعالیت‌ها</div>
+                <div id="activities-list">
+                    <p style="color:var(--hint-color); font-size:13px;">اطلاعاتی ثبت نشده است.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- زبانه ۳: چالش بالینی (محل قرارگیری کوییزها) -->
+        <div id="tab-challenge" class="tab-content">
+            <div class="card" style="text-align: center; padding: 30px 16px;">
+                <h2>🎯 بخش چالش بالینی</h2>
+                <p class="card-desc" style="margin-top:8px;">به‌زودی امکان پاسخگویی به کیس‌های بالینی روزانه در این بخش فعال می‌شود.</p>
+            </div>
+        </div>
+
+        <!-- زبانه ۴: دستیار هوش مصنوعی -->
+        <div id="tab-ai" class="tab-content">
+            <div class="card" style="text-align: center; padding: 30px 16px;">
+                <h2>💡 دستیار هوش مصنوعی</h2>
+                <p class="card-desc" style="margin-top:8px;">پرسش و پاسخ تخصصی پزشکی و تحلیل کیس‌ها.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- تب بار پایین (تنظیم برای دسترسی سریع) -->
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="switchTab('dashboard', this)">
+            <span class="nav-icon">📊</span>
+            <span>داشبورد</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('tracker', this)">
+            <span class="nav-icon">⏱️</span>
+            <span>ردیاب زمان</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('challenge', this)">
+            <span class="nav-icon">🩺</span>
+            <span>چالش‌ها</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('ai', this)">
+            <span class="nav-icon">🤖</span>
+            <span>هوش مصنوعی</span>
+        </div>
+    </div>
 
     <script>
-        // مقداردهی اولیه تلگرام
         const tg = window.Telegram.WebApp;
         tg.ready();
         tg.expand();
 
-        // نمایش اطلاعات کاربر در بالای صفحه
-        const user = tg.initDataUnsafe?.user;
-        if (user) {
-            document.getElementById('user-display').innerText = 
-                `سلام ${user.first_name} 👋 (شناسه: ${user.id})`;
-        } else {
-            document.getElementById('user-display').innerText = "⚠️ خارج از محیط تلگرام باز شده است.";
-        }
-
         const BASE_URL = "https://api.apamed.ir";
 
-        // ۱. تست Health Check
-        function testHealth() {
-            const resDiv = document.getElementById('result');
-            resDiv.style.display = 'block';
-            resDiv.innerHTML = "در حال ارسال درخواست به Health Check...";
+        // ۱. مدیریت جابه‌جایی بین تب‌ها
+        function switchTab(tabName, element) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
 
-            fetch(`${BASE_URL}/api/health`)
-                .then(res => res.json())
-                .then(data => {
-                    resDiv.innerHTML = `<p class="success">✅ پاسخ سرور: ${JSON.stringify(data)}</p>`;
-                })
-                .catch(err => {
-                    resDiv.innerHTML = `<p class="error">❌ خطا در ارتباط: ${err.message}</p>`;
-                });
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+            element.classList.add('active');
         }
 
-        // ۲. تست دریافت اطلاعات داشبورد
-        function testDashboard() {
-            const resDiv = document.getElementById('result');
-            resDiv.style.display = 'block';
-            resDiv.innerHTML = "در حال اعتبارسنجی و گرفتن اطلاعات داشبورد...";
+        // ۲. تبدیل ثانیه به فرمت HH:MM:SS
+        function formatSeconds(sec) {
+            const hrs = Math.floor(sec / 3600);
+            const mins = Math.floor((sec % 3600) / 60);
+            const secs = sec % 60;
+            return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
 
+        // ۳. فراخوانی API داشبورد
+        function loadDashboardData() {
             fetch(`${BASE_URL}/api/dashboard`, {
                 method: 'GET',
                 headers: {
@@ -97,28 +336,69 @@
                     'X-Telegram-Init-Data': tg.initData 
                 }
             })
-            .then(async res => {
-                const data = await res.json();
-                if (!res.ok) {
-                    // استخراج علت دقیق خطا از پاسخ پایتون
-                    const detail = data.reason || data.message || data.error || `خطای سرور (کد ${res.status})`;
-                    throw new Error(detail);
-                }
-                return data;
-            })
+            .then(res => res.json())
             .then(data => {
-                resDiv.innerHTML = `
-                    <p class="success">✅ اطلاعات کاربر از دیتابیس دریافت شد:</p>
-                    <b>نام کامل:</b> ${data.full_name || 'ثبت نشده'}<br>
-                    <b>وضعیت AI:</b> ${data.ai_remaining_text}<br>
-                    <b>وضعیت چالش:</b> ${data.challenge_remaining_text}<br>
-                    <b>تعداد کل چالش‌ها:</b> ${data.challenge.total}
-                `;
+                if(data.error) return;
+
+                // تنظیم نام و آواتار
+                const name = data.full_name || 'کاربر گرامی';
+                document.getElementById('user-name').innerText = name;
+                document.getElementById('user-avatar').innerText = name.charAt(0).toUpperCase();
+
+                // تنظیم دیتای AI
+                document.getElementById('ai-count').innerText = `${data.ai_prompts_count} پرامپت`;
+                document.getElementById('ai-text').innerText = data.ai_remaining_text;
+
+                // تنظیم دیتای چالش‌ها
+                document.getElementById('challenge-text').innerText = data.challenge_remaining_text;
+                document.getElementById('ch-total').innerText = data.challenge.total;
+                document.getElementById('ch-correct').innerText = data.challenge.correct;
+                document.getElementById('ch-incorrect').innerText = data.challenge.incorrect;
             })
-            .catch(err => {
-                resDiv.innerHTML = `<p class="error">❌ علت خطا: ${err.message}</p>`;
-            });
+            .catch(err => console.error("Error Dashboard:", err));
         }
+
+        // ۴. فراخوانی API ردیاب زمان
+        function loadTrackerData() {
+            fetch(`${BASE_URL}/api/tracker/today`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Telegram-Init-Data': tg.initData 
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.error) return;
+
+                document.getElementById('total-time').innerText = formatSeconds(data.total_seconds || 0);
+
+                if (data.active_activity) {
+                    document.getElementById('active-status').innerText = `🟢 در حال اجرا: ${data.active_activity}`;
+                    document.getElementById('active-status').style.color = '#34c759';
+                } else {
+                    document.getElementById('active-status').innerText = '⚪ هیچ فعالیتی روشن نیست.';
+                }
+
+                // رندر کردن لیست فعالیت‌ها
+                const listDiv = document.getElementById('activities-list');
+                if (data.activities && data.activities.length > 0) {
+                    listDiv.innerHTML = data.activities.map(act => `
+                        <div class="activity-item">
+                            <span>📌 ${act.name}</span>
+                            <strong>${formatSeconds(act.seconds)}</strong>
+                        </div>
+                    `).join('');
+                } else {
+                    listDiv.innerHTML = `<p style="color:var(--hint-color); font-size:13px;">امروز هنوز رمانی ثبت نشده است.</p>`;
+                }
+            })
+            .catch(err => console.error("Error Tracker:", err));
+        }
+
+        // اجرای اولیه هنگام باز شدن مینی اپ
+        loadDashboardData();
+        loadTrackerData();
     </script>
 </body>
 </html>
