@@ -85,18 +85,39 @@
 
         // ۲. تست دریافت اطلاعات داشبورد (با ارسال initData به عنوان هدر احراز هویت)
         function testDashboard() {
-            const resDiv = document.getElementById('result');
-            resDiv.style.display = 'block';
-            resDiv.innerHTML = "در حال اعتبارسنجی و گرفتن اطلاعات داشبورد...";
+    const resDiv = document.getElementById('result');
+    resDiv.style.display = 'block';
+    resDiv.innerHTML = "در حال اعتبارسنجی و گرفتن اطلاعات داشبورد...";
 
-            fetch(`${BASE_URL}/api/dashboard`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    // ارسال هدر احراز هویت تلگرام که در کد پایتون بررسی می‌شود
-                    'X-Telegram-Init-Data': tg.initData 
-                }
-            })
+    fetch(`${BASE_URL}/api/dashboard`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Telegram-Init-Data': tg.initData 
+        }
+    })
+    .then(async res => {
+        const data = await res.json();
+        if (!res.ok) {
+            // اگر خطایی رخ داد، دلیل دقیق فرستاده شده از پایتون را استخراج می‌کنیم
+            const detail = data.reason || data.message || data.error || 'خطای نامشخص';
+            throw new Error(detail);
+        }
+        return data;
+    })
+    .then(data => {
+        resDiv.innerHTML = `
+            <p class="success">✅ اطلاعات کاربر از دیتابیس دریافت شد:</p>
+            <b>نام کامل:</b> ${data.full_name || 'ثبت نشده'}<br>
+            <b>وضعیت AI:</b> ${data.ai_remaining_text}<br>
+            <b>وضعیت چالش:</b> ${data.challenge_remaining_text}<br>
+            <b>تعداد کل چالش‌ها:</b> ${data.challenge.total}
+        `;
+    })
+    .catch(err => {
+        resDiv.innerHTML = `<p class="error">❌ علت خطا: ${err.message}</p>`;
+    });
+}
             .then(async res => {
                 const data = await res.json();
                 if (!res.ok) {
