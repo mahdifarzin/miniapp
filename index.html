@@ -4,27 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Apamed Medical Mini App</title>
-    <!-- ۱. فونت رسمی Vazirmatn برای زیبایی متون فارسی -->
+    <!-- فونت Vazirmatn -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <!-- ۲. اسکریپت رسمی تلگرام -->
+    <!-- اسکریپت رسمی تلگرام -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     
     <style>
+        /* ---------------------------------------------------- */
+        /* ۱. متغیرهای تم روز (Light Mode) - پیش‌فرض */
+        /* ---------------------------------------------------- */
         :root {
-            /* پالت رنگی اختصاصی پزشکی و هماهنگ با تلگرام */
-            --bg-color: var(--tg-theme-bg-color, #f0f4f8);
-            --secondary-bg: var(--tg-theme-secondary-bg-color, #ffffff);
-            --text-color: var(--tg-theme-text-color, #0f172a);
-            --hint-color: var(--tg-theme-hint-color, #64748b);
+            --bg-color: #f0f4f8;
+            --secondary-bg: #ffffff;
+            --text-color: #0f172a;
+            --hint-color: #64748b;
             --med-cyan: #0284c7;
-            --med-teal: #0d9488;
             --med-emerald: #10b981;
             --med-navy: #0f172a;
             --med-blue-gradient: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0284c7 100%);
             --card-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 8px 10px -6px rgba(15, 23, 42, 0.03);
-            --glass-border: 1px solid rgba(255, 255, 255, 0.6);
+            --card-border: 1px solid rgba(226, 232, 240, 0.8);
+            --glass-nav-bg: rgba(255, 255, 255, 0.85);
+            --item-bg: #f8fafc;
+            --item-border: #f1f5f9;
+            
+            /* پترن پزشکی پس‌زمینه (روز) */
+            --bg-pattern-cross: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 14V26M14 20H26' stroke='%230284c7' stroke-width='1.5' stroke-linecap='round' stroke-opacity='0.08'/%3E%3C/svg%3E");
+            --bg-pattern-dots: radial-gradient(rgba(2, 132, 199, 0.08) 1.2px, transparent 1.2px);
+        }
+
+        /* ---------------------------------------------------- */
+        /* ۲. متغیرهای تم شب (Dark Mode) */
+        /* ---------------------------------------------------- */
+        body.dark-mode, @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #0b1329;
+                --secondary-bg: #152238;
+                --text-color: #f1f5f9;
+                --hint-color: #94a3b8;
+                --med-cyan: #38bdf8;
+                --med-emerald: #34d399;
+                --med-navy: #f8fafc;
+                --med-blue-gradient: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #1e3a8a 100%);
+                --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+                --card-border: 1px solid rgba(255, 255, 255, 0.08);
+                --glass-nav-bg: rgba(21, 34, 56, 0.85);
+                --item-bg: #1e2d4a;
+                --item-border: rgba(255, 255, 255, 0.05);
+
+                /* پترن پزشکی پس‌زمینه (شب) */
+                --bg-pattern-cross: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 14V26M14 20H26' stroke='%2338bdf8' stroke-width='1.5' stroke-linecap='round' stroke-opacity='0.12'/%3E%3C/svg%3E");
+                --bg-pattern-dots: radial-gradient(rgba(56, 189, 248, 0.12) 1.2px, transparent 1.2px);
+            }
         }
 
         * {
@@ -35,15 +68,19 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        /* استایل پس‌زمینه طرح‌دار پزشکی */
         body {
             background-color: var(--bg-color);
+            background-image: var(--bg-pattern-dots), var(--bg-pattern-cross);
+            background-size: 20px 20px, 40px 40px;
             color: var(--text-color);
             padding-bottom: 95px;
             user-select: none;
             overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        /* هدر بالای صفحه با استایل پزشکی */
+        /* هدر بالای صفحه */
         .app-header {
             background: var(--secondary-bg);
             padding: 16px 20px;
@@ -52,15 +89,16 @@
             justify-content: space-between;
             border-bottom-left-radius: 24px;
             border-bottom-right-radius: 24px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
             margin-bottom: 18px;
-            border-bottom: var(--glass-border);
+            border-bottom: var(--card-border);
+            transition: background 0.3s ease;
         }
 
         .user-info h3 {
             font-size: 17px;
             font-weight: 800;
-            color: var(--med-navy);
+            color: var(--text-color);
             display: flex;
             align-items: center;
             gap: 6px;
@@ -105,15 +143,16 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* کارت‌های شیشه‌ای مدرن */
+        /* کارت‌های شیشه‌ای */
         .card {
             background: var(--secondary-bg);
             border-radius: 20px;
             padding: 18px;
             margin-bottom: 14px;
             box-shadow: var(--card-shadow);
-            border: 1px solid rgba(226, 232, 240, 0.8);
+            border: var(--card-border);
             position: relative;
+            transition: background 0.3s ease, border-color 0.3s ease;
         }
 
         .card-title {
@@ -136,7 +175,7 @@
             width: 28px;
             height: 28px;
             border-radius: 8px;
-            background: rgba(2, 132, 199, 0.1);
+            background: rgba(2, 132, 199, 0.12);
             color: var(--med-cyan);
             display: inline-flex;
             align-items: center;
@@ -147,7 +186,7 @@
         .card-value {
             font-size: 22px;
             font-weight: 800;
-            color: var(--med-navy);
+            color: var(--text-color);
             margin-bottom: 4px;
         }
 
@@ -167,11 +206,11 @@
         }
 
         .stat-box {
-            background: #f8fafc;
+            background: var(--item-bg);
             padding: 12px 8px;
             border-radius: 14px;
             text-align: center;
-            border: 1px solid #f1f5f9;
+            border: var(--card-border);
         }
 
         .stat-box .num {
@@ -186,7 +225,7 @@
             font-weight: 600;
         }
 
-        /* بنر ویژه آزمون شبانه با افکت نبض */
+        /* بنر ویژه آزمون شبانه */
         .exam-banner {
             background: var(--med-blue-gradient);
             color: white;
@@ -223,7 +262,6 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        /* انیمیشن چشمک‌زن نبض */
         .pulse-dot {
             width: 8px;
             height: 8px;
@@ -241,7 +279,7 @@
 
         .exam-btn {
             background: #ffffff;
-            color: var(--med-navy);
+            color: #0f172a;
             border: none;
             width: 100%;
             padding: 14px;
@@ -259,7 +297,7 @@
             background-color: #f8fafc;
         }
 
-        /* جدول نفرات برتر لوکس */
+        /* جدول نفرات برتر */
         .leader-item {
             display: flex;
             align-items: center;
@@ -267,13 +305,9 @@
             padding: 12px 10px;
             border-radius: 14px;
             margin-bottom: 8px;
-            background: #f8fafc;
-            border: 1px solid #f1f5f9;
+            background: var(--item-bg);
+            border: var(--card-border);
         }
-
-        .leader-item.top-1 { background: linear-gradient(135deg, #fffbe3 0%, #ffffff 100%); border-color: #fef08a; }
-        .leader-item.top-2 { background: linear-gradient(135deg, #f1f5f9 0%, #ffffff 100%); border-color: #e2e8f0; }
-        .leader-item.top-3 { background: linear-gradient(135deg, #fff7ed 0%, #ffffff 100%); border-color: #ffedd5; }
 
         .leader-rank {
             font-weight: 800;
@@ -293,7 +327,7 @@
             width: 38px;
             height: 38px;
             border-radius: 12px;
-            background: #e2e8f0;
+            background: rgba(2, 132, 199, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -312,22 +346,23 @@
             margin-top: 1px;
         }
 
-        /* تب‌بار شناور پایینی (Floating Nav Bar) */
+        /* تب بار شناور پایینی */
         .bottom-nav {
             position: fixed;
             bottom: 12px;
             left: 12px;
             right: 12px;
-            background: rgba(255, 255, 255, 0.9);
+            background: var(--glass-nav-bg);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             display: flex;
             justify-content: space-around;
             padding: 8px 4px;
             border-radius: 24px;
-            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
-            border: var(--glass-border);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+            border: var(--card-border);
             z-index: 1000;
+            transition: background 0.3s ease;
         }
 
         .nav-item {
@@ -347,7 +382,7 @@
 
         .nav-item.active {
             color: var(--med-cyan);
-            background: rgba(2, 132, 199, 0.08);
+            background: rgba(2, 132, 199, 0.12);
             font-weight: 700;
         }
 
@@ -399,7 +434,7 @@
                 <div class="card-desc" id="challenge-text" style="margin-bottom:12px;">در حال دریافت...</div>
                 <div class="stats-grid">
                     <div class="stat-box">
-                        <div class="num" id="ch-total" style="color:var(--med-navy);">0</div>
+                        <div class="num" id="ch-total" style="color:var(--text-color);">0</div>
                         <div class="label">کل پاسخ‌ها</div>
                     </div>
                     <div class="stat-box">
@@ -415,10 +450,10 @@
 
         </div>
 
-        <!-- زبانه ۲: آزمون شبانه (طراحی مدرن پزشکی) -->
+        <!-- زبانه ۲: آزمون شبانه -->
         <div id="tab-nightly" class="tab-content">
             
-            <!-- کارت بنر آزمون امشب -->
+            <!-- بنر آزمون امشب -->
             <div class="exam-banner">
                 <div class="exam-status-badge">
                     <span class="pulse-dot"></span>
@@ -443,39 +478,36 @@
                 </div>
 
                 <div id="leaderboard-list">
-                    <!-- رتبه ۱ -->
-                    <div class="leader-item top-1">
+                    <div class="leader-item">
                         <div class="leader-rank">🥇</div>
                         <div class="leader-user">
                             <div class="leader-avatar">👨‍⚕️</div>
                             <div>
-                                <div style="font-size:13px; font-weight:800; color:var(--med-navy);">اقای ... </div>
+                                <div style="font-size:13px; font-weight:800; color:var(--text-color);">دکتر علی رضایی</div>
                                 <div class="leader-time">زمان ثبت: ۰۳:۴۵ دقیقه</div>
                             </div>
                         </div>
                         <div class="leader-score" style="color: var(--med-emerald);">۱۰ از ۱۰</div>
                     </div>
 
-                    <!-- رتبه ۲ -->
-                    <div class="leader-item top-2">
+                    <div class="leader-item">
                         <div class="leader-rank">🥈</div>
                         <div class="leader-user">
                             <div class="leader-avatar">👩‍⚕️</div>
                             <div>
-                                <div style="font-size:13px; font-weight:800; color:var(--med-navy);">خانم...</div>
+                                <div style="font-size:13px; font-weight:800; color:var(--text-color);">سارا محمدی</div>
                                 <div class="leader-time">زمان ثبت: ۰۴:۱۲ دقیقه</div>
                             </div>
                         </div>
                         <div class="leader-score" style="color: var(--med-emerald);">۹ از ۱۰</div>
                     </div>
 
-                    <!-- رتبه ۳ -->
-                    <div class="leader-item top-3">
+                    <div class="leader-item">
                         <div class="leader-rank">🥉</div>
                         <div class="leader-user">
                             <div class="leader-avatar">👨‍⚕️</div>
                             <div>
-                                <div style="font-size:13px; font-weight:800; color:var(--med-navy);">خانم</div>
+                                <div style="font-size:13px; font-weight:800; color:var(--text-color);">محمدحسین کریمی</div>
                                 <div class="leader-time">زمان ثبت: ۰۵:۰۱ دقیقه</div>
                             </div>
                         </div>
@@ -486,7 +518,7 @@
 
         </div>
 
-        <!-- زبانه ۳: ردیاب زمان مطالعه -->
+        <!-- زبانه ۳: ردیاب زمان -->
         <div id="tab-tracker" class="tab-content">
             <div class="card">
                 <div class="card-title">
@@ -516,7 +548,7 @@
         <div id="tab-challenge" class="tab-content">
             <div class="card" style="text-align: center; padding: 36px 16px;">
                 <div style="font-size:40px; margin-bottom:10px;">🎯</div>
-                <h3 style="font-size:17px; color:var(--med-navy);">بانک کیس‌های بالینی</h3>
+                <h3 style="font-size:17px; color:var(--text-color);">بانک کیس‌های بالینی</h3>
                 <p class="card-desc" style="margin-top:8px;">به‌زودی امکان پاسخگویی به سناریوهای واقعی بیمارستانی در این بخش فعال می‌شود.</p>
             </div>
         </div>
@@ -525,7 +557,7 @@
         <div id="tab-ai" class="tab-content">
             <div class="card" style="text-align: center; padding: 36px 16px;">
                 <div style="font-size:40px; margin-bottom:10px;">💡</div>
-                <h3 style="font-size:17px; color:var(--med-navy);">دستیار هوشمند آپامد</h3>
+                <h3 style="font-size:17px; color:var(--text-color);">دستیار هوشمند آپامد</h3>
                 <p class="card-desc" style="margin-top:8px;">تحلیل گایدلاین‌های پزشکی و پاسخ به سوالات تخصصی.</p>
             </div>
         </div>
@@ -561,6 +593,17 @@
         tg.ready();
         tg.expand();
 
+        // 🟢 تنظیم و هماهنگی هوشمند دارک‌مود با تم تلگرام کاربر
+        function applyTelegramTheme() {
+            if (tg.colorScheme === 'dark') {
+                document.body.classList.add('dark-mode');
+            } else {
+                document.body.classList.remove('dark-mode');
+            }
+        }
+        applyTelegramTheme();
+        tg.onEvent('themeChanged', applyTelegramTheme);
+
         const BASE_URL = "https://api.apamed.ir";
 
         function switchTab(tabName, element) {
@@ -582,7 +625,7 @@
             tg.showAlert("آزمون امشب به‌زودی فعال می‌شود! 🎯");
         }
 
-        // فراخوانی یک‌باره تمام اطلاعات از سرور
+        // فراخوانی داده‌ها
         function loadAppData() {
             fetch(`${BASE_URL}/api/init`, {
                 method: 'GET',
@@ -621,9 +664,9 @@
                     const listDiv = document.getElementById('activities-list');
                     if (data.tracker.activities && data.tracker.activities.length > 0) {
                         listDiv.innerHTML = data.tracker.activities.map(act => `
-                            <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #f1f5f9;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--item-border);">
                                 <span style="font-size:13px; font-weight:600;">📌 ${act.name}</span>
-                                <strong style="font-family:monospace; font-size:14px; color:var(--med-navy);">${formatSeconds(act.seconds)}</strong>
+                                <strong style="font-family:monospace; font-size:14px; color:var(--text-color);">${formatSeconds(act.seconds)}</strong>
                             </div>
                         `).join('');
                     } else {
