@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Apamed Mini App</title>
-    <!-- ۱. اسکریپت رسمی تلگرام -->
+    <!-- اسکریپت رسمی تلگرام -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
-            /* استفاده از متغیرهای خود تلگرام برای هماهنگی با تم روشن و تاریک */
+            /* متغیرهای تم تلگرام برای هماهنگی با حالت تاریک و روشن */
             --bg-color: var(--tg-theme-bg-color, #f4f5f7);
             --secondary-bg: var(--tg-theme-secondary-bg-color, #ffffff);
             --text-color: var(--tg-theme-text-color, #1c1c1e);
@@ -28,11 +28,11 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            padding-bottom: 80px; /* برای نرفتن محتوا زیر تب‌بار پایینی */
+            padding-bottom: 80px;
             user-select: none;
         }
 
-        /* هدر اپلیکیشن */
+        /* هدر بالای صفحه */
         .app-header {
             background-color: var(--secondary-bg);
             padding: 16px 20px;
@@ -69,7 +69,7 @@
             font-size: 18px;
         }
 
-        /* کانتینر اصلی بخش‌ها */
+        /* کانتینر اصلی */
         .container {
             padding: 0 16px;
         }
@@ -159,7 +159,7 @@
             border-bottom: none;
         }
 
-        /* تب بار پایین (Bottom Navigation) */
+        /* تب بار پایین */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -195,12 +195,6 @@
         .nav-icon {
             font-size: 20px;
         }
-
-        /* حالت لودینگ */
-        .loading-skeleton {
-            opacity: 0.6;
-            pointer-events: none;
-        }
     </style>
 </head>
 <body>
@@ -214,7 +208,7 @@
         <div class="avatar" id="user-avatar">A</div>
     </div>
 
-    <!-- محتوای زبانه‌ها -->
+    <!-- محتوای زبانه ها -->
     <div class="container">
 
         <!-- زبانه ۱: داشبورد اصلی -->
@@ -223,14 +217,14 @@
             <!-- کارت هوش مصنوعی -->
             <div class="card">
                 <div class="card-title">🤖 وضعیت هوش مصنوعی (AI)</div>
-                <div class="card-value" id="ai-count">0 سوال</div>
-                <div class="card-desc" id="ai-text">در حال بارگذاری اطلاعات...</div>
+                <div class="card-value" id="ai-count">0 پرامپت</div>
+                <div class="card-desc" id="ai-text">در حال دریافت اطلاعات...</div>
             </div>
 
             <!-- کارت چالش بالینی -->
             <div class="card">
                 <div class="card-title">🩺 چالش‌های بالینی</div>
-                <div class="card-desc" id="challenge-text" style="margin-bottom:12px;">در حال بارگذاری...</div>
+                <div class="card-desc" id="challenge-text" style="margin-bottom:12px;">در حال دریافت...</div>
                 <div class="stats-grid">
                     <div class="stat-box">
                         <div class="num" id="ch-total">0</div>
@@ -260,12 +254,12 @@
             <div class="card">
                 <div class="card-title">📋 جزئیات فعالیت‌ها</div>
                 <div id="activities-list">
-                    <p style="color:var(--hint-color); font-size:13px;">اطلاعاتی ثبت نشده است.</p>
+                    <p style="color:var(--hint-color); font-size:13px;">در حال دریافت اطلاعات...</p>
                 </div>
             </div>
         </div>
 
-        <!-- زبانه ۳: چالش بالینی (محل قرارگیری کوییزها) -->
+        <!-- زبانه ۳: چالش بالینی -->
         <div id="tab-challenge" class="tab-content">
             <div class="card" style="text-align: center; padding: 30px 16px;">
                 <h2>🎯 بخش چالش بالینی</h2>
@@ -283,7 +277,7 @@
 
     </div>
 
-    <!-- تب بار پایین (تنظیم برای دسترسی سریع) -->
+    <!-- تب بار پایین -->
     <div class="bottom-nav">
         <div class="nav-item active" onclick="switchTab('dashboard', this)">
             <span class="nav-icon">📊</span>
@@ -310,7 +304,7 @@
 
         const BASE_URL = "https://api.apamed.ir";
 
-        // ۱. مدیریت جابه‌جایی بین تب‌ها
+        // مدیریت جابه‌جایی بین تب‌ها
         function switchTab(tabName, element) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
@@ -319,7 +313,7 @@
             element.classList.add('active');
         }
 
-        // ۲. تبدیل ثانیه به فرمت HH:MM:SS
+        // تبدیل ثانیه به HH:MM:SS
         function formatSeconds(sec) {
             const hrs = Math.floor(sec / 3600);
             const mins = Math.floor((sec % 3600) / 60);
@@ -327,9 +321,9 @@
             return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
         }
 
-        // ۳. فراخوانی API داشبورد
-        function loadDashboardData() {
-            fetch(`${BASE_URL}/api/dashboard`, {
+        // دریافت یک‌باره تمام اطلاعات از Endpoint یکپارچه /api/init
+        function loadAppData() {
+            fetch(`${BASE_URL}/api/init`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -338,67 +332,54 @@
             })
             .then(res => res.json())
             .then(data => {
-                if(data.error) return;
+                if (data.error) {
+                    console.error("Server Error:", data.error);
+                    return;
+                }
 
-                // تنظیم نام و آواتار
+                // ۱. اطلاعات کاربر و داشبورد
                 const name = data.full_name || 'کاربر گرامی';
                 document.getElementById('user-name').innerText = name;
                 document.getElementById('user-avatar').innerText = name.charAt(0).toUpperCase();
 
-                // تنظیم دیتای AI
                 document.getElementById('ai-count').innerText = `${data.ai_prompts_count} پرامپت`;
                 document.getElementById('ai-text').innerText = data.ai_remaining_text;
 
-                // تنظیم دیتای چالش‌ها
                 document.getElementById('challenge-text').innerText = data.challenge_remaining_text;
                 document.getElementById('ch-total').innerText = data.challenge.total;
                 document.getElementById('ch-correct').innerText = data.challenge.correct;
                 document.getElementById('ch-incorrect').innerText = data.challenge.incorrect;
+
+                // ۲. اطلاعات ردیاب زمان (Tracker)
+                if (data.tracker) {
+                    document.getElementById('total-time').innerText = formatSeconds(data.tracker.total_seconds || 0);
+
+                    if (data.tracker.active_activity) {
+                        document.getElementById('active-status').innerText = `🟢 در حال اجرا: ${data.tracker.active_activity}`;
+                        document.getElementById('active-status').style.color = '#34c759';
+                    } else {
+                        document.getElementById('active-status').innerText = '⚪ هیچ فعالیتی روشن نیست.';
+                        document.getElementById('active-status').style.color = 'var(--hint-color)';
+                    }
+
+                    const listDiv = document.getElementById('activities-list');
+                    if (data.tracker.activities && data.tracker.activities.length > 0) {
+                        listDiv.innerHTML = data.tracker.activities.map(act => `
+                            <div class="activity-item">
+                                <span>📌 ${act.name}</span>
+                                <strong>${formatSeconds(act.seconds)}</strong>
+                            </div>
+                        `).join('');
+                    } else {
+                        listDiv.innerHTML = `<p style="color:var(--hint-color); font-size:13px;">امروز هنوز زمانی ثبت نشده است.</p>`;
+                    }
+                }
             })
-            .catch(err => console.error("Error Dashboard:", err));
+            .catch(err => console.error("Error Loading App Data:", err));
         }
 
-        // ۴. فراخوانی API ردیاب زمان
-        function loadTrackerData() {
-            fetch(`${BASE_URL}/api/tracker/today`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Telegram-Init-Data': tg.initData 
-                }
-            })
-            .then(res => res.json())
-            .then(data => {
-                if(data.error) return;
-
-                document.getElementById('total-time').innerText = formatSeconds(data.total_seconds || 0);
-
-                if (data.active_activity) {
-                    document.getElementById('active-status').innerText = `🟢 در حال اجرا: ${data.active_activity}`;
-                    document.getElementById('active-status').style.color = '#34c759';
-                } else {
-                    document.getElementById('active-status').innerText = '⚪ هیچ فعالیتی روشن نیست.';
-                }
-
-                // رندر کردن لیست فعالیت‌ها
-                const listDiv = document.getElementById('activities-list');
-                if (data.activities && data.activities.length > 0) {
-                    listDiv.innerHTML = data.activities.map(act => `
-                        <div class="activity-item">
-                            <span>📌 ${act.name}</span>
-                            <strong>${formatSeconds(act.seconds)}</strong>
-                        </div>
-                    `).join('');
-                } else {
-                    listDiv.innerHTML = `<p style="color:var(--hint-color); font-size:13px;">امروز هنوز رمانی ثبت نشده است.</p>`;
-                }
-            })
-            .catch(err => console.error("Error Tracker:", err));
-        }
-
-        // اجرای اولیه هنگام باز شدن مینی اپ
-        loadDashboardData();
-        loadTrackerData();
+        // اجرای خودکار به محض باز شدن مینی‌اپ
+        loadAppData();
     </script>
 </body>
 </html>
