@@ -1,38 +1,91 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بخش آموزشی</title>
-    <!-- اسکریپت رسمی مینی‌اپ تلگرام -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        body {
-            font-family: system-ui, -apple-system, sans-serif;
-            text-align: center;
-            padding: 20px;
-            background-color: var(--tg-theme-bg-color, #ffffff);
-            color: var(--tg-theme-text-color, #000000);
-        }
-        .btn {
-            background-color: var(--tg-theme-button-color, #2481cc);
-            color: var(--tg-theme-button-text-color, #ffffff);
-            border: none;
-            padding: 12px 24px;
-            border-radius: 10px;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>مینی‌اپ چالش پزشکی</title>
+  <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
-    <h2>🎓 به بخش آموزشی خوش آمدید</h2>
-    <p>این مینی‌اپ ربات تلگرامی شماست!</p>
-    <button class="btn" onclick="Telegram.WebApp.close()">بستن مینی‌اپ</button>
+  <main class="page-shell">
+    <header class="hero-card">
+      <div>
+        <p class="eyebrow">مینی‌اپ پزشکی</p>
+        <h1>چالش بالینی، هوش مصنوعی و آزمون شبانه</h1>
+        <p class="hero-description">
+          تجربه‌ای ساده برای مرور بالینی: چالش، سوالات هوش مصنوعی و آزمون شبانه با رتبه‌بندی.
+        </p>
+      </div>
+      <div class="hero-actions">
+        <button id="refreshStatusBtn" class="btn btn-primary">بارگذاری وضعیت</button>
+      </div>
+    </header>
 
-    <script>
-        Telegram.WebApp.ready();
-    </script>
+    <section class="status-grid" aria-label="وضعیت کاربر">
+      <article class="status-card">
+        <strong>نام شما</strong>
+        <p id="userName">در حال بارگذاری...</p>
+      </article>
+      <article class="status-card">
+        <strong>چالش امروز</strong>
+        <p id="challengeStatus">در حال بارگذاری...</p>
+      </article>
+      <article class="status-card">
+        <strong>هوش مصنوعی</strong>
+        <p id="aiStatus">در حال بارگذاری...</p>
+      </article>
+    </section>
+
+    <section class="action-grid">
+      <article class="feature-card" id="challengeCard">
+        <div class="card-header">
+          <span>چالش بالینی</span>
+          <p>سوالات بالینی کوتاه و تمرینی برای تقویت تفکر تشخیصی.</p>
+        </div>
+        <div class="card-body">
+          <div id="challengePanel" class="panel">
+            <p id="challengeIntro">برای شروع چالش، روی دکمه زیر بزنید.</p>
+            <button id="startChallengeBtn" class="btn btn-secondary">شروع چالش</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="feature-card" id="aiCard">
+        <div class="card-header">
+          <span>پرسش هوش مصنوعی</span>
+          <p>سوالی دارید؟ از هوش مصنوعی پزشکی بپرسید و پاسخ ساختارمند دریافت کنید.</p>
+        </div>
+        <div class="card-body">
+          <textarea id="aiQuestion" rows="5" placeholder="سوال خود را به فارسی بنویسید..."></textarea>
+          <button id="askAiBtn" class="btn btn-secondary">پرسش از هوش مصنوعی</button>
+          <div id="aiAnswer" class="response-box"></div>
+        </div>
+      </article>
+
+      <article class="feature-card" id="examCard">
+        <div class="card-header">
+          <span>آزمون شبانه</span>
+          <p>هر شب ساعت ۲۲، آزمون آنلاین برگزار می‌شود. ثبت نام کن و رتبه برتر شو.</p>
+        </div>
+        <div class="card-body">
+          <div id="examPanel" class="panel">
+            <p id="examIntro">در حال بارگذاری اطلاعات آزمون...</p>
+            <button id="registerExamBtn" class="btn btn-secondary">ثبت نام آزمون</button>
+          </div>
+          <div class="leaderboard-card">
+            <h3>نفرات برتر</h3>
+            <ol id="leaderboardList"><li>در حال بارگذاری...</li></ol>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="note-card">
+      <p>برای عملکرد کامل، این صفحه را از داخل تلگرام به عنوان مینی‌اپ باز کنید. در غیر این صورت ممکن به دلیل عدم اعتبارات تلگرام، فرایند‌ها فعال نشوند.</p>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true"></div>
+  <script src="/app.js"></script>
 </body>
 </html>
