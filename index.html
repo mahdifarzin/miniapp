@@ -1,91 +1,128 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>مینی‌اپ چالش پزشکی</title>
-  <link rel="stylesheet" href="/styles.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تست مینی آپ آپامد</title>
+    <!-- ۱. کتابخانه رسمی تلگرام -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            font-family: Tahoma, sans-serif;
+            text-align: center;
+            padding: 20px;
+            direction: rtl;
+            background-color: var(--tg-theme-bg-color, #ffffff);
+            color: var(--tg-theme-text-color, #000000);
+        }
+        .card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 15px;
+            text-align: right;
+            background-color: var(--tg-theme-secondary-bg-color, #f9f9f9);
+        }
+        button {
+            padding: 12px 20px;
+            font-size: 15px;
+            background-color: var(--tg-theme-button-color, #0088cc);
+            color: var(--tg-theme-button-text-color, #ffffff);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 8px 4px;
+            width: 100%;
+            max-width: 300px;
+        }
+        .success { color: green; font-weight: bold; }
+        .error { color: red; font-weight: bold; }
+    </style>
 </head>
 <body>
-  <main class="page-shell">
-    <header class="hero-card">
-      <div>
-        <p class="eyebrow">مینی‌اپ پزشکی</p>
-        <h1>چالش بالینی، هوش مصنوعی و آزمون شبانه</h1>
-        <p class="hero-description">
-          تجربه‌ای ساده برای مرور بالینی: چالش، سوالات هوش مصنوعی و آزمون شبانه با رتبه‌بندی.
-        </p>
-      </div>
-      <div class="hero-actions">
-        <button id="refreshStatusBtn" class="btn btn-primary">بارگذاری وضعیت</button>
-      </div>
-    </header>
 
-    <section class="status-grid" aria-label="وضعیت کاربر">
-      <article class="status-card">
-        <strong>نام شما</strong>
-        <p id="userName">در حال بارگذاری...</p>
-      </article>
-      <article class="status-card">
-        <strong>چالش امروز</strong>
-        <p id="challengeStatus">در حال بارگذاری...</p>
-      </article>
-      <article class="status-card">
-        <strong>هوش مصنوعی</strong>
-        <p id="aiStatus">در حال بارگذاری...</p>
-      </article>
-    </section>
+    <h2>تست مینی‌اپ Apamed</h2>
+    <p id="user-display">در حال فراخوانی اطلاعات تلگرام...</p>
 
-    <section class="action-grid">
-      <article class="feature-card" id="challengeCard">
-        <div class="card-header">
-          <span>چالش بالینی</span>
-          <p>سوالات بالینی کوتاه و تمرینی برای تقویت تفکر تشخیصی.</p>
-        </div>
-        <div class="card-body">
-          <div id="challengePanel" class="panel">
-            <p id="challengeIntro">برای شروع چالش، روی دکمه زیر بزنید.</p>
-            <button id="startChallengeBtn" class="btn btn-secondary">شروع چالش</button>
-          </div>
-        </div>
-      </article>
+    <!-- دکمه‌ها برای تست دو Endpoint مختلف -->
+    <button onclick="testHealth()">۱. تست سلامت API (Health Check)</button>
+    <button onclick="testDashboard()">۲. دریافت اطلاعات کاربر (Dashboard)</button>
 
-      <article class="feature-card" id="aiCard">
-        <div class="card-header">
-          <span>پرسش هوش مصنوعی</span>
-          <p>سوالی دارید؟ از هوش مصنوعی پزشکی بپرسید و پاسخ ساختارمند دریافت کنید.</p>
-        </div>
-        <div class="card-body">
-          <textarea id="aiQuestion" rows="5" placeholder="سوال خود را به فارسی بنویسید..."></textarea>
-          <button id="askAiBtn" class="btn btn-secondary">پرسش از هوش مصنوعی</button>
-          <div id="aiAnswer" class="response-box"></div>
-        </div>
-      </article>
+    <div id="result" class="card" style="display:none;"></div>
 
-      <article class="feature-card" id="examCard">
-        <div class="card-header">
-          <span>آزمون شبانه</span>
-          <p>هر شب ساعت ۲۲، آزمون آنلاین برگزار می‌شود. ثبت نام کن و رتبه برتر شو.</p>
-        </div>
-        <div class="card-body">
-          <div id="examPanel" class="panel">
-            <p id="examIntro">در حال بارگذاری اطلاعات آزمون...</p>
-            <button id="registerExamBtn" class="btn btn-secondary">ثبت نام آزمون</button>
-          </div>
-          <div class="leaderboard-card">
-            <h3>نفرات برتر</h3>
-            <ol id="leaderboardList"><li>در حال بارگذاری...</li></ol>
-          </div>
-        </div>
-      </article>
-    </section>
+    <script>
+        // مقداردهی تلگرام
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand();
 
-    <section class="note-card">
-      <p>برای عملکرد کامل، این صفحه را از داخل تلگرام به عنوان مینی‌اپ باز کنید. در غیر این صورت ممکن به دلیل عدم اعتبارات تلگرام، فرایند‌ها فعال نشوند.</p>
-    </section>
-  </main>
+        // نمایش نام کاربر تلگرام در بالای صفحه
+        const user = tg.initDataUnsafe?.user;
+        if (user) {
+            document.getElementById('user-display').innerText = 
+                `سلام ${user.first_name} 👋 (شناسه: ${user.id})`;
+        } else {
+            document.getElementById('user-display').innerText = "⚠️ خارج از محیط تلگرام باز شده است.";
+        }
 
-  <div id="toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true"></div>
-  <script src="/app.js"></script>
+        const BASE_URL = "https://api.apamed.ir";
+
+        // ۱. تست Health Check (بدون نیاز به اعتبارسنجی)
+        function testHealth() {
+            const resDiv = document.getElementById('result');
+            resDiv.style.display = 'block';
+            resDiv.innerHTML = "در حال ارسال درخواست به Health Check...";
+
+            fetch(`${BASE_URL}/api/health`)
+                .then(res => res.json())
+                .then(data => {
+                    resDiv.innerHTML = `<p class="success">✅ پاسخ سرور: ${JSON.stringify(data)}</p>`;
+                })
+                .catch(err => {
+                    resDiv.innerHTML = `<p class="error">❌ خطا در ارتباط: ${err.message}</p>`;
+                });
+        }
+
+        // ۲. تست دریافت اطلاعات داشبورد (با ارسال initData به عنوان هدر احراز هویت)
+        function testDashboard() {
+            const resDiv = document.getElementById('result');
+            resDiv.style.display = 'block';
+            resDiv.innerHTML = "در حال اعتبارسنجی و گرفتن اطلاعات داشبورد...";
+
+            fetch(`${BASE_URL}/api/dashboard`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // ارسال هدر احراز هویت تلگرام که در کد پایتون بررسی می‌شود
+                    'X-Telegram-Init-Data': tg.initData 
+                }
+            })
+            .then(async res => {
+                const data = await res.json();
+                if (!res.ok) {
+                    throw new Error(data.error || `خطای سرور (کد ${res.status})`);
+                }
+                return data;
+            })
+            .then(data => {
+                resDiv.innerHTML = `
+                    <p class="success">✅ اطلاعات کاربر از دیتابیس دریافت شد:</p>
+                    <b>نام کامل:</b> ${data.full_name || 'ثبت نشده'}<br>
+                    <b>وضعیت AI:</b> ${data.ai_remaining_text}<br>
+                    <b>وضعیت چالش:</b> ${data.challenge_remaining_text}<br>
+                    <b>تعداد کل چالش‌ها:</b> ${data.challenge.total}
+                `;
+            })
+            .catch(err => {
+                let errorMsg = err.message;
+                if (errorMsg.includes('unauthorized')) {
+                    errorMsg = "خطای عدم دسترسی (401)! تلگرام هویت شما را تایید نکرد یا BOT_TOKEN در سرور درست ست نشده است.";
+                } else if (errorMsg.includes('user_not_found')) {
+                    errorMsg = "کاربر یافت نشد (404)! هنوز این آیدی تلگرام در دیتابیس teluserinfo.db ثبت نشده است.";
+                }
+                resDiv.innerHTML = `<p class="error">❌ خطا: ${errorMsg}</p>`;
+            });
+        }
+    </script>
 </body>
 </html>
