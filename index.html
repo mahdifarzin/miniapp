@@ -546,19 +546,78 @@
 
         <!-- زبانه ۴: کیس‌های بالینی -->
         <div id="tab-challenge" class="tab-content">
-            <div class="card" style="text-align: center; padding: 36px 16px;">
-                <div style="font-size:40px; margin-bottom:10px;">🎯</div>
-                <h3 style="font-size:17px; color:var(--text-color);">بانک کیس‌های بالینی</h3>
-                <p class="card-desc" style="margin-top:8px;">به‌زودی امکان پاسخگویی به سناریوهای واقعی بیمارستانی در این بخش فعال می‌شود.</p>
+
+            <div class="card" id="challenge-quota-card">
+                <div class="card-title">
+                    <span class="card-title-icon">
+                        <span class="icon-badge">🎯</span>
+                        چالش بالینی
+                    </span>
+                </div>
+                <div class="card-desc" id="challenge-quota-text">در حال دریافت اطلاعات...</div>
+            </div>
+
+            <!-- انتخاب رشته -->
+            <div class="card" id="challenge-topics-card">
+                <div class="card-title">
+                    <span class="card-title-icon">
+                        <span class="icon-badge">📌</span>
+                        یک رشته را انتخاب کنید
+                    </span>
+                </div>
+                <div id="challenge-topics-list" style="display:flex; flex-wrap:wrap; gap:8px;">
+                    <p style="color:var(--hint-color); font-size:13px;">در حال بارگذاری رشته‌ها...</p>
+                </div>
+            </div>
+
+            <!-- سوال فعال -->
+            <div class="card" id="challenge-question-card" style="display:none;">
+                <div class="card-title">
+                    <span class="card-title-icon">
+                        <span class="icon-badge">🩺</span>
+                        <span id="challenge-question-topic">چالش بالینی</span>
+                    </span>
+                </div>
+                <div class="card-desc" id="challenge-question-text" style="white-space: pre-wrap; line-height: 1.9; margin-bottom: 14px;"></div>
+                <div id="challenge-options" style="display:flex; flex-direction:column; gap:8px;"></div>
+            </div>
+
+            <!-- نتیجه -->
+            <div class="card" id="challenge-result-card" style="display:none;">
+                <div class="card-title">
+                    <span class="card-title-icon">
+                        <span class="icon-badge" id="challenge-result-icon">✅</span>
+                        <span id="challenge-result-title">نتیجه</span>
+                    </span>
+                </div>
+                <div class="card-desc" id="challenge-result-text" style="white-space: pre-wrap; line-height: 1.9; margin-bottom: 14px;"></div>
+                <button class="exam-btn" onclick="resetChallengeFlow()">🔁 چالش جدید</button>
             </div>
         </div>
 
         <!-- زبانه ۵: هوش مصنوعی -->
         <div id="tab-ai" class="tab-content">
-            <div class="card" style="text-align: center; padding: 36px 16px;">
-                <div style="font-size:40px; margin-bottom:10px;">💡</div>
-                <h3 style="font-size:17px; color:var(--text-color);">دستیار هوشمند آپامد</h3>
-                <p class="card-desc" style="margin-top:8px;">تحلیل گایدلاین‌های پزشکی و پاسخ به سوالات تخصصی.</p>
+            <div class="card">
+                <div class="card-title">
+                    <span class="card-title-icon">
+                        <span class="icon-badge">💡</span>
+                        دستیار هوشمند آپامد
+                    </span>
+                </div>
+                <div class="card-desc" id="ai-quota-text" style="margin-bottom:12px;">در حال دریافت اطلاعات...</div>
+                <textarea id="ai-question-input" placeholder="سوال پزشکی خود را اینجا بنویسید..." rows="4"
+                    style="width:100%; border-radius:14px; border:var(--card-border); background:var(--item-bg); color:var(--text-color); padding:12px; font-size:14px; resize:vertical; outline:none;"></textarea>
+                <button class="exam-btn" id="ai-ask-btn" onclick="askAI()" style="margin-top:10px;">🚀 ارسال سوال</button>
+            </div>
+
+            <div class="card" id="ai-answer-card" style="display:none;">
+                <div class="card-title">
+                    <span class="card-title-icon">
+                        <span class="icon-badge">📝</span>
+                        پاسخ دستیار
+                    </span>
+                </div>
+                <div class="card-desc" id="ai-answer-text" style="white-space: pre-wrap; line-height: 1.9;"></div>
             </div>
         </div>
 
@@ -644,6 +703,8 @@
 
                 document.getElementById('ai-count').innerText = `${data.ai_prompts_count} پرامپت`;
                 document.getElementById('ai-text').innerText = data.ai_remaining_text;
+                document.getElementById('ai-quota-text').innerText = data.ai_remaining_text;
+                document.getElementById('challenge-quota-text').innerText = data.challenge_remaining_text;
 
                 document.getElementById('challenge-text').innerText = data.challenge_remaining_text;
                 document.getElementById('ch-total').innerText = data.challenge.total;
@@ -677,7 +738,175 @@
             .catch(err => console.error("Error Loading App Data:", err));
         }
 
+        // ---------- بخش هوش مصنوعی ----------
+        function askAI() {
+            const input = document.getElementById('ai-question-input');
+            const question = input.value.trim();
+            if (!question) {
+                tg.showAlert('لطفاً ابتدا سوال خود را بنویسید.');
+                return;
+            }
+
+            const btn = document.getElementById('ai-ask-btn');
+            btn.disabled = true;
+            btn.innerText = '⏳ در حال پردازش...';
+
+            const answerCard = document.getElementById('ai-answer-card');
+            answerCard.style.display = 'none';
+
+            fetch(`${BASE_URL}/api/ai/ask`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Telegram-Init-Data': tg.initData
+                },
+                body: JSON.stringify({ question })
+            })
+            .then(res => res.json().then(data => ({ status: res.status, data })))
+            .then(({ status, data }) => {
+                btn.disabled = false;
+                btn.innerText = '🚀 ارسال سوال';
+
+                if (status !== 200 || data.error) {
+                    tg.showAlert(data.message || 'خطایی رخ داد. دوباره تلاش کنید.');
+                    return;
+                }
+
+                document.getElementById('ai-answer-text').innerText = data.answer;
+                answerCard.style.display = 'block';
+                document.getElementById('ai-quota-text').innerText = data.ai_remaining_text;
+                document.getElementById('ai-text').innerText = data.ai_remaining_text;
+                input.value = '';
+            })
+            .catch(err => {
+                console.error('AI ask error:', err);
+                btn.disabled = false;
+                btn.innerText = '🚀 ارسال سوال';
+                tg.showAlert('خطا در ارتباط با سرور. اتصال اینترنت خود را بررسی کنید.');
+            });
+        }
+
+        // ---------- بخش چالش بالینی ----------
+        function loadChallengeTopics() {
+            fetch(`${BASE_URL}/api/challenge/topics`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(res => res.json())
+            .then(data => {
+                const list = document.getElementById('challenge-topics-list');
+                if (!data.topics || !data.topics.length) {
+                    list.innerHTML = '<p style="color:var(--hint-color); font-size:13px;">رشته‌ای یافت نشد.</p>';
+                    return;
+                }
+                list.innerHTML = data.topics.map(topic => `
+                    <button onclick="startChallenge('${topic}')" style="
+                        background: var(--item-bg); border: var(--card-border); color: var(--text-color);
+                        padding: 10px 16px; border-radius: 14px; font-size: 13px; font-weight: 700; cursor:pointer;
+                    ">${topic}</button>
+                `).join('');
+            })
+            .catch(err => console.error('Error loading topics:', err));
+        }
+
+        function startChallenge(topic) {
+            document.getElementById('challenge-topics-card').style.display = 'none';
+            document.getElementById('challenge-result-card').style.display = 'none';
+            document.getElementById('challenge-question-card').style.display = 'block';
+            document.getElementById('challenge-question-topic').innerText = `چالش بالینی — ${topic}`;
+            document.getElementById('challenge-question-text').innerText = '⏳ در حال ساخت سوال...';
+            document.getElementById('challenge-options').innerHTML = '';
+
+            fetch(`${BASE_URL}/api/challenge/new`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Telegram-Init-Data': tg.initData
+                },
+                body: JSON.stringify({ topic })
+            })
+            .then(res => res.json().then(data => ({ status: res.status, data })))
+            .then(({ status, data }) => {
+                if (status !== 200 || data.error) {
+                    tg.showAlert(data.message || 'خطا در ساخت سوال. دوباره تلاش کنید.');
+                    resetChallengeFlow();
+                    return;
+                }
+
+                document.getElementById('challenge-question-text').innerText = data.question;
+                document.getElementById('challenge-quota-text').innerText = data.challenge_remaining_text;
+                document.getElementById('challenge-text').innerText = data.challenge_remaining_text;
+
+                const optionsDiv = document.getElementById('challenge-options');
+                ['الف', 'ب', 'ج', 'د'].forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.innerText = opt;
+                    btn.style.cssText = `
+                        background: var(--item-bg); border: var(--card-border); color: var(--text-color);
+                        padding: 12px; border-radius: 14px; font-size: 14px; font-weight: 700; cursor:pointer; width:100%;
+                    `;
+                    btn.onclick = () => submitChallengeAnswer(opt);
+                    optionsDiv.appendChild(btn);
+                });
+            })
+            .catch(err => {
+                console.error('Challenge new error:', err);
+                tg.showAlert('خطا در ارتباط با سرور.');
+                resetChallengeFlow();
+            });
+        }
+
+        function submitChallengeAnswer(answer) {
+            document.getElementById('challenge-question-text').innerText += '\n\n⏳ در حال بررسی پاسخ...';
+            document.querySelectorAll('#challenge-options button').forEach(b => b.disabled = true);
+
+            fetch(`${BASE_URL}/api/challenge/answer`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Telegram-Init-Data': tg.initData
+                },
+                body: JSON.stringify({ answer })
+            })
+            .then(res => res.json().then(data => ({ status: res.status, data })))
+            .then(({ status, data }) => {
+                if (status !== 200 || data.error) {
+                    tg.showAlert(data.message || 'خطا در ثبت پاسخ.');
+                    return;
+                }
+
+                document.getElementById('challenge-question-card').style.display = 'none';
+                const resultCard = document.getElementById('challenge-result-card');
+                resultCard.style.display = 'block';
+
+                if (data.is_correct) {
+                    document.getElementById('challenge-result-icon').innerText = '🎉';
+                    document.getElementById('challenge-result-title').innerText = 'پاسخ صحیح!';
+                    document.getElementById('challenge-result-text').innerText =
+                        `گزینه انتخابی: ${data.selected_answer}\n\n💡 توضیح:\n${data.explanation}`;
+                } else {
+                    document.getElementById('challenge-result-icon').innerText = '❌';
+                    document.getElementById('challenge-result-title').innerText = 'پاسخ نادرست';
+                    document.getElementById('challenge-result-text').innerText =
+                        `گزینه صحیح: ${data.correct_answer}\nگزینه انتخابی شما: ${data.selected_answer}\n\n💡 توضیح:\n${data.explanation}`;
+                }
+
+                loadAppData();
+            })
+            .catch(err => {
+                console.error('Challenge answer error:', err);
+                tg.showAlert('خطا در ارتباط با سرور.');
+            });
+        }
+
+        function resetChallengeFlow() {
+            document.getElementById('challenge-question-card').style.display = 'none';
+            document.getElementById('challenge-result-card').style.display = 'none';
+            document.getElementById('challenge-topics-card').style.display = 'block';
+        }
+
         loadAppData();
+        loadChallengeTopics();
     </script>
 </body>
 </html>
