@@ -520,6 +520,8 @@
 
         <!-- زبانه ۳: ردیاب زمان -->
         <div id="tab-tracker" class="tab-content">
+
+            <!-- وضعیت فعلی -->
             <div class="card">
                 <div class="card-title">
                     <span class="card-title-icon">
@@ -529,8 +531,57 @@
                 </div>
                 <div class="card-value" id="total-time" style="font-family: monospace;">00:00:00</div>
                 <div class="card-desc" id="active-status">وضعیت: هیچ فعالیتی روشن نیست.</div>
+                <button class="exam-btn" id="tracker-stop-btn" onclick="stopTrackerActivity()" style="display:none; background:#ef4444; color:#fff;">⏹️ توقف فعالیت جاری</button>
             </div>
 
+            <!-- شروع فعالیت -->
+            <div class="card">
+                <div class="card-title">
+                    <span class="card-title-icon">
+                        <span class="icon-badge">▶️</span>
+                        شروع یک فعالیت
+                    </span>
+                </div>
+                <div id="tracker-activities-list" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
+                    <p style="color:var(--hint-color); font-size:13px;">در حال دریافت لیست فعالیت‌ها...</p>
+                </div>
+
+                <div style="display:flex; gap:8px;">
+                    <input id="tracker-new-activity-input" type="text" placeholder="نام فعالیت جدید..." maxlength="40"
+                        style="flex:1; border-radius:12px; border:var(--card-border); background:var(--item-bg); color:var(--text-color); padding:10px 12px; font-size:13px; outline:none;">
+                    <button onclick="addTrackerActivity()" style="
+                        background: var(--med-cyan); color:#fff; border:none; border-radius:12px; padding:0 16px; font-weight:800; cursor:pointer;
+                    ">➕</button>
+                </div>
+            </div>
+
+            <!-- نمودار دایره‌ای سهم فعالیت‌ها -->
+            <div class="card" id="tracker-pie-card" style="display:none;">
+                <div class="card-title">
+                    <span class="card-title-icon">
+                        <span class="icon-badge">🥯</span>
+                        سهم هر فعالیت از زمان امروز
+                    </span>
+                </div>
+                <div style="display:flex; align-items:center; gap:18px; flex-wrap:wrap; justify-content:center;">
+                    <svg id="tracker-pie-svg" viewBox="0 0 160 160" width="160" height="160"></svg>
+                    <div id="tracker-pie-legend" style="display:flex; flex-direction:column; gap:6px;"></div>
+                </div>
+            </div>
+
+            <!-- نمودار Timeline بازه‌های زمانی -->
+            <div class="card" id="tracker-timeline-card" style="display:none;">
+                <div class="card-title">
+                    <span class="card-title-icon">
+                        <span class="icon-badge">📊</span>
+                        بازه‌های زمانی فعالیت‌ها در طول روز
+                    </span>
+                </div>
+                <div id="tracker-timeline-axis" style="display:flex; justify-content:space-between; font-size:10px; color:var(--hint-color); margin-bottom:6px; padding: 0 2px;"></div>
+                <div id="tracker-timeline-rows" style="display:flex; flex-direction:column; gap:10px;"></div>
+            </div>
+
+            <!-- جزئیات لیستی -->
             <div class="card">
                 <div class="card-title">
                     <span class="card-title-icon">
@@ -671,6 +722,11 @@
 
             document.getElementById(`tab-${tabName}`).classList.add('active');
             element.classList.add('active');
+
+            if (tabName === 'tracker') {
+                loadTrackerData();
+                loadTrackerActivitiesList();
+            }
         }
 
         function formatSeconds(sec) {
@@ -710,30 +766,6 @@
                 document.getElementById('ch-total').innerText = data.challenge.total;
                 document.getElementById('ch-correct').innerText = data.challenge.correct;
                 document.getElementById('ch-incorrect').innerText = data.challenge.incorrect;
-
-                if (data.tracker) {
-                    document.getElementById('total-time').innerText = formatSeconds(data.tracker.total_seconds || 0);
-
-                    if (data.tracker.active_activity) {
-                        document.getElementById('active-status').innerText = `🟢 در حال اجرا: ${data.tracker.active_activity}`;
-                        document.getElementById('active-status').style.color = 'var(--med-emerald)';
-                    } else {
-                        document.getElementById('active-status').innerText = '⚪ هیچ فعالیتی روشن نیست.';
-                        document.getElementById('active-status').style.color = 'var(--hint-color)';
-                    }
-
-                    const listDiv = document.getElementById('activities-list');
-                    if (data.tracker.activities && data.tracker.activities.length > 0) {
-                        listDiv.innerHTML = data.tracker.activities.map(act => `
-                            <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--item-border);">
-                                <span style="font-size:13px; font-weight:600;">📌 ${act.name}</span>
-                                <strong style="font-family:monospace; font-size:14px; color:var(--text-color);">${formatSeconds(act.seconds)}</strong>
-                            </div>
-                        `).join('');
-                    } else {
-                        listDiv.innerHTML = `<p style="color:var(--hint-color); font-size:13px;">امروز هنوز زمانی ثبت نشده است.</p>`;
-                    }
-                }
             })
             .catch(err => console.error("Error Loading App Data:", err));
         }
@@ -903,6 +935,242 @@
             document.getElementById('challenge-question-card').style.display = 'none';
             document.getElementById('challenge-result-card').style.display = 'none';
             document.getElementById('challenge-topics-card').style.display = 'block';
+        }
+
+        // ---------- بخش ردیاب زمان (تایم ترکر) ----------
+        const ACTIVITY_COLORS = ['#0284c7', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#14b8a6', '#f97316'];
+        let trackerTimerInterval = null;
+
+        function loadTrackerActivitiesList() {
+            fetch(`${BASE_URL}/api/tracker/activities`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json', 'X-Telegram-Init-Data': tg.initData }
+            })
+            .then(res => res.json())
+            .then(data => {
+                const list = document.getElementById('tracker-activities-list');
+                if (!data.activities || !data.activities.length) {
+                    list.innerHTML = '<p style="color:var(--hint-color); font-size:13px;">هنوز فعالیتی اضافه نکرده‌اید. یکی بسازید 👇</p>';
+                    return;
+                }
+                list.innerHTML = data.activities.map(name => `
+                    <button onclick="startTrackerActivity(${JSON.stringify(name)})" style="
+                        background: var(--item-bg); border: var(--card-border); color: var(--text-color);
+                        padding: 10px 16px; border-radius: 14px; font-size: 13px; font-weight: 700; cursor:pointer;
+                    ">▶️ ${name}</button>
+                `).join('');
+            })
+            .catch(err => console.error('Error loading tracker activities:', err));
+        }
+
+        function addTrackerActivity() {
+            const input = document.getElementById('tracker-new-activity-input');
+            const name = input.value.trim();
+            if (!name) {
+                tg.showAlert('لطفاً نام فعالیت را وارد کنید.');
+                return;
+            }
+            fetch(`${BASE_URL}/api/tracker/activities/add`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-Telegram-Init-Data': tg.initData },
+                body: JSON.stringify({ name })
+            })
+            .then(res => res.json().then(data => ({ status: res.status, data })))
+            .then(({ status, data }) => {
+                if (status !== 200 || data.error) {
+                    tg.showAlert(data.message || 'خطا در افزودن فعالیت.');
+                    return;
+                }
+                input.value = '';
+                loadTrackerActivitiesList();
+            })
+            .catch(err => {
+                console.error('Add activity error:', err);
+                tg.showAlert('خطا در ارتباط با سرور.');
+            });
+        }
+
+        function startTrackerActivity(name) {
+            fetch(`${BASE_URL}/api/tracker/start`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-Telegram-Init-Data': tg.initData },
+                body: JSON.stringify({ activity_name: name })
+            })
+            .then(res => res.json().then(data => ({ status: res.status, data })))
+            .then(({ status, data }) => {
+                if (status !== 200 || data.error) {
+                    tg.showAlert(data.message || 'خطا در شروع فعالیت.');
+                    return;
+                }
+                loadTrackerData();
+            })
+            .catch(err => {
+                console.error('Start activity error:', err);
+                tg.showAlert('خطا در ارتباط با سرور.');
+            });
+        }
+
+        function stopTrackerActivity() {
+            fetch(`${BASE_URL}/api/tracker/stop`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-Telegram-Init-Data': tg.initData }
+            })
+            .then(res => res.json().then(data => ({ status: res.status, data })))
+            .then(({ status, data }) => {
+                if (status !== 200 || data.error) {
+                    tg.showAlert(data.message || 'خطا در توقف فعالیت.');
+                    return;
+                }
+                const h = Math.floor(data.duration_seconds / 3600), m = Math.floor((data.duration_seconds % 3600) / 60);
+                tg.showAlert(`⏹️ فعالیت «${data.activity_name}» متوقف شد.\nمدت زمان: ${h} ساعت و ${m} دقیقه`);
+                loadTrackerData();
+            })
+            .catch(err => {
+                console.error('Stop activity error:', err);
+                tg.showAlert('خطا در ارتباط با سرور.');
+            });
+        }
+
+        function loadTrackerData() {
+            fetch(`${BASE_URL}/api/tracker/today`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json', 'X-Telegram-Init-Data': tg.initData }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) return;
+
+                if (trackerTimerInterval) {
+                    clearInterval(trackerTimerInterval);
+                    trackerTimerInterval = null;
+                }
+
+                const baseTotalSeconds = data.total_seconds || 0;
+                const baseTimestamp = Date.now();
+                const activeActivity = data.active_activity || null;
+
+                document.getElementById('total-time').innerText = formatSeconds(baseTotalSeconds);
+
+                const stopBtn = document.getElementById('tracker-stop-btn');
+                if (activeActivity) {
+                    document.getElementById('active-status').innerText = `🟢 در حال اجرا: ${activeActivity}`;
+                    document.getElementById('active-status').style.color = 'var(--med-emerald)';
+                    stopBtn.style.display = 'block';
+
+                    trackerTimerInterval = setInterval(() => {
+                        const elapsed = Math.floor((Date.now() - baseTimestamp) / 1000);
+                        document.getElementById('total-time').innerText = formatSeconds(baseTotalSeconds + elapsed);
+                    }, 1000);
+                } else {
+                    document.getElementById('active-status').innerText = '⚪ هیچ فعالیتی روشن نیست.';
+                    document.getElementById('active-status').style.color = 'var(--hint-color)';
+                    stopBtn.style.display = 'none';
+                }
+
+                const listDiv = document.getElementById('activities-list');
+                if (data.activities && data.activities.length > 0) {
+                    listDiv.innerHTML = data.activities.map(act => `
+                        <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--item-border);">
+                            <span style="font-size:13px; font-weight:600;">📌 ${act.name}</span>
+                            <strong style="font-family:monospace; font-size:14px; color:var(--text-color);">${formatSeconds(act.seconds)}</strong>
+                        </div>
+                    `).join('');
+                } else {
+                    listDiv.innerHTML = `<p style="color:var(--hint-color); font-size:13px;">امروز هنوز زمانی ثبت نشده است.</p>`;
+                }
+
+                renderTrackerPieChart(data.activities || []);
+                renderTrackerTimeline(data.sessions || []);
+            })
+            .catch(err => console.error('Error loading tracker data:', err));
+        }
+
+        function renderTrackerPieChart(activities) {
+            const pieCard = document.getElementById('tracker-pie-card');
+            if (!activities.length) {
+                pieCard.style.display = 'none';
+                return;
+            }
+            pieCard.style.display = 'block';
+
+            const total = activities.reduce((sum, a) => sum + a.seconds, 0);
+            const size = 160, radius = 60, center = size / 2;
+            const circumference = 2 * Math.PI * radius;
+            let offset = 0;
+
+            let circles = '';
+            let legend = '';
+            activities.forEach((act, idx) => {
+                const fraction = total > 0 ? act.seconds / total : 0;
+                const dash = fraction * circumference;
+                const color = ACTIVITY_COLORS[idx % ACTIVITY_COLORS.length];
+                circles += `<circle cx="${center}" cy="${center}" r="${radius}" fill="none" stroke="${color}"
+                    stroke-width="26" stroke-dasharray="${dash} ${circumference - dash}"
+                    stroke-dashoffset="${-offset}" transform="rotate(-90 ${center} ${center})" />`;
+                offset += dash;
+
+                const percent = total > 0 ? Math.round(fraction * 100) : 0;
+                legend += `
+                    <div style="display:flex; align-items:center; gap:8px; font-size:12px;">
+                        <span style="width:10px; height:10px; border-radius:3px; background:${color}; display:inline-block;"></span>
+                        <span style="font-weight:700; color:var(--text-color);">${act.name}</span>
+                        <span style="color:var(--hint-color);">${percent}٪ (${formatSeconds(act.seconds)})</span>
+                    </div>`;
+            });
+
+            document.getElementById('tracker-pie-svg').innerHTML = circles;
+            document.getElementById('tracker-pie-legend').innerHTML = legend;
+        }
+
+        function renderTrackerTimeline(sessions) {
+            const timelineCard = document.getElementById('tracker-timeline-card');
+            if (!sessions.length) {
+                timelineCard.style.display = 'none';
+                return;
+            }
+            timelineCard.style.display = 'block';
+
+            const axis = document.getElementById('tracker-timeline-axis');
+            axis.innerHTML = ['۰۰:۰۰', '۰۶:۰۰', '۱۲:۰۰', '۱۸:۰۰', '۲۴:۰۰'].map(t => `<span>${t}</span>`).join('');
+
+            const activityNames = [...new Set(sessions.map(s => s.activity_name))];
+            const colorMap = {};
+            activityNames.forEach((name, idx) => colorMap[name] = ACTIVITY_COLORS[idx % ACTIVITY_COLORS.length]);
+
+            const toMinutes = (hhmm) => {
+                if (!hhmm) return 0;
+                const [h, m] = hhmm.split(':').map(Number);
+                return h * 60 + m;
+            };
+
+            const rowsDiv = document.getElementById('tracker-timeline-rows');
+            rowsDiv.innerHTML = activityNames.map(name => {
+                const activitySessions = sessions.filter(s => s.activity_name === name);
+                const bars = activitySessions.map(s => {
+                    const startMin = toMinutes(s.start_time);
+                    let endMin = toMinutes(s.end_time);
+                    if (endMin < startMin) endMin = 1440;
+                    const rightPct = (startMin / 1440) * 100;
+                    const widthPct = Math.max(0.6, ((endMin - startMin) / 1440) * 100);
+                    const color = colorMap[name];
+                    const label = `${s.start_time} تا ${s.is_active ? 'اکنون' : s.end_time}`;
+                    return `<div title="${label}" style="
+                        position:absolute; right:${rightPct}%; width:${widthPct}%; top:0; bottom:0;
+                        background:${color}; border-radius:6px; ${s.is_active ? 'opacity:0.75;' : ''}
+                    "></div>`;
+                }).join('');
+
+                return `
+                    <div>
+                        <div style="font-size:12px; font-weight:700; color:var(--text-color); margin-bottom:4px; display:flex; align-items:center; gap:6px;">
+                            <span style="width:8px; height:8px; border-radius:2px; background:${colorMap[name]}; display:inline-block;"></span>
+                            ${name}
+                        </div>
+                        <div style="position:relative; height:22px; background:var(--item-bg); border-radius:8px; border:var(--card-border); overflow:hidden;">
+                            ${bars}
+                        </div>
+                    </div>`;
+            }).join('');
         }
 
         loadAppData();
