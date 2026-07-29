@@ -827,16 +827,21 @@
             .then(res => res.json())
             .then(data => {
                 const list = document.getElementById('challenge-topics-list');
+                list.innerHTML = '';
                 if (!data.topics || !data.topics.length) {
                     list.innerHTML = '<p style="color:var(--hint-color); font-size:13px;">رشته‌ای یافت نشد.</p>';
                     return;
                 }
-                list.innerHTML = data.topics.map(topic => `
-                    <button onclick="startChallenge('${topic}')" style="
+                data.topics.forEach(topic => {
+                    const btn = document.createElement('button');
+                    btn.textContent = topic;
+                    btn.style.cssText = `
                         background: var(--item-bg); border: var(--card-border); color: var(--text-color);
                         padding: 10px 16px; border-radius: 14px; font-size: 13px; font-weight: 700; cursor:pointer;
-                    ">${topic}</button>
-                `).join('');
+                    `;
+                    btn.addEventListener('click', () => startChallenge(topic));
+                    list.appendChild(btn);
+                });
             })
             .catch(err => console.error('Error loading topics:', err));
         }
@@ -949,16 +954,21 @@
             .then(res => res.json())
             .then(data => {
                 const list = document.getElementById('tracker-activities-list');
+                list.innerHTML = '';
                 if (!data.activities || !data.activities.length) {
                     list.innerHTML = '<p style="color:var(--hint-color); font-size:13px;">هنوز فعالیتی اضافه نکرده‌اید. یکی بسازید 👇</p>';
                     return;
                 }
-                list.innerHTML = data.activities.map(name => `
-                    <button onclick="startTrackerActivity(${JSON.stringify(name)})" style="
+                data.activities.forEach(name => {
+                    const btn = document.createElement('button');
+                    btn.textContent = `▶️ ${name}`;
+                    btn.style.cssText = `
                         background: var(--item-bg); border: var(--card-border); color: var(--text-color);
                         padding: 10px 16px; border-radius: 14px; font-size: 13px; font-weight: 700; cursor:pointer;
-                    ">▶️ ${name}</button>
-                `).join('');
+                    `;
+                    btn.addEventListener('click', () => startTrackerActivity(name));
+                    list.appendChild(btn);
+                });
             })
             .catch(err => console.error('Error loading tracker activities:', err));
         }
