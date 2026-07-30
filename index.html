@@ -452,19 +452,45 @@
 
         <!-- زبانه ۲: آزمون شبانه -->
         <div id="tab-nightly" class="tab-content">
-            
-            <!-- بنر آزمون امشب -->
-            <div class="exam-banner">
-                <div class="exam-status-badge">
+
+            <!-- بنر وضعیت آزمون امشب -->
+            <div class="exam-banner" id="nightly-banner">
+                <div class="exam-status-badge" id="nightly-status-badge">
                     <span class="pulse-dot"></span>
-                    <span>در حال برگزاری زنده</span>
+                    <span id="nightly-status-label">در حال بررسی وضعیت...</span>
                 </div>
-                <h2 style="font-size: 19px; font-weight: 800; margin-bottom: 6px;" id="exam-title">آزمون شبانه فارماکولوژی بالینی</h2>
-                <p style="font-size: 13px; opacity: 0.9; font-weight: 500;" id="exam-details">📚 ۱۰ سوال تخصصی | مهلت پاسخگویی: ۱۵ دقیقه</p>
-                <div style="font-size: 12px; margin-top: 10px; opacity: 0.85; font-weight: 600;">
-                    ⏱️ زمان باقی‌مانده تا پایان: <span id="exam-timer" style="font-family: monospace; font-size:14px; font-weight:bold;">01:45:22</span>
+                <h2 style="font-size: 19px; font-weight: 800; margin-bottom: 6px;">آزمون شبانه ترکیبی</h2>
+                <p style="font-size: 13px; opacity: 0.9; font-weight: 500;">📚 ۱۰ سوال از رشته‌های مختلف | هر شب ساعت ۲۱:۰۰ تا ۲۱:۱۵</p>
+                <div style="font-size: 12px; margin-top: 10px; opacity: 0.85; font-weight: 600;" id="nightly-countdown-row">
+                    ⏱️ <span id="nightly-countdown-label">در حال محاسبه...</span> <span id="nightly-countdown" style="font-family: monospace; font-size:14px; font-weight:bold;">--:--:--</span>
                 </div>
-                <button class="exam-btn" id="start-exam-btn" onclick="startNightlyExam()">ورود به آزمون امشب 🚀</button>
+                <button class="exam-btn" id="nightly-action-btn" onclick="startNightlyExam()" style="display:none;">ورود به آزمون امشب 🚀</button>
+            </div>
+
+            <!-- فرم آزمون (وقتی شروع میشه) -->
+            <div class="card" id="nightly-quiz-card" style="display:none;">
+                <div class="card-title">
+                    <span class="card-title-icon">
+                        <span class="icon-badge">📝</span>
+                        سوالات آزمون امشب
+                    </span>
+                    <span style="font-size: 12px; color: #ef4444; font-weight:800;" id="nightly-quiz-timer">--:--</span>
+                </div>
+                <div id="nightly-questions-list" style="display:flex; flex-direction:column; gap:18px;"></div>
+                <button class="exam-btn" onclick="submitNightlyExam()" style="margin-top:16px;">✅ ثبت نهایی پاسخ‌ها</button>
+            </div>
+
+            <!-- نتیجه بعد از ثبت -->
+            <div class="card" id="nightly-result-card" style="display:none;">
+                <div class="card-title">
+                    <span class="card-title-icon">
+                        <span class="icon-badge">🎯</span>
+                        نتیجه آزمون شما
+                    </span>
+                </div>
+                <div class="card-value" id="nightly-result-score">۰ از ۱۰</div>
+                <div class="card-desc" id="nightly-result-desc"></div>
+                <div id="nightly-result-details" style="margin-top:14px; display:flex; flex-direction:column; gap:10px;"></div>
             </div>
 
             <!-- جدول نفرات برتر -->
@@ -472,47 +498,13 @@
                 <div class="card-title">
                     <span class="card-title-icon">
                         <span class="icon-badge">🏆</span>
-                        جدول نفرات برتر امشب
+                        <span id="nightly-leaderboard-title">جدول نفرات برتر امشب</span>
                     </span>
-                    <span style="font-size: 11px; color: var(--med-cyan); font-weight:700;">به‌روزرسانی آنی</span>
+                    <span style="font-size: 11px; color: var(--med-cyan); font-weight:700;">به‌روزرسانی خودکار</span>
                 </div>
 
                 <div id="leaderboard-list">
-                    <div class="leader-item">
-                        <div class="leader-rank">🥇</div>
-                        <div class="leader-user">
-                            <div class="leader-avatar">👨‍⚕️</div>
-                            <div>
-                                <div style="font-size:13px; font-weight:800; color:var(--text-color);">دکتر علی رضایی</div>
-                                <div class="leader-time">زمان ثبت: ۰۳:۴۵ دقیقه</div>
-                            </div>
-                        </div>
-                        <div class="leader-score" style="color: var(--med-emerald);">۱۰ از ۱۰</div>
-                    </div>
-
-                    <div class="leader-item">
-                        <div class="leader-rank">🥈</div>
-                        <div class="leader-user">
-                            <div class="leader-avatar">👩‍⚕️</div>
-                            <div>
-                                <div style="font-size:13px; font-weight:800; color:var(--text-color);">سارا محمدی</div>
-                                <div class="leader-time">زمان ثبت: ۰۴:۱۲ دقیقه</div>
-                            </div>
-                        </div>
-                        <div class="leader-score" style="color: var(--med-emerald);">۹ از ۱۰</div>
-                    </div>
-
-                    <div class="leader-item">
-                        <div class="leader-rank">🥉</div>
-                        <div class="leader-user">
-                            <div class="leader-avatar">👨‍⚕️</div>
-                            <div>
-                                <div style="font-size:13px; font-weight:800; color:var(--text-color);">محمدحسین کریمی</div>
-                                <div class="leader-time">زمان ثبت: ۰۵:۰۱ دقیقه</div>
-                            </div>
-                        </div>
-                        <div class="leader-score" style="color: var(--med-emerald);">۹ از ۱۰</div>
-                    </div>
+                    <p style="color:var(--hint-color); font-size:13px;">در حال دریافت اطلاعات...</p>
                 </div>
             </div>
 
@@ -726,6 +718,13 @@
             if (tabName === 'tracker') {
                 loadTrackerData();
                 loadTrackerActivitiesList();
+            } else if (tabName === 'nightly') {
+                loadNightlyStatus();
+                if (nightlyStatusPollInterval) clearInterval(nightlyStatusPollInterval);
+                nightlyStatusPollInterval = setInterval(loadNightlyStatus, 20000);
+            } else if (nightlyStatusPollInterval) {
+                clearInterval(nightlyStatusPollInterval);
+                nightlyStatusPollInterval = null;
             }
         }
 
@@ -736,8 +735,261 @@
             return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
         }
 
+        // ---------- بخش آزمون شبانه ----------
+        let nightlyStatusPollInterval = null;
+        let nightlyQuizCountdownInterval = null;
+        let nightlyQuestions = [];
+        let nightlyAnswers = [];
+        let nightlySubmitted = false;
+
+        function formatMMSS(totalSeconds) {
+            const s = Math.max(0, totalSeconds);
+            const m = Math.floor(s / 60);
+            const sec = s % 60;
+            return `${m.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+        }
+
+        function renderNightlyLeaderboard(leaderboard, title) {
+            document.getElementById('nightly-leaderboard-title').innerText = title || 'جدول نفرات برتر امشب';
+            const listDiv = document.getElementById('leaderboard-list');
+            if (!leaderboard || !leaderboard.length) {
+                listDiv.innerHTML = '<p style="color:var(--hint-color); font-size:13px;">هنوز کسی در این آزمون شرکت نکرده است.</p>';
+                return;
+            }
+            const medals = ['🥇', '🥈', '🥉'];
+            listDiv.innerHTML = leaderboard.map(item => {
+                const medal = item.rank <= 3 ? medals[item.rank - 1] : `#${item.rank}`;
+                const minutes = Math.floor(item.duration_seconds / 60);
+                const secs = item.duration_seconds % 60;
+                return `
+                    <div class="leader-item">
+                        <div class="leader-rank">${medal}</div>
+                        <div class="leader-user">
+                            <div class="leader-avatar">👤</div>
+                            <div>
+                                <div style="font-size:13px; font-weight:800; color:var(--text-color);">${item.name}</div>
+                                <div class="leader-time">زمان ثبت: ${minutes.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')} دقیقه</div>
+                            </div>
+                        </div>
+                        <div class="leader-score" style="color: var(--med-emerald);">${item.score} از ${item.total}</div>
+                    </div>`;
+            }).join('');
+        }
+
+        function loadNightlyStatus() {
+            fetch(`${BASE_URL}/api/nightly/status`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json', 'X-Telegram-Init-Data': tg.initData }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) return;
+
+                renderNightlyLeaderboard(data.leaderboard,
+                    data.leaderboard_date === data.exam_date ? 'جدول نفرات برتر امشب' : 'جدول نفرات برتر دیشب');
+
+                const badge = document.getElementById('nightly-status-badge');
+                const label = document.getElementById('nightly-status-label');
+                const countdownLabel = document.getElementById('nightly-countdown-label');
+                const countdownEl = document.getElementById('nightly-countdown');
+                const actionBtn = document.getElementById('nightly-action-btn');
+
+                // اگر کاربر در حال حاضر وسط پاسخ‌دادن به آزمونه، وضعیت رو دستکاری نکن
+                if (document.getElementById('nightly-quiz-card').style.display === 'block' && !nightlySubmitted) {
+                    return;
+                }
+
+                if (data.is_active && !data.already_participated) {
+                    badge.style.background = 'rgba(16,185,129,0.25)';
+                    label.innerText = 'در حال برگزاری — می‌توانید شرکت کنید';
+                    countdownLabel.innerText = 'زمان باقی‌مانده تا پایان آزمون:';
+                    countdownEl.innerText = formatMMSS(data.seconds_to_end);
+                    actionBtn.style.display = 'block';
+                    actionBtn.innerText = 'ورود به آزمون امشب 🚀';
+                    actionBtn.disabled = false;
+                } else if (data.is_active && data.already_participated) {
+                    label.innerText = 'شما امشب شرکت کرده‌اید ✅';
+                    countdownLabel.innerText = 'زمان باقی‌مانده تا پایان آزمون:';
+                    countdownEl.innerText = formatMMSS(data.seconds_to_end);
+                    actionBtn.style.display = 'none';
+                    showNightlyResultFromStatus(data.my_result);
+                } else if (!data.is_active && data.seconds_to_start > 0) {
+                    label.innerText = 'آزمون امشب هنوز شروع نشده';
+                    countdownLabel.innerText = 'زمان تا شروع آزمون امشب:';
+                    countdownEl.innerText = formatMMSS(data.seconds_to_start);
+                    actionBtn.style.display = 'none';
+                    document.getElementById('nightly-result-card').style.display = data.already_participated ? 'block' : 'none';
+                } else {
+                    label.innerText = 'آزمون امشب به پایان رسیده است';
+                    countdownLabel.innerText = '';
+                    countdownEl.innerText = '';
+                    actionBtn.style.display = 'none';
+                    if (data.already_participated) {
+                        showNightlyResultFromStatus(data.my_result);
+                    }
+                }
+            })
+            .catch(err => console.error('Error loading nightly status:', err));
+        }
+
+        function showNightlyResultFromStatus(myResult) {
+            if (!myResult) return;
+            document.getElementById('nightly-quiz-card').style.display = 'none';
+            const resultCard = document.getElementById('nightly-result-card');
+            resultCard.style.display = 'block';
+            document.getElementById('nightly-result-score').innerText = `${myResult.score} از ${myResult.total}`;
+            const m = Math.floor(myResult.duration_seconds / 60), s = myResult.duration_seconds % 60;
+            document.getElementById('nightly-result-desc').innerText =
+                `زمان صرف‌شده شما: ${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')} دقیقه`;
+        }
+
         function startNightlyExam() {
-            tg.showAlert("آزمون امشب به‌زودی فعال می‌شود! 🎯");
+            const btn = document.getElementById('nightly-action-btn');
+            btn.disabled = true;
+            btn.innerText = '⏳ در حال آماده‌سازی سوالات...';
+
+            fetch(`${BASE_URL}/api/nightly/start`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-Telegram-Init-Data': tg.initData },
+                body: JSON.stringify({})
+            })
+            .then(res => res.json().then(data => ({ status: res.status, data })))
+            .then(({ status, data }) => {
+                btn.disabled = false;
+                btn.innerText = 'ورود به آزمون امشب 🚀';
+
+                if (status !== 200 || data.error) {
+                    tg.showAlert(data.message || 'خطا در شروع آزمون.');
+                    if (data.error === 'already_participated' && data.my_result) {
+                        showNightlyResultFromStatus(data.my_result);
+                    }
+                    return;
+                }
+
+                nightlyQuestions = data.questions;
+                nightlyAnswers = new Array(nightlyQuestions.length).fill(null);
+                nightlySubmitted = false;
+
+                document.getElementById('nightly-action-btn').style.display = 'none';
+                document.getElementById('nightly-result-card').style.display = 'none';
+                renderNightlyQuiz();
+                document.getElementById('nightly-quiz-card').style.display = 'block';
+
+                if (nightlyQuizCountdownInterval) clearInterval(nightlyQuizCountdownInterval);
+                let remaining = data.seconds_to_end;
+                const timerEl = document.getElementById('nightly-quiz-timer');
+                timerEl.innerText = formatMMSS(remaining);
+                nightlyQuizCountdownInterval = setInterval(() => {
+                    remaining -= 1;
+                    timerEl.innerText = formatMMSS(remaining);
+                    if (remaining <= 0) {
+                        clearInterval(nightlyQuizCountdownInterval);
+                        if (!nightlySubmitted) {
+                            tg.showAlert('⏰ زمان آزمون به پایان رسید؛ پاسخ‌های شما به‌صورت خودکار ثبت شد.');
+                            submitNightlyExam();
+                        }
+                    }
+                }, 1000);
+            })
+            .catch(err => {
+                console.error('Nightly start error:', err);
+                btn.disabled = false;
+                btn.innerText = 'ورود به آزمون امشب 🚀';
+                tg.showAlert('خطا در ارتباط با سرور.');
+            });
+        }
+
+        function renderNightlyQuiz() {
+            const container = document.getElementById('nightly-questions-list');
+            container.innerHTML = '';
+            nightlyQuestions.forEach((q, idx) => {
+                const qDiv = document.createElement('div');
+                qDiv.style.cssText = 'border-bottom:1px solid var(--item-border); padding-bottom:14px;';
+
+                const qHeader = document.createElement('div');
+                qHeader.style.cssText = 'font-size:11px; color:var(--med-cyan); font-weight:700; margin-bottom:6px;';
+                qHeader.innerText = `سوال ${idx + 1} از ${nightlyQuestions.length} — ${q.topic || ''}`;
+                qDiv.appendChild(qHeader);
+
+                const qText = document.createElement('div');
+                qText.style.cssText = 'font-size:13px; line-height:1.9; white-space:pre-wrap; margin-bottom:10px; color:var(--text-color);';
+                qText.innerText = q.question;
+                qDiv.appendChild(qText);
+
+                const optWrap = document.createElement('div');
+                optWrap.style.cssText = 'display:flex; gap:6px;';
+                ['الف', 'ب', 'ج', 'د'].forEach(letter => {
+                    const optBtn = document.createElement('button');
+                    optBtn.innerText = letter;
+                    optBtn.dataset.qIndex = idx;
+                    optBtn.dataset.letter = letter;
+                    optBtn.style.cssText = `
+                        flex:1; background: var(--item-bg); border: var(--card-border); color: var(--text-color);
+                        padding: 10px; border-radius: 12px; font-size: 13px; font-weight: 800; cursor:pointer;
+                    `;
+                    optBtn.addEventListener('click', () => selectNightlyAnswer(idx, letter));
+                    optWrap.appendChild(optBtn);
+                });
+                qDiv.appendChild(optWrap);
+                container.appendChild(qDiv);
+            });
+        }
+
+        function selectNightlyAnswer(qIndex, letter) {
+            nightlyAnswers[qIndex] = letter;
+            document.querySelectorAll(`button[data-q-index="${qIndex}"]`).forEach(btn => {
+                if (btn.dataset.letter === letter) {
+                    btn.style.background = 'var(--med-cyan)';
+                    btn.style.color = '#fff';
+                } else {
+                    btn.style.background = 'var(--item-bg)';
+                    btn.style.color = 'var(--text-color)';
+                }
+            });
+        }
+
+        function submitNightlyExam() {
+            if (nightlySubmitted) return;
+            nightlySubmitted = true;
+            if (nightlyQuizCountdownInterval) clearInterval(nightlyQuizCountdownInterval);
+
+            fetch(`${BASE_URL}/api/nightly/submit`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-Telegram-Init-Data': tg.initData },
+                body: JSON.stringify({ answers: nightlyAnswers })
+            })
+            .then(res => res.json().then(data => ({ status: res.status, data })))
+            .then(({ status, data }) => {
+                if (status !== 200 || data.error) {
+                    tg.showAlert(data.message || 'خطا در ثبت پاسخ‌ها.');
+                    nightlySubmitted = false;
+                    return;
+                }
+
+                document.getElementById('nightly-quiz-card').style.display = 'none';
+                const resultCard = document.getElementById('nightly-result-card');
+                resultCard.style.display = 'block';
+                document.getElementById('nightly-result-score').innerText = `${data.score} از ${data.total}`;
+                const m = Math.floor(data.duration_seconds / 60), s = data.duration_seconds % 60;
+                document.getElementById('nightly-result-desc').innerText =
+                    `زمان صرف‌شده شما: ${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')} دقیقه`;
+
+                const detailsDiv = document.getElementById('nightly-result-details');
+                detailsDiv.innerHTML = data.results.map((r, idx) => `
+                    <div style="font-size:12px; padding:8px; border-radius:10px; background:var(--item-bg); border:var(--card-border);">
+                        <div style="font-weight:700; margin-bottom:4px;">سوال ${idx + 1} (${r.topic}): ${r.is_correct ? '✅ صحیح' : '❌ نادرست'}</div>
+                        ${!r.is_correct ? `<div style="color:var(--hint-color);">پاسخ صحیح: ${r.correct_answer} | پاسخ شما: ${r.selected_answer || '—'}</div>` : ''}
+                        <div style="color:var(--hint-color); margin-top:3px;">💡 ${r.explanation}</div>
+                    </div>
+                `).join('');
+
+                renderNightlyLeaderboard(data.leaderboard, 'جدول نفرات برتر امشب');
+            })
+            .catch(err => {
+                console.error('Nightly submit error:', err);
+                tg.showAlert('خطا در ارتباط با سرور برای ثبت پاسخ‌ها.');
+                nightlySubmitted = false;
+            });
         }
 
         // فراخوانی داده‌ها
