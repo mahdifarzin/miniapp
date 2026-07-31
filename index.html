@@ -725,6 +725,7 @@
             } else if (nightlyStatusPollInterval) {
                 clearInterval(nightlyStatusPollInterval);
                 nightlyStatusPollInterval = null;
+                stopNightlyBannerCountdown();
             }
         }
 
@@ -747,6 +748,47 @@
             const m = Math.floor(s / 60);
             const sec = s % 60;
             return `${m.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+        }
+
+        function formatHHMMSS(totalSeconds) {
+            const s = Math.max(0, Math.floor(totalSeconds));
+            const h = Math.floor(s / 3600);
+            const m = Math.floor((s % 3600) / 60);
+            const sec = s % 60;
+            return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+        }
+
+        let nightlyBannerCountdownInterval = null;
+
+        // تایمر بنر رو هر ثانیه به‌صورت محلی می‌شمره (نه فقط با هر poll از سرور) تا نرم و بدون پرش حرکت کنه
+        function startNightlyBannerCountdown(baseSeconds) {
+            if (nightlyBannerCountdownInterval) {
+                clearInterval(nightlyBannerCountdownInterval);
+                nightlyBannerCountdownInterval = null;
+            }
+            const countdownEl = document.getElementById('nightly-countdown');
+            let remaining = Math.floor(baseSeconds);
+            countdownEl.innerText = formatHHMMSS(remaining);
+
+            nightlyBannerCountdownInterval = setInterval(() => {
+                remaining -= 1;
+                if (remaining <= 0) {
+                    clearInterval(nightlyBannerCountdownInterval);
+                    nightlyBannerCountdownInterval = null;
+                    countdownEl.innerText = formatHHMMSS(0);
+                    // وقتی شمارش به صفر رسید (مثلاً دقیقاً ساعت ۲۱:۰۰ شد) وضعیت رو از سرور دوباره می‌گیریم
+                    loadNightlyStatus();
+                    return;
+                }
+                countdownEl.innerText = formatHHMMSS(remaining);
+            }, 1000);
+        }
+
+        function stopNightlyBannerCountdown() {
+            if (nightlyBannerCountdownInterval) {
+                clearInterval(nightlyBannerCountdownInterval);
+                nightlyBannerCountdownInterval = null;
+            }
         }
 
         function renderNightlyLeaderboard(leaderboard, title) {
@@ -803,26 +845,27 @@
                     badge.style.background = 'rgba(16,185,129,0.25)';
                     label.innerText = 'در حال برگزاری — می‌توانید شرکت کنید';
                     countdownLabel.innerText = 'زمان باقی‌مانده تا پایان آزمون:';
-                    countdownEl.innerText = formatMMSS(data.seconds_to_end);
+                    startNightlyBannerCountdown(data.seconds_to_end);
                     actionBtn.style.display = 'block';
                     actionBtn.innerText = 'ورود به آزمون امشب 🚀';
                     actionBtn.disabled = false;
                 } else if (data.is_active && data.already_participated) {
                     label.innerText = 'شما امشب شرکت کرده‌اید ✅';
                     countdownLabel.innerText = 'زمان باقی‌مانده تا پایان آزمون:';
-                    countdownEl.innerText = formatMMSS(data.seconds_to_end);
+                    startNightlyBannerCountdown(data.seconds_to_end);
                     actionBtn.style.display = 'none';
                     showNightlyResultFromStatus(data.my_result);
                 } else if (!data.is_active && data.seconds_to_start > 0) {
                     label.innerText = 'آزمون امشب هنوز شروع نشده';
                     countdownLabel.innerText = 'زمان تا شروع آزمون امشب:';
-                    countdownEl.innerText = formatMMSS(data.seconds_to_start);
+                    startNightlyBannerCountdown(data.seconds_to_start);
                     actionBtn.style.display = 'none';
                     document.getElementById('nightly-result-card').style.display = data.already_participated ? 'block' : 'none';
                 } else {
                     label.innerText = 'آزمون امشب به پایان رسیده است';
                     countdownLabel.innerText = '';
-                    countdownEl.innerText = '';
+                    stopNightlyBannerCountdown();
+                    document.getElementById('nightly-countdown').innerText = '';
                     actionBtn.style.display = 'none';
                     if (data.already_participated) {
                         showNightlyResultFromStatus(data.my_result);
@@ -878,10 +921,10 @@
                 if (nightlyQuizCountdownInterval) clearInterval(nightlyQuizCountdownInterval);
                 let remaining = data.seconds_to_end;
                 const timerEl = document.getElementById('nightly-quiz-timer');
-                timerEl.innerText = formatMMSS(remaining);
+                timerEl.innerText = formatHHMMSS(remaining);
                 nightlyQuizCountdownInterval = setInterval(() => {
                     remaining -= 1;
-                    timerEl.innerText = formatMMSS(remaining);
+                    timerEl.innerText = formatHHMMSS(remaining);
                     if (remaining <= 0) {
                         clearInterval(nightlyQuizCountdownInterval);
                         if (!nightlySubmitted) {
