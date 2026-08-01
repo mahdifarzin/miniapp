@@ -1098,7 +1098,7 @@
         </div>
 
         <!-- زبانه ۶: پنل ادمین (فقط برای ادمین قابل مشاهده) -->
-        <div id="tab-admin" class="tab-content" style="display:none;">
+        <div id="tab-admin" class="tab-content">
             <div class="card" style="border-right: 4px solid #ef4444;">
                 <div class="card-title">
                     <span class="card-title-icon">
@@ -1245,10 +1245,21 @@
         const BASE_URL = "https://api.apamed.ir";
 
         function switchTab(tabName, element) {
+            // بررسی اینکه آیا کاربر اجازه دسترسی به این تب را دارد
+            if (tabName === 'admin' && !isAdminUser) {
+                tg.showAlert('🚫 شما دسترسی به پنل ادمین ندارید.');
+                return;
+            }
+
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
 
-            document.getElementById(`tab-${tabName}`).classList.add('active');
+            const targetTab = document.getElementById(`tab-${tabName}`);
+            if (targetTab) {
+                targetTab.classList.add('active');
+                // اطمینان از نمایش تب (حذف display:none اگر وجود دارد)
+                targetTab.style.display = 'block';
+            }
             element.classList.add('active');
 
             if (tabName === 'tracker') {
@@ -1258,6 +1269,9 @@
                 loadNightlyStatus();
                 if (nightlyStatusPollInterval) clearInterval(nightlyStatusPollInterval);
                 nightlyStatusPollInterval = setInterval(loadNightlyStatus, 20000);
+            } else if (tabName === 'admin') {
+                // پنل ادمین - نیازی به لود اضافی نیست
+                console.log('پنل ادمین باز شد');
             } else if (nightlyStatusPollInterval) {
                 clearInterval(nightlyStatusPollInterval);
                 nightlyStatusPollInterval = null;
@@ -1675,6 +1689,8 @@
             })
             .then(res => res.json())
             .then(data => {
+                console.log('داده‌های دریافتی از API:', data);
+
                 if (data.error) {
                     // اگر خطای دسترسی بود، پیام مناسب نمایش بده
                     if (data.error === 'access_denied') {
@@ -1696,6 +1712,11 @@
                 document.getElementById('ch-total').innerText = data.challenge.total;
                 document.getElementById('ch-correct').innerText = data.challenge.correct;
                 document.getElementById('ch-incorrect').innerText = data.challenge.incorrect;
+
+                // بررسی دسترسی ادمین بعد از دریافت اطلاعات کاربر
+                if (data.chat_id) {
+                    checkAdminAccess(data.chat_id);
+                }
             })
             .catch(err => console.error("Error Loading App Data:", err));
         }
@@ -2321,13 +2342,16 @@
         // ---------- تشخیص نفر اول و نمایش تبریک ----------
         let hasShownCelebration = false;
 
-        function checkAndCelebrateFirstPlace(leaderboard) {
-            if (!leaderboard || !leaderboard.length || hasShownCelebration) return;
+        function checkAndCelebrateFirstPlace(leaderboard, myResult) {
+            if (!leaderboard || !leaderboard.length || hasShownCelebration || !myResult) return;
 
             const firstPlace = leaderboard[0];
 
-            // بررسی آیا کاربر فعلی نفر اول است
-            if (firstPlace.name && firstPlace.rank === 1) {
+            // بررسی آیا کاربر فعلی واقعاً نفر اول است
+            // مقایسه بر اساس امتیاز و زمان (چون chat_id در leaderboard نیست)
+            if (firstPlace.rank === 1 &&
+                firstPlace.score === myResult.score &&
+                firstPlace.duration_seconds === myResult.duration_seconds) {
                 // نمایش تبریک بعد از یک تاخیر کوتاه
                 setTimeout(() => {
                     showFirstPlaceCelebration(firstPlace.score, firstPlace.total, firstPlace.duration_seconds);
@@ -2349,8 +2373,8 @@
                 })
                 .then(res => res.json())
                 .then(data => {
-                    if (data.leaderboard && data.leaderboard.length > 0) {
-                        checkAndCelebrateFirstPlace(data.leaderboard);
+                    if (data.leaderboard && data.leaderboard.length > 0 && data.my_result) {
+                        checkAndCelebrateFirstPlace(data.leaderboard, data.my_result);
                     }
                 })
                 .catch(err => console.error('Error checking first place:', err));
@@ -2374,25 +2398,27 @@
 
         // ---------- پنل ادمین ----------
         const ADMIN_CHAT_ID = 1914755688;
+        let isAdminUser = false;
 
-        function checkAdminAccess() {
-            // بررسی آیا کاربر ادمین است
-            fetch(`${BASE_URL}/api/init`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Telegram-Init-Data': tg.initData
-                }
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.chat_id === ADMIN_CHAT_ID) {
-                    // نمایش تب ادمین
-                    document.getElementById('admin-nav-item').style.display = 'flex';
-                    console.log('👑 دسترسی ادمین فعال شد');
-                }
-            })
-            .catch(err => console.error('Error checking admin access:', err));
+        function checkAdminAccess(chatId) {
+            console.log('بررسی دسترسی ادمین - chat_id کاربر:', chatId, 'نوع:', typeof chatId);
+            console.log('ADMIN_CHAT_ID:', ADMIN_CHAT_ID, 'نوع:', typeof ADMIN_CHAT_ID);
+
+            // مقایسه به صورت string برای جلوگیری از مشکلات نوع داده
+            const userChatId = String(chatId);
+            const adminId = String(ADMIN_CHAT_ID);
+
+            if (userChatId === adminId) {
+                isAdminUser = true;
+                // نمایش تب ادمین در نوبار
+                document.getElementById('admin-nav-item').style.display = 'flex';
+                console.log('👑 دسترسی ادمین فعال شد');
+            } else {
+                isAdminUser = false;
+                // مخفی کردن تب ادمین
+                document.getElementById('admin-nav-item').style.display = 'none';
+                console.log('کاربر عادی - دسترسی ادمین غیرفعال');
+            }
         }
 
         function preloadExamQuestions() {
@@ -2450,8 +2476,6 @@
             });
         }
 
-        // بررسی دسترسی ادمین هنگام لود صفحه
-        checkAdminAccess();
     </script>
 </body>
 </html>
