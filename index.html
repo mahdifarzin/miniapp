@@ -875,10 +875,12 @@
                 <p style="font-size: 12px; opacity: 0.95; font-weight: 600; margin-bottom: 10px; background: rgba(255,255,255,0.15); padding: 8px 12px; border-radius: 10px; line-height: 1.6;">
                     مسابقه شبانه پزشکی آپامد | رقابت علمی بین اکسترن‌ها | هر شب ساعت ۲۱:۰۰
                 </p>
-                <p style="font-size: 13px; opacity: 0.9; font-weight: 500;">📚 ۱۰ سوال بالینی سخت و چالشی | ۶ دقیقه فرصت پاسخ‌دهی</p>
+                <p style="font-size: 13px; opacity: 0.9; font-weight: 500;">📚 ۱۰ سوال بالینی از ۱۰ مبحث | ۶ دقیقه فرصت پاسخ‌دهی</p>
                 <div style="display:flex; gap:16px; margin-top:10px; font-size:12px; font-weight:700;">
                     <span>💳 هزینه ورودی: <span id="nightly-entry-fee">--</span> تومان</span>
-                    <span>👥 شرکت‌کننده: <span id="nightly-participant-count">--</span> نفر</span>
+                </div>
+                <div style="font-size:11px; margin-top:6px; opacity:0.9;">
+                    👥 تعداد شرکت‌کنندگان مسابقه امشب تا به اینجا: <span id="nightly-participant-count" style="font-weight:800;">--</span> نفر
                 </div>
                 <div id="nightly-registration-status" style="display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:11px; font-weight:700;">
                 </div>
@@ -895,6 +897,7 @@
                 <div style="font-size: 12px; margin-top: 10px; opacity: 0.85; font-weight: 600;" id="nightly-countdown-row">
                     ⏱️ <span id="nightly-countdown-label">در حال محاسبه...</span> <span id="nightly-countdown" style="font-family: monospace; font-size:14px; font-weight:bold;">--:--:--</span>
                 </div>
+                <button class="exam-btn pay-btn" id="nightly-action-btn" style="display:none;"></button>
             </div>
 
             <!-- فرم آپالیگ (وقتی شروع میشه) -->
@@ -1326,20 +1329,10 @@
                     data.leaderboard_date === data.exam_date ? 'جدول نفرات برتر آپالیگ' : 'جدول نفرات برتر دیشب');
 
                 document.getElementById('nightly-entry-fee').innerText = data.entry_fee_toman.toLocaleString('fa-IR');
-                const participantEl = document.getElementById('nightly-participant-count');
-                const oldCount = parseInt(participantEl.textContent.replace(/[^\d]/g, '')) || 0;
-                participantEl.innerText = data.participant_count.toLocaleString('fa-IR');
-
-                // اگر تعداد شرکت‌کننده‌ها تغییر کرد، افکت نمایش بده
-                if (data.participant_count > oldCount && oldCount > 0) {
-                    participantEl.parentElement.classList.add('prize-highlight');
-                    setTimeout(() => participantEl.parentElement.classList.remove('prize-highlight'), 500);
-                }
+                document.getElementById('nightly-participant-count').innerText = data.participant_count.toLocaleString('fa-IR');
 
                 // نمایش اطلاعات جوایز به صورت پویا
                 const prizesDiv = document.getElementById('nightly-prizes-info');
-                const oldPrizesHTML = prizesDiv.innerHTML;
-
                 if (data.prize_info && data.participant_count > 0) {
                     const prizeInfo = data.prize_info;
                     let prizesHTML = '';
@@ -1355,12 +1348,6 @@
                     }
 
                     prizesDiv.innerHTML = prizesHTML;
-
-                    // اگر محتوا تغییر کرد، افکت نمایش بده
-                    if (oldPrizesHTML !== prizesHTML && oldPrizesHTML !== '<span>هنوز شرکت‌کننده‌ای ثبت‌نام نکرده</span>') {
-                        prizesDiv.parentElement.classList.add('prize-highlight');
-                        setTimeout(() => prizesDiv.parentElement.classList.remove('prize-highlight'), 500);
-                    }
                 } else {
                     prizesDiv.innerHTML = '<span>هنوز شرکت‌کننده‌ای ثبت‌نام نکرده</span>';
                 }
@@ -1382,7 +1369,7 @@
                     regStatusDiv.style.display = 'block';
                     regStatusDiv.style.background = 'rgba(245, 158, 11, 0.2)';
                     regStatusDiv.style.color = '#f59e0b';
-                    regStatusDiv.innerHTML = '⏳ هنوز برای آپالیگ امشب ثبت‌نام نکرده‌اید';
+                    regStatusDiv.innerHTML = '⏳ هنوز برای آپالیگ امشب ثبت‌نام نکرده‌اید<br><span style="font-size:10px; opacity:0.8;">⏰ ثبت‌نام را به ساعت پایانی موکول نکنید و هرچه زودتر اقدام کنید</span>';
                     regBtn.style.display = 'block';
                     regBtn.disabled = false;
                     regBtn.innerText = `💳 ثبت‌نام و پرداخت ${data.entry_fee_toman.toLocaleString('fa-IR')} تومان`;
@@ -1392,10 +1379,6 @@
                 const badge = document.getElementById('nightly-status-badge');
                 const label = document.getElementById('nightly-status-label');
                 const countdownLabel = document.getElementById('nightly-countdown-label');
-                const actionBtn = document.getElementById('nightly-action-btn');
-
-                // مخفی کردن دکمه قدیمی (از دکمه جدید ثبت‌نام استفاده می‌کنیم)
-                actionBtn.style.display = 'none';
 
                 // اگر کاربر در حال حاضر وسط پاسخ‌دادن به آپالیگه، وضعیت رو دستکاری نکن
                 if (document.getElementById('nightly-quiz-card').style.display === 'block' && !nightlySubmitted) {
