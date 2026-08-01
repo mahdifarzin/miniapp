@@ -1632,12 +1632,18 @@
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-Telegram-Init-Data': tg.initData 
+                    'X-Telegram-Init-Data': tg.initData
                 }
             })
             .then(res => res.json())
             .then(data => {
-                if (data.error) return;
+                if (data.error) {
+                    // اگر خطای دسترسی بود، پیام مناسب نمایش بده
+                    if (data.error === 'access_denied') {
+                        showAccessDeniedMessage(data.message);
+                    }
+                    return;
+                }
 
                 const name = data.full_name || 'پزشک گرامی';
                 document.getElementById('user-name').innerText = name;
@@ -1654,6 +1660,46 @@
                 document.getElementById('ch-incorrect').innerText = data.challenge.incorrect;
             })
             .catch(err => console.error("Error Loading App Data:", err));
+        }
+
+        function showAccessDeniedMessage(message) {
+            // مخفی کردن تمام محتوا
+            document.querySelector('.container').style.display = 'none';
+
+            // نمایش پیام خطا
+            const errorDiv = document.createElement('div');
+            errorDiv.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: linear-gradient(135deg, #ef4444, #dc2626);
+                color: white;
+                padding: 32px;
+                border-radius: 24px;
+                text-align: center;
+                max-width: 320px;
+                box-shadow: 0 10px 40px rgba(239, 68, 68, 0.4);
+                z-index: 10000;
+                animation: fadeIn 0.3s ease;
+            `;
+            errorDiv.innerHTML = `
+                <div style="font-size: 64px; margin-bottom: 16px;">🚫</div>
+                <h2 style="font-size: 20px; font-weight: 800; margin-bottom: 12px;">دسترسی غیرمجاز</h2>
+                <p style="font-size: 14px; line-height: 1.6; opacity: 0.9;">${message}</p>
+                <button onclick="window.location.reload()" style="
+                    margin-top: 20px;
+                    background: white;
+                    color: #ef4444;
+                    border: none;
+                    padding: 12px 24px;
+                    border-radius: 12px;
+                    font-size: 14px;
+                    font-weight: 700;
+                    cursor: pointer;
+                ">تلاش مجدد</button>
+            `;
+            document.body.appendChild(errorDiv);
         }
 
         // ---------- بخش هوش مصنوعی ----------
@@ -1686,7 +1732,12 @@
                 btn.innerText = '🚀 ارسال سوال';
 
                 if (status !== 200 || data.error) {
-                    tg.showAlert(data.message || 'خطایی رخ داد. دوباره تلاش کنید.');
+                    // اگر خطای دسترسی بود، پیام خاص نمایش بده
+                    if (data.error === 'access_denied') {
+                        tg.showAlert('🚫 ' + data.message);
+                    } else {
+                        tg.showAlert(data.message || 'خطایی رخ داد. دوباره تلاش کنید.');
+                    }
                     return;
                 }
 
@@ -1751,7 +1802,12 @@
             .then(res => res.json().then(data => ({ status: res.status, data })))
             .then(({ status, data }) => {
                 if (status !== 200 || data.error) {
-                    tg.showAlert(data.message || 'خطا در ساخت سوال. دوباره تلاش کنید.');
+                    // اگر خطای دسترسی بود، پیام خاص نمایش بده
+                    if (data.error === 'access_denied') {
+                        tg.showAlert('🚫 ' + data.message);
+                    } else {
+                        tg.showAlert(data.message || 'خطا در ساخت سوال. دوباره تلاش کنید.');
+                    }
                     resetChallengeFlow();
                     return;
                 }
