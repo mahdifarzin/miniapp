@@ -1097,6 +1097,40 @@
             </div>
         </div>
 
+        <!-- زبانه ۶: پنل ادمین (فقط برای ادمین قابل مشاهده) -->
+        <div id="tab-admin" class="tab-content" style="display:none;">
+            <div class="card" style="border-right: 4px solid #ef4444;">
+                <div class="card-title">
+                    <span class="card-title-icon">
+                        <span class="icon-badge" style="background: rgba(239, 68, 68, 0.12); color: #ef4444;">👑</span>
+                        پنل مدیریت ادمین
+                    </span>
+                </div>
+                <div class="card-desc" style="margin-bottom:12px;">ابزارهای مدیریت ویژه ادمین ربات</div>
+
+                <div style="background: var(--item-bg); padding: 16px; border-radius: 14px; margin-bottom: 12px; border: var(--card-border);">
+                    <div style="font-weight: 700; font-size: 13px; margin-bottom: 8px; color: var(--text-color);">📦 پیش‌بارگذاری سوالات آپالیگ</div>
+                    <div style="font-size: 11px; color: var(--hint-color); margin-bottom: 12px; line-height: 1.6;">
+                        سوالات امشب را از الان بسازید تا موقع شروع آزمون، کاربران با تاخیر مواجه نشوند.
+                    </div>
+                    <div id="admin-preload-status" style="font-size: 11px; margin-bottom: 10px; padding: 8px; border-radius: 8px; display: none;"></div>
+                    <button class="exam-btn" id="admin-preload-btn" onclick="preloadExamQuestions()" style="width: 100%; background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+                        🚀 پیش‌بارگذاری سوالات امشب
+                    </button>
+                </div>
+
+                <div style="background: var(--item-bg); padding: 16px; border-radius: 14px; border: var(--card-border);">
+                    <div style="font-weight: 700; font-size: 13px; margin-bottom: 8px; color: var(--text-color);">ℹ️ راهنما</div>
+                    <div style="font-size: 11px; color: var(--hint-color); line-height: 1.8;">
+                        • سوالات هر شب ساعت ۲۱:۰۰ نمایش داده می‌شوند<br>
+                        • برای جلوگیری از تاخیر، از چند ساعت قبل پیش‌بارگذاری کنید<br>
+                        • اگر سوالات از قبل ساخته شده باشند، پیام "از قبل موجود" نمایش داده می‌شود<br>
+                        • ادمین نیازی به پرداخت هزینه آزمون ندارد
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <!-- مودال تبریک نفر اول -->
@@ -1138,6 +1172,10 @@
         <div class="nav-item" onclick="switchTab('ai', this)">
             <span class="nav-icon">🤖</span>
             <span>AI</span>
+        </div>
+        <div class="nav-item" id="admin-nav-item" onclick="switchTab('admin', this)" style="display:none;">
+            <span class="nav-icon">👑</span>
+            <span>ادمین</span>
         </div>
     </div>
 
@@ -2333,6 +2371,87 @@
 
         loadAppData();
         loadChallengeTopics();
+
+        // ---------- پنل ادمین ----------
+        const ADMIN_CHAT_ID = 1914755688;
+
+        function checkAdminAccess() {
+            // بررسی آیا کاربر ادمین است
+            fetch(`${BASE_URL}/api/init`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Telegram-Init-Data': tg.initData
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.chat_id === ADMIN_CHAT_ID) {
+                    // نمایش تب ادمین
+                    document.getElementById('admin-nav-item').style.display = 'flex';
+                    console.log('👑 دسترسی ادمین فعال شد');
+                }
+            })
+            .catch(err => console.error('Error checking admin access:', err));
+        }
+
+        function preloadExamQuestions() {
+            const btn = document.getElementById('admin-preload-btn');
+            const statusDiv = document.getElementById('admin-preload-status');
+
+            btn.disabled = true;
+            btn.innerText = '⏳ در حال ساخت سوالات...';
+            statusDiv.style.display = 'block';
+            statusDiv.style.background = 'rgba(139, 92, 246, 0.2)';
+            statusDiv.style.color = '#8b5cf6';
+            statusDiv.innerText = 'در حال اتصال به سرور...';
+
+            fetch(`${BASE_URL}/api/admin/preload-exam`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Telegram-Init-Data': tg.initData
+                },
+                body: JSON.stringify({})
+            })
+            .then(res => res.json().then(data => ({ status: res.status, data })))
+            .then(({ status, data }) => {
+                btn.disabled = false;
+                btn.innerText = '🚀 پیش‌بارگذاری سوالات امشب';
+
+                if (status !== 200 || data.error) {
+                    statusDiv.style.background = 'rgba(239, 68, 68, 0.2)';
+                    statusDiv.style.color = '#ef4444';
+                    statusDiv.innerText = '❌ ' + (data.message || 'خطا در پیش‌بارگذاری سوالات');
+                    return;
+                }
+
+                statusDiv.style.background = 'rgba(16, 185, 129, 0.2)';
+                statusDiv.style.color = '#10b981';
+
+                if (data.already_existed) {
+                    statusDiv.innerText = `✅ ${data.message}`;
+                } else {
+                    statusDiv.innerText = `🎉 ${data.message}`;
+                    // افکت موفقیت
+                    btn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+                    setTimeout(() => {
+                        btn.style.background = 'linear-gradient(135deg, #8b5cf6, #7c3aed)';
+                    }, 2000);
+                }
+            })
+            .catch(err => {
+                console.error('Preload error:', err);
+                btn.disabled = false;
+                btn.innerText = '🚀 پیش‌بارگذاری سوالات امشب';
+                statusDiv.style.background = 'rgba(239, 68, 68, 0.2)';
+                statusDiv.style.color = '#ef4444';
+                statusDiv.innerText = '❌ خطا در ارتباط با سرور';
+            });
+        }
+
+        // بررسی دسترسی ادمین هنگام لود صفحه
+        checkAdminAccess();
     </script>
 </body>
 </html>
