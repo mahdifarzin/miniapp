@@ -77,7 +77,7 @@
             padding-bottom: 95px;
             user-select: none;
             overflow-x: hidden;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            transition: background-color 0.4s ease, color 0.4s ease, background-image 0.4s ease;
         }
 
         /* هدر بالای صفحه */
@@ -197,6 +197,401 @@
             font-weight: 400;
         }
 
+        /* کارت‌های رنگی بخش‌ها */
+        .card-ai { border-right: 4px solid #10b981; }
+        .card-challenge { border-right: 4px solid #0284c7; }
+        .card-tracker { border-right: 4px solid #f59e0b; }
+        .card-nightly { border-right: 4px solid #8b5cf6; }
+
+        /* دکمه‌های بهبود یافته */
+        .exam-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            box-shadow: 0 4px 15px rgba(16, 189, 129, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .exam-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 189, 129, 0.5);
+        }
+
+        .exam-btn:active {
+            transform: translateY(0);
+        }
+
+        /* دکمه پرداخت با افکت درخشش */
+        .pay-btn {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+            animation: glow-pulse 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow-pulse {
+            from { box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4); }
+            to { box-shadow: 0 4px 25px rgba(245, 158, 11, 0.6); }
+        }
+
+        /* آیکون نوبار فعال با درخشش */
+        .nav-item.active .nav-icon {
+            transform: scale(1.2);
+            filter: drop-shadow(0 2px 8px rgba(2, 132, 199, 0.5));
+        }
+
+        .nav-item.active {
+            position: relative;
+        }
+
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 3px;
+            background: var(--med-cyan);
+            border-radius: 2px;
+        }
+
+        /* بالون نوتیفیکیشن روی تب‌ها */
+        .nav-badge {
+            position: absolute;
+            top: 2px;
+            right: 15px;
+            width: 8px;
+            height: 8px;
+            background: #ef4444;
+            border-radius: 50%;
+            border: 2px solid var(--secondary-bg);
+        }
+
+        /* گزینه‌های آپالیگ بهبود یافته */
+        .option-btn {
+            border-radius: 50px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.4s, height 0.4s;
+        }
+
+        .option-btn:active::before {
+            width: 200px;
+            height: 200px;
+        }
+
+        .option-btn.selected {
+            background: linear-gradient(135deg, #0284c7, #0ea5e9);
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+        }
+
+        /* نفر اول جدول با افکت ویژه */
+        .leader-item.golden {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 2px solid #f59e0b;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+            animation: golden-glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes golden-glow {
+            from { box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3); }
+            to { box-shadow: 0 4px 25px rgba(245, 158, 11, 0.5); }
+        }
+
+        .leader-medal {
+            font-size: 24px;
+            animation: medal-bounce 1s ease-in-out infinite;
+        }
+
+        @keyframes medal-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* مودال تبریک نفر اول */
+        .celebration-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .celebration-card {
+            background: linear-gradient(135deg, #1e3a8a, #0284c7);
+            border-radius: 24px;
+            padding: 32px;
+            text-align: center;
+            color: white;
+            max-width: 320px;
+            animation: celebrationPop 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes celebrationPop {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .celebration-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(255, 215, 0, 0.3), transparent);
+            animation: rotate 3s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .celebration-trophy {
+            font-size: 80px;
+            animation: trophy-bounce 0.6s ease-in-out;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes trophy-bounce {
+            0% { transform: scale(0) rotate(-20deg); }
+            50% { transform: scale(1.2) rotate(10deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        .celebration-title {
+            font-size: 24px;
+            font-weight: 800;
+            margin: 16px 0 8px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .celebration-subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .celebration-stats {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .celebration-stat {
+            font-size: 32px;
+            font-weight: 800;
+        }
+
+        .celebration-stat-label {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .celebration-btn {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #1e3a8a;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .celebration-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(251, 191, 36, 0.5);
+        }
+
+        /* کانفetti */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            opacity: 0;
+        }
+
+        /* افکت‌های متحرک برای بخش‌ها */
+        .slide-up {
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .pulse {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        /* تایپوگرافی بهبود یافته */
+        .section-subtitle {
+            font-size: 14px;
+            color: var(--hint-color);
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .highlight-text {
+            font-weight: 700;
+            color: var(--med-cyan);
+        }
+
+        /* آواتار بهبود یافته */
+        .avatar {
+            background: linear-gradient(135deg, #0284c7, #0ea5e9);
+            box-shadow: 0 4px 15px rgba(2, 132, 199, 0.4);
+            animation: avatar-glow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes avatar-glow {
+            from { box-shadow: 0 4px 15px rgba(2, 132, 199, 0.4); }
+            to { box-shadow: 0 4px 25px rgba(2, 132, 199, 0.6); }
+        }
+
+        /* دکمه تغییر تم */
+        #theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        #theme-toggle:active {
+            transform: scale(0.95);
+        }
+
+        body.dark-mode #theme-toggle {
+            background: var(--item-bg);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        /* بخش جوایز پویا */
+        .prize-section {
+            transition: all 0.3s ease;
+        }
+
+        .prize-highlight {
+            animation: prizeUpdate 0.5s ease;
+        }
+
+        @keyframes prizeUpdate {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); background: rgba(255,215,0,0.3); }
+            100% { transform: scale(1); }
+        }
+
+        .prize-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 700;
+            margin-left: 4px;
+        }
+
+        .prize-badge-new {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        /* وضعیت ثبت‌نام */
+        #nightly-registration-status {
+            transition: all 0.3s ease;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* دکمه ثبت‌نام بزرگ و جذاب */
+        #nightly-register-btn {
+            width: 100%;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 800;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(16, 189, 129, 0.4);
+            transition: all 0.3s ease;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        #nightly-register-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16, 189, 129, 0.5);
+        }
+
+        #nightly-register-btn:active {
+            transform: translateY(0);
+        }
+
+        #nightly-register-btn:disabled {
+            background: linear-gradient(135deg, #9ca3af, #6b7280);
+            cursor: not-allowed;
+            animation: none;
+        }
+
         /* آمار چالش‌ها */
         .stats-grid {
             display: grid;
@@ -225,7 +620,7 @@
             font-weight: 600;
         }
 
-        /* بنر ویژه آزمون شبانه */
+        /* بنر ویژه آپالیگ */
         .exam-banner {
             background: var(--med-blue-gradient);
             color: white;
@@ -403,7 +798,24 @@
             <h3 id="user-name">در حال بارگذاری... 🩺</h3>
             <p id="user-status">آکادمی هوشمند پزشکی آپامد</p>
         </div>
-        <div class="avatar" id="user-avatar">A</div>
+        <div style="display:flex; align-items:center; gap:12px;">
+            <button id="theme-toggle" onclick="toggleTheme()" style="
+                width: 40px;
+                height: 40px;
+                border-radius: 12px;
+                border: none;
+                background: var(--item-bg);
+                color: var(--text-color);
+                font-size: 18px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.3s ease;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            ">🌙</button>
+            <div class="avatar" id="user-avatar">A</div>
+        </div>
     </div>
 
     <!-- کانتینر محتوا -->
@@ -411,8 +823,8 @@
 
         <!-- زبانه ۱: داشبورد -->
         <div id="tab-dashboard" class="tab-content active">
-            
-            <div class="card">
+
+            <div class="card card-ai">
                 <div class="card-title">
                     <span class="card-title-icon">
                         <span class="icon-badge">🤖</span>
@@ -424,7 +836,7 @@
                 <div class="card-desc" id="ai-text">در حال دریافت اطلاعات از سرور...</div>
             </div>
 
-            <div class="card">
+            <div class="card card-challenge">
                 <div class="card-title">
                     <span class="card-title-icon">
                         <span class="icon-badge">🩺</span>
@@ -450,29 +862,47 @@
 
         </div>
 
-        <!-- زبانه ۲: آزمون شبانه -->
+        <!-- زبانه ۲: آپالیگ (مسابقه شبانه) -->
         <div id="tab-nightly" class="tab-content">
 
-            <!-- بنر وضعیت آزمون امشب -->
-            <div class="exam-banner" id="nightly-banner">
+            <!-- بنر وضعیت آپالیگ امشب -->
+            <div class="exam-banner slide-up" id="nightly-banner">
                 <div class="exam-status-badge" id="nightly-status-badge">
                     <span class="pulse-dot"></span>
                     <span id="nightly-status-label">در حال بررسی وضعیت...</span>
                 </div>
-                <h2 style="font-size: 19px; font-weight: 800; margin-bottom: 6px;">آزمون شبانه ترکیبی</h2>
-                <p style="font-size: 13px; opacity: 0.9; font-weight: 500;">📚 ۱۰ سوال بالینی سخت و چالشی | هر شب ساعت ۲۱:۰۰ تا ۲۱:۰۶</p>
+                <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 8px; text-shadow: 0 2px 10px rgba(0,0,0,0.2);">🏆 آپالیگ</h2>
+                <p style="font-size: 12px; opacity: 0.95; font-weight: 600; margin-bottom: 10px; background: rgba(255,255,255,0.15); padding: 8px 12px; border-radius: 10px; line-height: 1.6;">
+                    مسابقه شبانه پزشکی آپامد | رقابت علمی بین اکسترن‌ها | هر شب ساعت ۲۱:۰۰
+                </p>
+                <p style="font-size: 13px; opacity: 0.9; font-weight: 500;">📚 ۱۰ سوال بالینی سخت و چالشی | ۶ دقیقه فرصت پاسخ‌دهی</p>
+                <div style="display:flex; gap:16px; margin-top:10px; font-size:12px; font-weight:700;">
+                    <span>💳 هزینه ورودی: <span id="nightly-entry-fee">--</span> تومان</span>
+                    <span>👥 شرکت‌کننده: <span id="nightly-participant-count">--</span> نفر</span>
+                </div>
+                <div id="nightly-registration-status" style="display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:11px; font-weight:700;">
+                </div>
+                <button class="exam-btn pay-btn" id="nightly-register-btn" style="display:none; margin-top:12px;">
+                    💳 ثبت‌نام و پرداخت
+                </button>
+                <div style="font-size: 13px; margin-top: 8px; background: rgba(255,215,0,0.2); padding: 10px; border-radius: 8px; border: 1px solid rgba(255,215,0,0.3);">
+                    <div style="font-weight:800; color:#fbbf24; margin-bottom:6px;">🏆 جوایز نفرات برتر:</div>
+                    <div id="nightly-prizes-info" style="display:flex; flex-direction:column; gap:4px; font-size:11px; opacity:0.95;">
+                        <span>🥇 نفر اول: -- تومان</span>
+                    </div>
+                </div>
+                <div style="font-size: 11px; margin-top: 6px; opacity: 0.75;" id="nightly-min-participants">حداقل <span id="nightly-min-count">--</span> نفر برای برگزاری رسمی</div>
                 <div style="font-size: 12px; margin-top: 10px; opacity: 0.85; font-weight: 600;" id="nightly-countdown-row">
                     ⏱️ <span id="nightly-countdown-label">در حال محاسبه...</span> <span id="nightly-countdown" style="font-family: monospace; font-size:14px; font-weight:bold;">--:--:--</span>
                 </div>
-                <button class="exam-btn" id="nightly-action-btn" onclick="startNightlyExam()" style="display:none;">ورود به آزمون امشب 🚀</button>
             </div>
 
-            <!-- فرم آزمون (وقتی شروع میشه) -->
-            <div class="card" id="nightly-quiz-card" style="display:none;">
+            <!-- فرم آپالیگ (وقتی شروع میشه) -->
+            <div class="card card-nightly slide-up" id="nightly-quiz-card" style="display:none;">
                 <div class="card-title">
                     <span class="card-title-icon">
                         <span class="icon-badge">📝</span>
-                        سوالات آزمون امشب
+                        سوالات آپالیگ امشب
                     </span>
                     <span style="font-size: 12px; color: #ef4444; font-weight:800;" id="nightly-quiz-timer">--:--</span>
                 </div>
@@ -481,11 +911,11 @@
             </div>
 
             <!-- نتیجه بعد از ثبت -->
-            <div class="card" id="nightly-result-card" style="display:none;">
+            <div class="card card-nightly slide-up" id="nightly-result-card" style="display:none;">
                 <div class="card-title">
                     <span class="card-title-icon">
                         <span class="icon-badge">🎯</span>
-                        نتیجه آزمون شما
+                        نتیجه آپالیگ شما
                     </span>
                 </div>
                 <div class="card-value" id="nightly-result-score">۰ از ۱۰</div>
@@ -494,7 +924,7 @@
             </div>
 
             <!-- جدول نفرات برتر -->
-            <div class="card">
+            <div class="card card-nightly slide-up">
                 <div class="card-title">
                     <span class="card-title-icon">
                         <span class="icon-badge">🏆</span>
@@ -514,7 +944,7 @@
         <div id="tab-tracker" class="tab-content">
 
             <!-- وضعیت فعلی -->
-            <div class="card">
+            <div class="card card-tracker">
                 <div class="card-title">
                     <span class="card-title-icon">
                         <span class="icon-badge">⏱️</span>
@@ -527,7 +957,7 @@
             </div>
 
             <!-- شروع فعالیت -->
-            <div class="card">
+            <div class="card card-tracker">
                 <div class="card-title">
                     <span class="card-title-icon">
                         <span class="icon-badge">▶️</span>
@@ -548,7 +978,7 @@
             </div>
 
             <!-- نمودار دایره‌ای سهم فعالیت‌ها -->
-            <div class="card" id="tracker-pie-card" style="display:none;">
+            <div class="card card-tracker slide-up" id="tracker-pie-card" style="display:none;">
                 <div class="card-title">
                     <span class="card-title-icon">
                         <span class="icon-badge">🥯</span>
@@ -562,7 +992,7 @@
             </div>
 
             <!-- نمودار Timeline بازه‌های زمانی -->
-            <div class="card" id="tracker-timeline-card" style="display:none;">
+            <div class="card card-tracker slide-up" id="tracker-timeline-card" style="display:none;">
                 <div class="card-title">
                     <span class="card-title-icon">
                         <span class="icon-badge">📊</span>
@@ -574,7 +1004,7 @@
             </div>
 
             <!-- جزئیات لیستی -->
-            <div class="card">
+            <div class="card card-tracker">
                 <div class="card-title">
                     <span class="card-title-icon">
                         <span class="icon-badge">📋</span>
@@ -590,7 +1020,7 @@
         <!-- زبانه ۴: کیس‌های بالینی -->
         <div id="tab-challenge" class="tab-content">
 
-            <div class="card" id="challenge-quota-card">
+            <div class="card card-challenge" id="challenge-quota-card">
                 <div class="card-title">
                     <span class="card-title-icon">
                         <span class="icon-badge">🎯</span>
@@ -601,7 +1031,7 @@
             </div>
 
             <!-- انتخاب رشته -->
-            <div class="card" id="challenge-topics-card">
+            <div class="card card-challenge" id="challenge-topics-card">
                 <div class="card-title">
                     <span class="card-title-icon">
                         <span class="icon-badge">📌</span>
@@ -614,7 +1044,7 @@
             </div>
 
             <!-- سوال فعال -->
-            <div class="card" id="challenge-question-card" style="display:none;">
+            <div class="card card-challenge slide-up" id="challenge-question-card" style="display:none;">
                 <div class="card-title">
                     <span class="card-title-icon">
                         <span class="icon-badge">🩺</span>
@@ -626,7 +1056,7 @@
             </div>
 
             <!-- نتیجه -->
-            <div class="card" id="challenge-result-card" style="display:none;">
+            <div class="card card-challenge slide-up" id="challenge-result-card" style="display:none;">
                 <div class="card-title">
                     <span class="card-title-icon">
                         <span class="icon-badge" id="challenge-result-icon">✅</span>
@@ -640,7 +1070,7 @@
 
         <!-- زبانه ۵: هوش مصنوعی -->
         <div id="tab-ai" class="tab-content">
-            <div class="card">
+            <div class="card card-ai">
                 <div class="card-title">
                     <span class="card-title-icon">
                         <span class="icon-badge">💡</span>
@@ -653,7 +1083,7 @@
                 <button class="exam-btn" id="ai-ask-btn" onclick="askAI()" style="margin-top:10px;">🚀 ارسال سوال</button>
             </div>
 
-            <div class="card" id="ai-answer-card" style="display:none;">
+            <div class="card card-ai slide-up" id="ai-answer-card" style="display:none;">
                 <div class="card-title">
                     <span class="card-title-icon">
                         <span class="icon-badge">📝</span>
@@ -666,6 +1096,24 @@
 
     </div>
 
+    <!-- مودال تبریک نفر اول -->
+    <div id="celebration-modal" class="celebration-overlay" style="display:none;">
+        <div class="celebration-card">
+            <div class="celebration-trophy">🏆</div>
+            <h2 class="celebration-title">تبریک! شما نفر اول شدید!</h2>
+            <p class="celebration-subtitle">عملکرد فوق‌العاده‌ای داشتید</p>
+            <div class="celebration-stats">
+                <div class="celebration-stat" id="celebration-score">10 از 10</div>
+                <div class="celebration-stat-label">امتیاز شما</div>
+            </div>
+            <div class="celebration-stats">
+                <div class="celebration-stat" id="celebration-time" style="font-size: 24px;">02:45</div>
+                <div class="celebration-stat-label">زمان پاسخ‌دهی</div>
+            </div>
+            <button class="celebration-btn" onclick="closeCelebration()">🎯 عالی بود!</button>
+        </div>
+    </div>
+
     <!-- تب بار شناور پایینی -->
     <div class="bottom-nav">
         <div class="nav-item active" onclick="switchTab('dashboard', this)">
@@ -673,8 +1121,8 @@
             <span>داشبورد</span>
         </div>
         <div class="nav-item" onclick="switchTab('nightly', this)">
-            <span class="nav-icon">🌙</span>
-            <span>آزمون</span>
+            <span class="nav-icon">🏆</span>
+            <span>آپالیگ</span>
         </div>
         <div class="nav-item" onclick="switchTab('tracker', this)">
             <span class="nav-icon">⏱️</span>
@@ -695,16 +1143,63 @@
         tg.ready();
         tg.expand();
 
-        // 🟢 تنظیم و هماهنگی هوشمند دارک‌مود با تم تلگرام کاربر
-        function applyTelegramTheme() {
-            if (tg.colorScheme === 'dark') {
+        // 🌓 سیستم مدیریت تم (دارک مود و لایت مود)
+        let currentTheme = localStorage.getItem('theme') || 'auto';
+        let userManualTheme = localStorage.getItem('userManualTheme');
+
+        function applyTheme(theme) {
+            const themeBtn = document.getElementById('theme-toggle');
+
+            if (theme === 'dark') {
                 document.body.classList.add('dark-mode');
-            } else {
+                themeBtn.textContent = '☀️';
+                themeBtn.title = 'تغییر به حالت روشن';
+            } else if (theme === 'light') {
                 document.body.classList.remove('dark-mode');
+                themeBtn.textContent = '🌙';
+                themeBtn.title = 'تغییر به حالت تاریک';
+            } else {
+                // حالت خودکار - بر اساس تم تلگرام
+                if (tg.colorScheme === 'dark') {
+                    document.body.classList.add('dark-mode');
+                    themeBtn.textContent = '☀️';
+                    themeBtn.title = 'تغییر به حالت روشن';
+                } else {
+                    document.body.classList.remove('dark-mode');
+                    themeBtn.textContent = '🌙';
+                    themeBtn.title = 'تغییر به حالت تاریک';
+                }
             }
         }
-        applyTelegramTheme();
-        tg.onEvent('themeChanged', applyTelegramTheme);
+
+        function toggleTheme() {
+            const isDark = document.body.classList.contains('dark-mode');
+            const newTheme = isDark ? 'light' : 'dark';
+
+            // ذخیره انتخاب کاربر
+            localStorage.setItem('theme', newTheme);
+            localStorage.setItem('userManualTheme', 'true');
+            currentTheme = newTheme;
+
+            // اعمال تم جدید با انیمیشن
+            document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
+            applyTheme(newTheme);
+
+            // لرزش خفیف دکمه برای حس بهتر
+            const themeBtn = document.getElementById('theme-toggle');
+            themeBtn.style.animation = 'shake 0.3s ease';
+            setTimeout(() => themeBtn.style.animation = '', 300);
+        }
+
+        // اعمال تم اولیه
+        applyTheme(currentTheme);
+
+        // گوش دادن به تغییرات تم تلگرام (فقط اگه کاربر دستی تغییر نداده باشه)
+        tg.onEvent('themeChanged', () => {
+            if (!localStorage.getItem('userManualTheme')) {
+                applyTheme('auto');
+            }
+        });
 
         const BASE_URL = "https://api.apamed.ir";
 
@@ -736,7 +1231,7 @@
             return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
         }
 
-        // ---------- بخش آزمون شبانه ----------
+        // ---------- بخش آپالیگ ----------
         let nightlyStatusPollInterval = null;
         let nightlyQuizCountdownInterval = null;
         let nightlyQuestions = [];
@@ -792,10 +1287,10 @@
         }
 
         function renderNightlyLeaderboard(leaderboard, title) {
-            document.getElementById('nightly-leaderboard-title').innerText = title || 'جدول نفرات برتر امشب';
+            document.getElementById('nightly-leaderboard-title').innerText = title || 'جدول نفرات برتر آپالیگ';
             const listDiv = document.getElementById('leaderboard-list');
             if (!leaderboard || !leaderboard.length) {
-                listDiv.innerHTML = '<p style="color:var(--hint-color); font-size:13px;">هنوز کسی در این آزمون شرکت نکرده است.</p>';
+                listDiv.innerHTML = '<p style="color:var(--hint-color); font-size:13px;">هنوز کسی در این آپالیگ شرکت نکرده است.</p>';
                 return;
             }
             const medals = ['🥇', '🥈', '🥉'];
@@ -828,51 +1323,161 @@
                 if (data.error) return;
 
                 renderNightlyLeaderboard(data.leaderboard,
-                    data.leaderboard_date === data.exam_date ? 'جدول نفرات برتر امشب' : 'جدول نفرات برتر دیشب');
+                    data.leaderboard_date === data.exam_date ? 'جدول نفرات برتر آپالیگ' : 'جدول نفرات برتر دیشب');
+
+                document.getElementById('nightly-entry-fee').innerText = data.entry_fee_toman.toLocaleString('fa-IR');
+                const participantEl = document.getElementById('nightly-participant-count');
+                const oldCount = parseInt(participantEl.textContent.replace(/[^\d]/g, '')) || 0;
+                participantEl.innerText = data.participant_count.toLocaleString('fa-IR');
+
+                // اگر تعداد شرکت‌کننده‌ها تغییر کرد، افکت نمایش بده
+                if (data.participant_count > oldCount && oldCount > 0) {
+                    participantEl.parentElement.classList.add('prize-highlight');
+                    setTimeout(() => participantEl.parentElement.classList.remove('prize-highlight'), 500);
+                }
+
+                // نمایش اطلاعات جوایز به صورت پویا
+                const prizesDiv = document.getElementById('nightly-prizes-info');
+                const oldPrizesHTML = prizesDiv.innerHTML;
+
+                if (data.prize_info && data.participant_count > 0) {
+                    const prizeInfo = data.prize_info;
+                    let prizesHTML = '';
+
+                    if (prizeInfo.first_prize > 0) {
+                        prizesHTML += `<span>🥇 نفر اول: ${prizeInfo.first_prize.toLocaleString('fa-IR')} تومان</span>`;
+                    }
+                    if (prizeInfo.second_prize > 0) {
+                        prizesHTML += `<span>🥈 نفر دوم: ${prizeInfo.second_prize.toLocaleString('fa-IR')} تومان</span>`;
+                    }
+                    if (prizeInfo.third_prize > 0) {
+                        prizesHTML += `<span>🥉 نفر سوم: ${prizeInfo.third_prize.toLocaleString('fa-IR')} تومان</span>`;
+                    }
+
+                    prizesDiv.innerHTML = prizesHTML;
+
+                    // اگر محتوا تغییر کرد، افکت نمایش بده
+                    if (oldPrizesHTML !== prizesHTML && oldPrizesHTML !== '<span>هنوز شرکت‌کننده‌ای ثبت‌نام نکرده</span>') {
+                        prizesDiv.parentElement.classList.add('prize-highlight');
+                        setTimeout(() => prizesDiv.parentElement.classList.remove('prize-highlight'), 500);
+                    }
+                } else {
+                    prizesDiv.innerHTML = '<span>هنوز شرکت‌کننده‌ای ثبت‌نام نکرده</span>';
+                }
+
+                // نمایش حداقل شرکت‌کننده
+                document.getElementById('nightly-min-count').innerText = data.min_participants;
+
+                // نمایش وضعیت ثبت‌نام
+                const regStatusDiv = document.getElementById('nightly-registration-status');
+                const regBtn = document.getElementById('nightly-register-btn');
+
+                if (data.has_paid) {
+                    regStatusDiv.style.display = 'block';
+                    regStatusDiv.style.background = 'rgba(16, 185, 129, 0.2)';
+                    regStatusDiv.style.color = '#10b981';
+                    regStatusDiv.innerHTML = '✅ ثبت‌نام شما برای آپالیگ امشب تایید شد';
+                    regBtn.style.display = 'none';
+                } else {
+                    regStatusDiv.style.display = 'block';
+                    regStatusDiv.style.background = 'rgba(245, 158, 11, 0.2)';
+                    regStatusDiv.style.color = '#f59e0b';
+                    regStatusDiv.innerHTML = '⏳ هنوز برای آپالیگ امشب ثبت‌نام نکرده‌اید';
+                    regBtn.style.display = 'block';
+                    regBtn.disabled = false;
+                    regBtn.innerText = `💳 ثبت‌نام و پرداخت ${data.entry_fee_toman.toLocaleString('fa-IR')} تومان`;
+                    regBtn.onclick = payNightlyExam;
+                }
 
                 const badge = document.getElementById('nightly-status-badge');
                 const label = document.getElementById('nightly-status-label');
                 const countdownLabel = document.getElementById('nightly-countdown-label');
-                const countdownEl = document.getElementById('nightly-countdown');
                 const actionBtn = document.getElementById('nightly-action-btn');
 
-                // اگر کاربر در حال حاضر وسط پاسخ‌دادن به آزمونه، وضعیت رو دستکاری نکن
+                // مخفی کردن دکمه قدیمی (از دکمه جدید ثبت‌نام استفاده می‌کنیم)
+                actionBtn.style.display = 'none';
+
+                // اگر کاربر در حال حاضر وسط پاسخ‌دادن به آپالیگه، وضعیت رو دستکاری نکن
                 if (document.getElementById('nightly-quiz-card').style.display === 'block' && !nightlySubmitted) {
                     return;
                 }
 
                 if (data.is_active && !data.already_participated) {
                     badge.style.background = 'rgba(16,185,129,0.25)';
-                    label.innerText = 'در حال برگزاری — می‌توانید شرکت کنید';
-                    countdownLabel.innerText = 'زمان باقی‌مانده تا پایان آزمون:';
+                    countdownLabel.innerText = 'زمان باقی‌مانده تا پایان آپالیگ:';
                     startNightlyBannerCountdown(data.seconds_to_end);
-                    actionBtn.style.display = 'block';
-                    actionBtn.innerText = 'ورود به آزمون امشب 🚀';
-                    actionBtn.disabled = false;
+
+                    if (data.has_paid) {
+                        label.innerText = 'در حال برگزاری — می‌توانید شرکت کنید';
+                        // دکمه ثبت‌نام رو مخفی کن و یک دکمه شروع آزمون نشون بده
+                        regBtn.style.display = 'block';
+                        regBtn.disabled = false;
+                        regBtn.innerText = '🚀 شروع آپالیگ';
+                        regBtn.onclick = startNightlyExam;
+                    } else {
+                        label.innerText = 'در حال برگزاری — برای شرکت باید پرداخت کنید';
+                    }
                 } else if (data.is_active && data.already_participated) {
                     label.innerText = 'شما امشب شرکت کرده‌اید ✅';
-                    countdownLabel.innerText = 'زمان باقی‌مانده تا پایان آزمون:';
+                    countdownLabel.innerText = 'زمان باقی‌مانده تا پایان آپالیگ:';
                     startNightlyBannerCountdown(data.seconds_to_end);
-                    actionBtn.style.display = 'none';
+                    regBtn.style.display = 'none';
                     showNightlyResultFromStatus(data.my_result);
                 } else if (!data.is_active && data.seconds_to_start > 0) {
-                    label.innerText = 'آزمون امشب هنوز شروع نشده';
-                    countdownLabel.innerText = 'زمان تا شروع آزمون امشب:';
+                    countdownLabel.innerText = 'زمان تا شروع آپالیگ امشب:';
                     startNightlyBannerCountdown(data.seconds_to_start);
-                    actionBtn.style.display = 'none';
                     document.getElementById('nightly-result-card').style.display = data.already_participated ? 'block' : 'none';
+
+                    if (data.has_paid) {
+                        label.innerText = 'پرداخت شما ثبت شد ✅ — منتظر شروع آپالیگ بمان';
+                        regBtn.style.display = 'none';
+                    } else {
+                        label.innerText = 'آپالیگ امشب هنوز شروع نشده — می‌توانی از الان پرداخت کنی';
+                    }
                 } else {
-                    label.innerText = 'آزمون امشب به پایان رسیده است';
+                    label.innerText = 'آپالیگ امشب به پایان رسیده است';
                     countdownLabel.innerText = '';
                     stopNightlyBannerCountdown();
                     document.getElementById('nightly-countdown').innerText = '';
-                    actionBtn.style.display = 'none';
+                    regBtn.style.display = 'none';
                     if (data.already_participated) {
                         showNightlyResultFromStatus(data.my_result);
                     }
                 }
             })
             .catch(err => console.error('Error loading nightly status:', err));
+        }
+
+        function payNightlyExam() {
+            const btn = document.getElementById('nightly-action-btn');
+            btn.disabled = true;
+            btn.innerText = '⏳ در حال اتصال به درگاه پرداخت...';
+
+            fetch(`${BASE_URL}/api/nightly/payment/request`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-Telegram-Init-Data': tg.initData },
+                body: JSON.stringify({})
+            })
+            .then(res => res.json().then(data => ({ status: res.status, data })))
+            .then(({ status, data }) => {
+                if (status !== 200 || data.error) {
+                    tg.showAlert(data.message || 'خطا در اتصال به درگاه پرداخت.');
+                    btn.disabled = false;
+                    loadNightlyStatus();
+                    return;
+                }
+                // درگاه‌های پرداخت ایرانی معمولاً داخل WebView تلگرام درست باز نمی‌شوند؛
+                // با openLink در مرورگر خارجی باز می‌شود و بعد از پرداخت به صفحه callback برمی‌گردد
+                tg.openLink(data.pay_url);
+                btn.disabled = false;
+                btn.innerText = 'بعد از پرداخت، اینجا را دوباره باز کن 🔄';
+            })
+            .catch(err => {
+                console.error('Payment request error:', err);
+                btn.disabled = false;
+                tg.showAlert('خطا در ارتباط با سرور.');
+                loadNightlyStatus();
+            });
         }
 
         function showNightlyResultFromStatus(myResult) {
@@ -899,12 +1504,15 @@
             .then(res => res.json().then(data => ({ status: res.status, data })))
             .then(({ status, data }) => {
                 btn.disabled = false;
-                btn.innerText = 'ورود به آزمون امشب 🚀';
+                btn.innerText = 'ورود به آپالیگ امشب 🚀';
 
                 if (status !== 200 || data.error) {
-                    tg.showAlert(data.message || 'خطا در شروع آزمون.');
+                    tg.showAlert(data.message || 'خطا در شروع آپالیگ.');
                     if (data.error === 'already_participated' && data.my_result) {
                         showNightlyResultFromStatus(data.my_result);
+                    }
+                    if (data.error === 'payment_required') {
+                        loadNightlyStatus();
                     }
                     return;
                 }
@@ -928,7 +1536,7 @@
                     if (remaining <= 0) {
                         clearInterval(nightlyQuizCountdownInterval);
                         if (!nightlySubmitted) {
-                            tg.showAlert('⏰ زمان آزمون به پایان رسید؛ پاسخ‌های شما به‌صورت خودکار ثبت شد.');
+                            tg.showAlert('⏰ زمان آپالیگ به پایان رسید؛ پاسخ‌های شما به‌صورت خودکار ثبت شد.');
                             submitNightlyExam();
                         }
                     }
@@ -937,7 +1545,7 @@
             .catch(err => {
                 console.error('Nightly start error:', err);
                 btn.disabled = false;
-                btn.innerText = 'ورود به آزمون امشب 🚀';
+                btn.innerText = 'ورود به آپالیگ امشب 🚀';
                 tg.showAlert('خطا در ارتباط با سرور.');
             });
         }
@@ -1026,7 +1634,7 @@
                     </div>
                 `).join('');
 
-                renderNightlyLeaderboard(data.leaderboard, 'جدول نفرات برتر امشب');
+                renderNightlyLeaderboard(data.leaderboard, 'جدول نفرات برتر آپالیگ');
             })
             .catch(err => {
                 console.error('Nightly submit error:', err);
@@ -1477,6 +2085,212 @@
                     </div>`;
             }).join('');
         }
+
+        // ---------- افکت تبریک نفر اول ----------
+        function showFirstPlaceCelebration(score, total, durationSeconds) {
+            const modal = document.getElementById('celebration-modal');
+            const scoreEl = document.getElementById('celebration-score');
+            const timeEl = document.getElementById('celebration-time');
+
+            scoreEl.textContent = `${score} از ${total}`;
+
+            const minutes = Math.floor(durationSeconds / 60);
+            const seconds = durationSeconds % 60;
+            timeEl.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+            modal.style.display = 'flex';
+
+            // ایجاد کانفetti
+            createConfetti(modal);
+
+            // پخش صدای جشن (اختیاری - مرورگرها ممکنه بلاک کنن)
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                playVictorySound(audioContext);
+            } catch (e) {
+                console.log('Audio not supported');
+            }
+
+            // لرزش خفیف صفحه برای حس بهتر
+            document.body.classList.add('shake');
+            setTimeout(() => document.body.classList.remove('shake'), 500);
+        }
+
+        function createConfetti(container) {
+            const colors = ['#fbbf24', '#10b981', '#0284c7', '#ef4444', '#8b5cf6', '#ec4899'];
+
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = '-10px';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.width = Math.random() * 10 + 5 + 'px';
+                confetti.style.height = Math.random() * 10 + 5 + 'px';
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                container.appendChild(confetti);
+
+                // انیمیشن ریزش کانفetti
+                const duration = Math.random() * 2 + 1;
+                const delay = Math.random() * 0.5;
+                const xDrift = (Math.random() - 0.5) * 200;
+
+                confetti.animate([
+                    {
+                        opacity: 1,
+                        transform: `translateY(0) translateX(0) rotate(0deg)`
+                    },
+                    {
+                        opacity: 0,
+                        transform: `translateY(${window.innerHeight}px) translateX(${xDrift}px) rotate(${Math.random() * 720}deg)`
+                    }
+                ], {
+                    duration: duration * 1000,
+                    delay: delay * 1000,
+                    easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+                }).onfinish = () => confetti.remove();
+            }
+        }
+
+        function playVictorySound(audioContext) {
+            const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            oscillator.type = 'sine';
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+
+            let time = audioContext.currentTime;
+            notes.forEach((freq, i) => {
+                oscillator.frequency.setValueAtTime(freq, time);
+                gainNode.gain.setValueAtTime(0.3, time);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, time + 0.2);
+                time += 0.15;
+            });
+
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(time);
+        }
+
+        function closeCelebration() {
+            const modal = document.getElementById('celebration-modal');
+            modal.style.display = 'none';
+        }
+
+        // ---------- بهبود جدول نفرات برتر ----------
+        function renderEnhancedLeaderboard(leaderboard, title) {
+            document.getElementById('nightly-leaderboard-title').innerText = title || 'جدول نفرات برتر آپالیگ';
+            const listDiv = document.getElementById('leaderboard-list');
+            if (!leaderboard || !leaderboard.length) {
+                listDiv.innerHTML = '<p style="color:var(--hint-color); font-size:13px;">هنوز کسی در این آپالیگ شرکت نکرده است.</p>';
+                return;
+            }
+
+            const medals = ['🥇', '🥈', '🥉'];
+            listDiv.innerHTML = leaderboard.map((item, idx) => {
+                const medal = item.rank <= 3 ? medals[item.rank - 1] : `#${item.rank}`;
+                const minutes = Math.floor(item.duration_seconds / 60);
+                const secs = item.duration_seconds % 60;
+                const isGolden = item.rank === 1;
+                const itemClass = isGolden ? 'leader-item golden' : 'leader-item';
+                const medalClass = isGolden ? 'leader-medal' : '';
+
+                return `
+                    <div class="${itemClass}" style="animation-delay: ${idx * 0.1}s;">
+                        <div class="leader-rank ${medalClass}">${medal}</div>
+                        <div class="leader-user">
+                            <div class="leader-avatar">${isGolden ? '👑' : '👤'}</div>
+                            <div>
+                                <div style="font-size:13px; font-weight:800; color:var(--text-color);">${item.name}</div>
+                                <div class="leader-time">زمان ثبت: ${minutes.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}</div>
+                            </div>
+                        </div>
+                        <div class="leader-score" style="color: ${isGolden ? '#f59e0b' : 'var(--med-emerald)'};">
+                            ${item.score} از ${item.total}
+                        </div>
+                    </div>`;
+            }).join('');
+        }
+
+        // بازنویسی تابع renderNightlyLeaderboard
+        window.renderNightlyLeaderboard = renderEnhancedLeaderboard;
+
+        // ---------- بهبود رنگ‌بندی کارت‌ها ----------
+        function applyCardColors() {
+            // کارت AI
+            const aiCards = document.querySelectorAll('.card:has(#ai-count)');
+            aiCards.forEach(card => card.classList.add('card-ai'));
+
+            // کارت چالش
+            const challengeCards = document.querySelectorAll('.card:has(#challenge-text)');
+            challengeCards.forEach(card => card.classList.add('card-challenge'));
+
+            // کارت ردیاب
+            const trackerCards = document.querySelectorAll('.card:has(#total-time)');
+            trackerCards.forEach(card => card.classList.add('card-tracker'));
+
+            // کارت آپالیگ
+            const nightlyCards = document.querySelectorAll('.card:has(#nightly-entry-fee)');
+            nightlyCards.forEach(card => card.classList.add('card-nightly'));
+        }
+
+        // اعمال رنگ‌ها بعد از بارگذاری
+        setTimeout(applyCardColors, 100);
+
+        // ---------- تشخیص نفر اول و نمایش تبریک ----------
+        let hasShownCelebration = false;
+
+        function checkAndCelebrateFirstPlace(leaderboard) {
+            if (!leaderboard || !leaderboard.length || hasShownCelebration) return;
+
+            const firstPlace = leaderboard[0];
+
+            // بررسی آیا کاربر فعلی نفر اول است
+            if (firstPlace.name && firstPlace.rank === 1) {
+                // نمایش تبریک بعد از یک تاخیر کوتاه
+                setTimeout(() => {
+                    showFirstPlaceCelebration(firstPlace.score, firstPlace.total, firstPlace.duration_seconds);
+                    hasShownCelebration = true;
+                }, 500);
+            }
+        }
+
+        // بهبود تابع loadNightlyStatus برای تشخیص نفر اول
+        const originalLoadNightlyStatus = window.loadNightlyStatus;
+        window.loadNightlyStatus = function() {
+            originalLoadNightlyStatus.call(this);
+
+            // بعد از دریافت داده‌ها، نفر اول رو بررسی کن
+            setTimeout(() => {
+                fetch(`${BASE_URL}/api/nightly/status`, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json', 'X-Telegram-Init-Data': tg.initData }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.leaderboard && data.leaderboard.length > 0) {
+                        checkAndCelebrateFirstPlace(data.leaderboard);
+                    }
+                })
+                .catch(err => console.error('Error checking first place:', err));
+            }, 1000);
+        };
+
+        // ---------- افکت‌های متحرک برای بخش‌ها ----------
+        function addAnimationToElements() {
+            // اضافه کردن کلاس slide-up به کارت‌ها
+            document.querySelectorAll('.card').forEach((card, idx) => {
+                card.style.animationDelay = `${idx * 0.1}s`;
+                card.classList.add('slide-up');
+            });
+        }
+
+        // اجرای افکت‌ها بعد از بارگذاری
+        window.addEventListener('load', addAnimationToElements);
 
         loadAppData();
         loadChallengeTopics();
