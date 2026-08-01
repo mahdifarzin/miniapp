@@ -1251,14 +1251,15 @@
                 return;
             }
 
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+                tab.style.display = '';  // حذف inline display اگر وجود دارد
+            });
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
 
             const targetTab = document.getElementById(`tab-${tabName}`);
             if (targetTab) {
                 targetTab.classList.add('active');
-                // اطمینان از نمایش تب (حذف display:none اگر وجود دارد)
-                targetTab.style.display = 'block';
             }
             element.classList.add('active');
 
