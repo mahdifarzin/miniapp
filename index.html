@@ -951,7 +951,7 @@
                 <div class="card-title">
                     <span class="card-title-icon">
                         <span class="icon-badge">⏱️</span>
-                        ردیاب مطالعه امروز
+                        ردیاب فعالیت‌های امروز
                     </span>
                 </div>
                 <div class="card-value" id="total-time" style="font-family: monospace;">00:00:00</div>
@@ -1114,9 +1114,20 @@
                         سوالات امشب را از الان بسازید تا موقع شروع آزمون، کاربران با تاخیر مواجه نشوند.
                     </div>
                     <div id="admin-preload-status" style="font-size: 11px; margin-bottom: 10px; padding: 8px; border-radius: 8px; display: none;"></div>
-                    <button class="exam-btn" id="admin-preload-btn" onclick="preloadExamQuestions()" style="width: 100%; background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
-                        🚀 پیش‌بارگذاری سوالات امشب
-                    </button>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="exam-btn" id="admin-preload-btn" onclick="preloadExamQuestions()" style="flex: 1; background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+                            🚀 پیش‌بارگذاری سوالات امشب
+                        </button>
+                        <button onclick="checkPreloadStatusAndRefresh()" style="
+                            background: var(--item-bg);
+                            border: var(--card-border);
+                            color: var(--text-color);
+                            padding: 12px 16px;
+                            border-radius: 12px;
+                            font-size: 14px;
+                            cursor: pointer;
+                        ">🔄</button>
+                    </div>
                 </div>
 
                 <div style="background: var(--item-bg); padding: 16px; border-radius: 14px; border: var(--card-border);">
@@ -1125,7 +1136,8 @@
                         • سوالات هر شب ساعت ۲۱:۰۰ نمایش داده می‌شوند<br>
                         • برای جلوگیری از تاخیر، از چند ساعت قبل پیش‌بارگذاری کنید<br>
                         • اگر سوالات از قبل ساخته شده باشند، پیام "از قبل موجود" نمایش داده می‌شود<br>
-                        • ادمین نیازی به پرداخت هزینه آزمون ندارد
+                        • ادمین نیازی به پرداخت هزینه آزمون ندارد<br>
+                        • با دکمه 🔄 می‌توانید وضعیت فعلی را بررسی کنید
                     </div>
                 </div>
             </div>
@@ -2414,12 +2426,82 @@
                 // نمایش تب ادمین در نوبار
                 document.getElementById('admin-nav-item').style.display = 'flex';
                 console.log('👑 دسترسی ادمین فعال شد');
+
+                // چک کردن وضعیت پیش‌بارگذاری و نمایش نوتیفیکیشن
+                checkPreloadStatusAndNotify();
             } else {
                 isAdminUser = false;
                 // مخفی کردن تب ادمین
                 document.getElementById('admin-nav-item').style.display = 'none';
                 console.log('کاربر عادی - دسترسی ادمین غیرفعال');
             }
+        }
+
+        function checkPreloadStatusAndNotify() {
+            fetch(`${BASE_URL}/api/admin/preload-status`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Telegram-Init-Data': tg.initData
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log('وضعیت پیش‌بارگذاری:', data);
+
+                if (data.preloaded) {
+                    // نمایش نوتیفیکیشن به ادمین
+                    tg.showAlert(`✅ سوالات آپالیگ امشب قبلاً پیش‌بارگذاری شده است\n\nتعداد سوالات: ${data.questions_count}\nزمان ساخت: ${data.created_at}\n\n🌐 آدرس: apamed.ir`);
+
+                    // به‌روزرسانی وضعیت در پنل ادمین
+                    updateAdminPreloadStatus(data);
+                }
+            })
+            .catch(err => console.error('Error checking preload status:', err));
+        }
+
+        function updateAdminPreloadStatus(data) {
+            const statusDiv = document.getElementById('admin-preload-status');
+            if (statusDiv) {
+                if (data.preloaded) {
+                    statusDiv.style.display = 'block';
+                    statusDiv.style.background = 'rgba(16, 185, 129, 0.2)';
+                    statusDiv.style.color = '#10b981';
+                    statusDiv.innerHTML = `✅ سوالات امشب پیش‌بارگذاری شده (${data.questions_count} سوال)<br><span style="font-size:10px; opacity:0.8;">ساعت ${data.created_at}</span>`;
+                } else {
+                    statusDiv.style.display = 'block';
+                    statusDiv.style.background = 'rgba(245, 158, 11, 0.2)';
+                    statusDiv.style.color = '#f59e0b';
+                    statusDiv.innerHTML = '⏳ سوالات امشب هنوز پیش‌بارگذاری نشده‌اند';
+                }
+            }
+        }
+
+        function checkPreloadStatusAndRefresh() {
+            const statusDiv = document.getElementById('admin-preload-status');
+            statusDiv.style.display = 'block';
+            statusDiv.style.background = 'rgba(139, 92, 246, 0.2)';
+            statusDiv.style.color = '#8b5cf6';
+            statusDiv.innerText = 'در حال بررسی وضعیت...';
+
+            fetch(`${BASE_URL}/api/admin/preload-status`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Telegram-Init-Data': tg.initData
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log('وضعیت پیش‌بارگذاری (رفرش):', data);
+                updateAdminPreloadStatus(data);
+            })
+            .catch(err => {
+                console.error('Error checking preload status:', err);
+                statusDiv.style.background = 'rgba(239, 68, 68, 0.2)';
+                statusDiv.style.color = '#ef4444';
+                statusDiv.innerText = '❌ خطا در بررسی وضعیت';
+            });
         }
 
         function preloadExamQuestions() {
@@ -2457,9 +2539,9 @@
                 statusDiv.style.color = '#10b981';
 
                 if (data.already_existed) {
-                    statusDiv.innerText = `✅ ${data.message}`;
+                    statusDiv.innerHTML = `✅ ${data.message}<br><span style="font-size:10px; opacity:0.8;">ساعت ${data.created_at}</span>`;
                 } else {
-                    statusDiv.innerText = `🎉 ${data.message}`;
+                    statusDiv.innerHTML = `🎉 ${data.message}<br><span style="font-size:10px; opacity:0.8;">ساعت ${data.created_at}</span>`;
                     // افکت موفقیت
                     btn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
                     setTimeout(() => {
