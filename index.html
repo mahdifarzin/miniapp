@@ -2355,8 +2355,13 @@
         // ---------- تشخیص نفر اول و نمایش تبریک ----------
         let hasShownCelebration = false;
 
-        function checkAndCelebrateFirstPlace(leaderboard, myResult) {
-            if (!leaderboard || !leaderboard.length || hasShownCelebration || !myResult) return;
+        function checkAndCelebrateFirstPlace(leaderboard, myResult, examEnded) {
+            // فقط وقتی تبریک نمایش بده که:
+            // ۱. آزمون برای همه تموم شده باشه (examEnded = true)
+            // ۲. کاربر قبلاً امتحان داده باشه
+            // ۳. جدول نفرات برتر موجود باشه
+            // ۴. قبلاً تبریک نشون داده نشده باشه
+            if (!examEnded || !leaderboard || !leaderboard.length || hasShownCelebration || !myResult) return;
 
             const firstPlace = leaderboard[0];
 
@@ -2386,8 +2391,11 @@
                 })
                 .then(res => res.json())
                 .then(data => {
-                    if (data.leaderboard && data.leaderboard.length > 0 && data.my_result) {
-                        checkAndCelebrateFirstPlace(data.leaderboard, data.my_result);
+                    // آیا آزمون تموم شده؟ (زمان تموم شده و کاربر قبلاً شرکت کرده)
+                    const examEnded = !data.is_active && data.already_participated;
+
+                    if (data.leaderboard && data.leaderboard.length > 0 && data.my_result && examEnded) {
+                        checkAndCelebrateFirstPlace(data.leaderboard, data.my_result, examEnded);
                     }
                 })
                 .catch(err => console.error('Error checking first place:', err));
