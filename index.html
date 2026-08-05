@@ -788,6 +788,476 @@
         .nav-icon {
             font-size: 20px;
         }
+
+        /* ============================================ */
+        /* استایل‌های مدالیت آزمون تعاملی */
+        /* ============================================ */
+
+        .quiz-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0284c7 100%);
+            z-index: 100000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 20px;
+            animation: quizOverlayIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes quizOverlayIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .quiz-header {
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .quiz-progress {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255,255,255,0.9);
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .quiz-progress-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .quiz-progress-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .quiz-progress-dot.active {
+            background: #fbbf24;
+            transform: scale(1.2);
+            box-shadow: 0 0 12px rgba(251, 191, 36, 0.6);
+        }
+
+        .quiz-progress-dot.answered {
+            background: #10b981;
+        }
+
+        .quiz-close-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-close-btn:hover {
+            background: rgba(239, 68, 68, 0.3);
+            border-color: #ef4444;
+        }
+
+        /* تایمر دایره‌ای */
+        .quiz-timer-container {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin-bottom: 24px;
+        }
+
+        .quiz-timer-svg {
+            transform: rotate(-90deg);
+            width: 100px;
+            height: 100px;
+        }
+
+        .quiz-timer-bg {
+            fill: none;
+            stroke: rgba(255,255,255,0.15);
+            stroke-width: 8;
+        }
+
+        .quiz-timer-progress {
+            fill: none;
+            stroke: #10b981;
+            stroke-width: 8;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1s linear, stroke 0.3s ease;
+        }
+
+        .quiz-timer-progress.warning {
+            stroke: #f59e0b;
+        }
+
+        .quiz-timer-progress.danger {
+            stroke: #ef4444;
+            animation: timerPulse 0.5s ease-in-out infinite;
+        }
+
+        @keyframes timerPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .quiz-timer-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 28px;
+            font-weight: 800;
+            color: white;
+            font-family: 'Vazirmatn', monospace;
+        }
+
+        /* کارت سوال */
+        .quiz-question-card {
+            width: 100%;
+            max-width: 500px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: questionSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes questionSlideIn {
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .quiz-question-topic {
+            font-size: 12px;
+            font-weight: 700;
+            color: #0284c7;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .quiz-question-topic::before {
+            content: '📚';
+            font-size: 16px;
+        }
+
+        .quiz-question-number {
+            font-size: 11px;
+            color: #64748b;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .quiz-question-text {
+            font-size: 15px;
+            line-height: 2;
+            color: #0f172a;
+            margin-bottom: 20px;
+            white-space: pre-wrap;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .quiz-option-btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: 16px;
+            background: #f8fafc;
+            border: 3px solid #e2e8f0;
+            color: #0f172a;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            text-align: right;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .quiz-option-btn:hover {
+            border-color: #0284c7;
+            background: #f0f9ff;
+            transform: translateX(-4px);
+        }
+
+        .quiz-option-btn.selected {
+            background: linear-gradient(135deg, #0284c7, #0ea5e9);
+            border-color: #0284c7;
+            color: white;
+            transform: scale(1.02);
+            box-shadow: 0 8px 20px rgba(2, 132, 199, 0.4);
+        }
+
+        .quiz-option-letter {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            background: rgba(2, 132, 199, 0.1);
+            color: #0284c7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 14px;
+        }
+
+        .quiz-option-btn.selected .quiz-option-letter {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+
+        /* دکمه بعدی */
+        .quiz-next-btn {
+            width: 100%;
+            max-width: 500px;
+            margin-top: 20px;
+            padding: 18px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            font-size: 16px;
+            font-weight: 800;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(16, 189, 129, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .quiz-next-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(16, 189, 129, 0.5);
+        }
+
+        .quiz-next-btn:disabled {
+            background: linear-gradient(135deg, #9ca3af, #6b7280);
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        /* صفحه شروع */
+        .quiz-start-screen {
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            color: white;
+            padding: 40px 20px;
+        }
+
+        .quiz-start-icon {
+            font-size: 80px;
+            margin-bottom: 24px;
+            animation: trophyBounce 1s ease-in-out infinite;
+        }
+
+        @keyframes trophyBounce {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+        }
+
+        .quiz-start-title {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .quiz-start-subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 32px;
+            line-height: 1.8;
+        }
+
+        .quiz-start-btn {
+            padding: 20px 48px;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #0f172a;
+            font-size: 18px;
+            font-weight: 800;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(251, 191, 36, 0.5);
+            transition: all 0.3s ease;
+            animation: pulseGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 10px 30px rgba(251, 191, 36, 0.5); }
+            50% { box-shadow: 0 15px 40px rgba(251, 191, 36, 0.7); }
+        }
+
+        .quiz-start-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* صفحه نتیجه */
+        .quiz-result-screen {
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            color: white;
+            padding: 40px 20px;
+        }
+
+        .quiz-result-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .quiz-result-title {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .quiz-result-score {
+            font-size: 48px;
+            font-weight: 800;
+            margin: 20px 0;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .quiz-result-score span {
+            font-size: 20px;
+            opacity: 0.8;
+        }
+
+        .quiz-result-time {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 32px;
+        }
+
+        .quiz-result-details {
+            background: rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 24px;
+            text-align: right;
+        }
+
+        .quiz-result-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .quiz-result-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .quiz-result-item-icon {
+            font-size: 24px;
+        }
+
+        .quiz-result-item-text {
+            flex: 1;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .quiz-result-close-btn {
+            padding: 18px 48px;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            font-size: 16px;
+            font-weight: 800;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(16, 189, 129, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .quiz-result-close-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* انیمیشن‌های اضافی */
+        .shake-animation {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-10px); }
+            40% { transform: translateX(10px); }
+            60% { transform: translateX(-10px); }
+            80% { transform: translateX(10px); }
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            pointer-events: none;
+            z-index: 100001;
+            animation: confettiFall 3s ease-out forwards;
+        }
+
+        @keyframes confettiFall {
+            0% { opacity: 1; transform: translateY(0) rotate(0deg); }
+            100% { opacity: 0; transform: translateY(100vh) rotate(720deg); }
+        }
+
+        /* ریسپانسیو */
+        @media (max-width: 400px) {
+            .quiz-question-card {
+                padding: 18px;
+            }
+
+            .quiz-question-text {
+                font-size: 14px;
+            }
+
+            .quiz-option-btn {
+                padding: 14px;
+                font-size: 14px;
+            }
+
+            .quiz-timer-container {
+                width: 80px;
+                height: 80px;
+            }
+
+            .quiz-timer-svg {
+                width: 80px;
+                height: 80px;
+            }
+
+            .quiz-timer-text {
+                font-size: 22px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1163,6 +1633,60 @@
         </div>
     </div>
 
+    <!-- مدالیت آزمون تعاملی -->
+    <div id="quiz-modal" class="quiz-overlay" style="display:none;">
+        <!-- صفحه شروع -->
+        <div id="quiz-start-screen" class="quiz-start-screen">
+            <div class="quiz-start-icon">🏆</div>
+            <h1 class="quiz-start-title">آپالیگ امشب</h1>
+            <p class="quiz-start-subtitle">
+                ۱۰ سوال بالینی از ۱۰ مبحث مختلف<br>
+                ⏱️ ۳۰ ثانیه فرصت برای هر سوال<br>
+                🎯 پاسخ صحیح = ۱ امتیاز<br><br>
+                <strong>آماده‌اید؟</strong>
+            </p>
+            <button class="quiz-start-btn" onclick="startQuizQuestions()">🚀 شروع آزمون</button>
+        </div>
+
+        <!-- صفحه سوالات -->
+        <div id="quiz-active-screen" style="display:none; width: 100%; flex-direction: column; align-items: center;">
+            <!-- هدر -->
+            <div class="quiz-header">
+                <div class="quiz-progress">
+                    <span id="quiz-question-counter">1 از 10</span>
+                    <div class="quiz-progress-dots" id="quiz-progress-dots"></div>
+                </div>
+                <button class="quiz-close-btn" onclick="closeQuizModal()">✕</button>
+            </div>
+
+            <!-- تایمر دایره‌ای -->
+            <div class="quiz-timer-container">
+                <svg class="quiz-timer-svg" viewBox="0 0 100 100">
+                    <circle class="quiz-timer-bg" cx="50" cy="50" r="42"></circle>
+                    <circle class="quiz-timer-progress" id="quiz-timer-circle" cx="50" cy="50" r="42"
+                            stroke-dasharray="264" stroke-dashoffset="0"></circle>
+                </svg>
+                <div class="quiz-timer-text" id="quiz-timer-text">30</div>
+            </div>
+
+            <!-- کارت سوال -->
+            <div class="quiz-question-card">
+                <div class="quiz-question-topic" id="quiz-question-topic">موضوع</div>
+                <div class="quiz-question-number" id="quiz-question-number">سوال 1 از 10</div>
+                <div class="quiz-question-text" id="quiz-question-text">متن سوال اینجا قرار میگیرد</div>
+                <div class="quiz-options" id="quiz-options"></div>
+            </div>
+
+            <!-- دکمه بعدی -->
+            <button class="quiz-next-btn" id="quiz-next-btn" onclick="goToNextQuestion()" disabled>
+                سوال بعدی ➡️
+            </button>
+        </div>
+
+        <!-- صفحه نتیجه -->
+        <div id="quiz-result-screen" class="quiz-result-screen" style="display:none;"></div>
+    </div>
+
     <!-- تب بار شناور پایینی -->
     <div class="bottom-nav">
         <div class="nav-item active" onclick="switchTab('dashboard', this)">
@@ -1305,6 +1829,14 @@
         let nightlyQuestions = [];
         let nightlyAnswers = [];
         let nightlySubmitted = false;
+
+        // متغیرهای جدید برای آزمون تعاملی
+        let currentQuizQuestionIndex = 0;
+        let quizTimerInterval = null;
+        let quizTimeRemaining = 30;
+        let quizSelectedAnswer = null;
+        let quizStartTime = null;
+        const QUIZ_TIME_PER_QUESTION = 30;
 
         function formatMMSS(totalSeconds) {
             const s = Math.max(0, totalSeconds);
@@ -1539,7 +2071,7 @@
                 `زمان صرف‌شده شما: ${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')} دقیقه`;
         }
 
-        function startNightlyExam() {
+        function startNightlyExam(isAdminStart = false) {
             const btn = document.getElementById('nightly-action-btn');
             btn.disabled = true;
             btn.innerText = '⏳ در حال آماده‌سازی سوالات...';
@@ -1547,7 +2079,7 @@
             fetch(`${BASE_URL}/api/nightly/start`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'X-Telegram-Init-Data': tg.initData },
-                body: JSON.stringify({})
+                body: JSON.stringify({ admin_start: isAdminStart })
             })
             .then(res => res.json().then(data => ({ status: res.status, data })))
             .then(({ status, data }) => {
@@ -1571,8 +2103,14 @@
 
                 document.getElementById('nightly-action-btn').style.display = 'none';
                 document.getElementById('nightly-result-card').style.display = 'none';
-                renderNightlyQuiz();
-                document.getElementById('nightly-quiz-card').style.display = 'block';
+
+                // نمایش پیام اگر آزمون توسط ادمین شروع شده باشه
+                if (data.admin_started) {
+                    tg.showAlert('✅ آزمون با موفقیت توسط ادمین فعال شد!\n\nحالا می‌توانید آزمون را شروع کنید.');
+                }
+
+                // فراخوانی مدالیت آزمون تعاملی
+                openQuizModal();
 
                 if (nightlyQuizCountdownInterval) clearInterval(nightlyQuizCountdownInterval);
                 let remaining = data.seconds_to_end;
@@ -2548,6 +3086,8 @@
 
                 if (data.already_existed) {
                     statusDiv.innerHTML = `✅ ${data.message}<br><span style="font-size:10px; opacity:0.8;">ساعت ${data.created_at}</span>`;
+                    // اضافه کردن دکمه شروع فوری برای ادمین
+                    addAdminStartButton(statusDiv);
                 } else {
                     statusDiv.innerHTML = `🎉 ${data.message}<br><span style="font-size:10px; opacity:0.8;">ساعت ${data.created_at}</span>`;
                     // افکت موفقیت
@@ -2555,6 +3095,8 @@
                     setTimeout(() => {
                         btn.style.background = 'linear-gradient(135deg, #8b5cf6, #7c3aed)';
                     }, 2000);
+                    // اضافه کردن دکمه شروع فوری برای ادمین
+                    addAdminStartButton(statusDiv);
                 }
             })
             .catch(err => {
@@ -2565,6 +3107,406 @@
                 statusDiv.style.color = '#ef4444';
                 statusDiv.innerText = '❌ خطا در ارتباط با سرور';
             });
+        }
+
+        // تابع اضافه کردن دکمه شروع فوری برای ادمین
+        function addAdminStartButton(statusDiv) {
+            // بررسی آیا کاربر ادمین است
+            if (!isAdminUser) return;
+
+            // حذف دکمه قبلی اگر وجود دارد
+            const existingBtn = document.getElementById('admin-start-now-btn');
+            if (existingBtn) existingBtn.remove();
+
+            // ایجاد دکمه جدید
+            const startBtn = document.createElement('button');
+            startBtn.id = 'admin-start-now-btn';
+            startBtn.innerText = '🎮 شروع فوری آزمون (فقط ادمین)';
+            startBtn.style.cssText = `
+                width: 100%;
+                margin-top: 10px;
+                padding: 12px;
+                border-radius: 12px;
+                background: linear-gradient(135deg, #f59e0b, #d97706);
+                color: white;
+                font-size: 13px;
+                font-weight: 800;
+                border: none;
+                cursor: pointer;
+                box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+                transition: all 0.3s ease;
+            `;
+            startBtn.onmouseover = function() {
+                this.style.transform = 'translateY(-2px)';
+                this.style.boxShadow = '0 6px 16px rgba(245, 158, 11, 0.5)';
+            };
+            startBtn.onmouseout = function() {
+                this.style.transform = 'translateY(0)';
+                this.style.boxShadow = '0 4px 12px rgba(245, 158, 11, 0.4)';
+            };
+            startBtn.onclick = adminStartQuizNow;
+
+            // اضافه کردن به statusDiv
+            statusDiv.appendChild(startBtn);
+        }
+
+        // تابع شروع فوری آزمون برای ادمین
+        function adminStartQuizNow() {
+            // نمایش پیام تایید
+            tg.showConfirm(
+                'آیا میخواهید آزمون را همین الان شروع کنید؟\n\n' +
+                '⚠️ توجه: با این کار آزمون برای شما فعال می‌شود.',
+                (confirmed) => {
+                    if (confirmed) {
+                        // شروع آزمون با پارامتر ادمین
+                        startNightlyExam(true);
+                    }
+                }
+            );
+        }
+
+        // ============================================
+        // توابع جدید آزمون تعاملی با مدالیت
+        // ============================================
+
+        // باز کردن مدالیت و نمایش صفحه شروع
+        function openQuizModal() {
+            const modal = document.getElementById('quiz-modal');
+            modal.style.display = 'flex';
+
+            // بازنشانی وضعیت
+            currentQuizQuestionIndex = 0;
+            quizSelectedAnswer = null;
+
+            // نمایش صفحه شروع
+            document.getElementById('quiz-start-screen').style.display = 'block';
+            document.getElementById('quiz-active-screen').style.display = 'none';
+            document.getElementById('quiz-result-screen').style.display = 'none';
+
+            // بستن فرم قبلی آزمون
+            document.getElementById('nightly-quiz-card').style.display = 'none';
+        }
+
+        // بستن مدالیت
+        function closeQuizModal() {
+            const modal = document.getElementById('quiz-modal');
+            modal.style.display = 'none';
+
+            // دوباره فرم آزمون را نشون میده
+            if (nightlyQuestions && nightlyQuestions.length > 0) {
+                document.getElementById('nightly-quiz-card').style.display = 'block';
+            }
+        }
+
+        // شروع مستقیم آزمون از مدالیت
+        function startQuizQuestions() {
+            // مخفی کردن صفحه شروع
+            document.getElementById('quiz-start-screen').style.display = 'none';
+
+            // بارگذاری سوالات اگر هنوز بارگذاری نشده بود
+            if (!nightlyQuestions || nightlyQuestions.length === 0) {
+                document.getElementById('quiz-active-screen').innerHTML = '';
+                const loadingDiv = document.createElement('div');
+                loadingDiv.innerHTML = '<p style="color:white;text-align:center;margin-top:50px;">⏳ در حال دریافت سوالات...</p>';
+                document.getElementById('quiz-active-screen').appendChild(loadingDiv);
+                return;
+            }
+
+            // نمایش اولین سوال
+            document.getElementById('quiz-active-screen').style.display = 'flex';
+            showQuestion(0);
+        }
+
+        // نمایش یک سوال خاص
+        function showQuestion(index) {
+            if (!nightlyQuestions || index >= nightlyQuestions.length) {
+                showQuizResult();
+                return;
+            }
+
+            currentQuizQuestionIndex = index;
+
+            // به‌روزرسانی شمارنده سوالات
+            document.getElementById('quiz-question-counter').textContent =
+                `سوال ${index + 1} از ${nightlyQuestions.length}`;
+
+            // به‌روزرسانی پیشرفت
+            updateProgressDots();
+
+            const q = nightlyQuestions[index];
+            quizSelectedAnswer = null;
+
+            // تنظیم متن سوال
+            document.getElementById('quiz-question-topic').textContent = q.topic || 'سوال بالینی';
+            document.getElementById('quiz-question-text').textContent = q.question;
+            document.getElementById('quiz-question-number').textContent =
+                `سوال ${index + 1} از ${nightlyQuestions.length}`;
+
+            // ساخت گزینه‌ها
+            const optionsDiv = document.getElementById('quiz-options');
+            optionsDiv.innerHTML = '';
+
+            ['الف', 'ب', 'ج', 'د'].forEach((letter, idx) => {
+                const option = q.options && q.options[idx] ? q.options[idx] : letter;
+                const btn = document.createElement('button');
+                btn.textContent = option;
+                btn.innerHTML = `
+                    <span class="quiz-option-letter">${letter}</span>
+                    <span>${option}</span>
+                `;
+                btn.className = 'quiz-option-btn';
+                btn.dataset.letter = letter;
+                btn.onclick = () => selectQuizAnswer(letter, btn);
+                optionsDiv.appendChild(btn);
+            });
+
+            // شروع تایمر 30 ثانیه‌ای
+            startQuestionTimer();
+        }
+
+        // به‌روزرسانی نقاط پیشرفت
+        function updateProgressDots() {
+            const dotsContainer = document.getElementById('quiz-progress-dots');
+            dotsContainer.innerHTML = '';
+
+            nightlyQuestions.forEach((_, idx) => {
+                const dot = document.createElement('div');
+                dot.className = 'quiz-progress-dot';
+
+                if (idx < currentQuizQuestionIndex) {
+                    dot.classList.add('answered');
+                } else if (idx === currentQuizQuestionIndex) {
+                    dot.classList.add('active');
+                }
+
+                dotsContainer.appendChild(dot);
+            });
+        }
+
+        // شروع تایمر سوال جاری
+        function startQuestionTimer() {
+            // پاک‌کردن تایمر قبلی
+            if (quizTimerInterval) {
+                clearInterval(quizTimerInterval);
+            }
+
+            quizTimeRemaining = QUIZ_TIME_PER_QUESTION;
+            updateTimerDisplay();
+
+            // به‌روزرسانی دایره تایمر
+            updateTimerCircle();
+
+            quizTimerInterval = setInterval(() => {
+                quizTimeRemaining--;
+                updateTimerDisplay();
+                updateTimerCircle();
+
+                if (quizTimeRemaining <= 0) {
+                    clearInterval(quizTimerInterval);
+
+                    // اگر پاسخی انتخاب نشده، یک پاسخ را "هیچ‌کدام" می‌کنیم
+                    if (quizSelectedAnswer === null) {
+                        quizSelectedAnswer = '--';
+                        nightlyAnswers[currentQuizQuestionIndex] = '--';
+                    }
+
+                    // انتقال به سوال بعدی یا نمایش نتیجه
+                    setTimeout(() => {
+                        if (currentQuizQuestionIndex < nightlyQuestions.length - 1) {
+                            showQuestion(currentQuizQuestionIndex + 1);
+                        } else {
+                            submitQuiz();
+                        }
+                    }, 500);
+                }
+            }, 1000);
+        }
+
+        // به‌روزرسانی نمایشگر زمان
+        function updateTimerDisplay() {
+            document.getElementById('quiz-timer-text').textContent = quizTimeRemaining.toString().padStart(2, '0');
+        }
+
+        // به‌روزرسانی دایره تایمر
+        function updateTimerCircle() {
+            const circle = document.getElementById('quiz-timer-circle');
+            const progress = (QUIZ_TIME_PER_QUESTION - quizTimeRemaining) / QUIZ_TIME_PER_QUESTION;
+            const radius = 42;
+            const circumference = 2 * Math.PI * radius;
+            const offset = circumference * (1 - progress);
+
+            circle.style.strokeDashoffset = offset;
+
+            // تغییر رنگ بر اساس زمان باقی‌مانده
+            if (quizTimeRemaining <= 10) {
+                circle.classList.remove('warning', 'danger');
+                circle.classList.add('danger');
+            } else if (quizTimeRemaining <= 20) {
+                circle.classList.remove('danger');
+                circle.classList.add('warning');
+            } else {
+                circle.classList.remove('warning', 'danger');
+            }
+        }
+
+        // انتخاب پاسخ
+        function selectQuizAnswer(letter, btn) {
+            quizSelectedAnswer = letter;
+            nightlyAnswers[currentQuizQuestionIndex] = letter;
+
+            // به‌روزرسانی دکمه‌ها
+            document.querySelectorAll('.quiz-option-btn').forEach(b => {
+                b.classList.remove('selected');
+            });
+            btn.classList.add('selected');
+
+            // توقف تایمر
+            clearInterval(quizTimerInterval);
+
+            // انتقال خودکار به سوال بعدی بعد از 1 ثانیه
+            setTimeout(() => {
+                goToNextQuestion();
+            }, 1000);
+        }
+
+        // نمایش دکمه بعدی و پردازش تکمیل سوال
+        function goToNextQuestion() {
+            if (quizSelectedAnswer === null) {
+                // ایجاد افکت لرزش
+                document.querySelector('.quiz-question-card').classList.add('shake-animation');
+                setTimeout(() => {
+                    document.querySelector('.quiz-question-card').classList.remove('shake-animation');
+                }, 500);
+                return;
+            }
+
+            clearInterval(quizTimerInterval);
+
+            // انتقال به سوال بعدی یا نمایش نتیجه
+            if (currentQuizQuestionIndex < nightlyQuestions.length - 1) {
+                showQuestion(currentQuizQuestionIndex + 1);
+            } else {
+                submitQuiz();
+            }
+        }
+
+        // ارسال نهایی پاسخ‌ها
+        function submitQuiz() {
+            clearInterval(quizTimerInterval);
+
+            fetch(`${BASE_URL}/api/nightly/submit`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Telegram-Init-Data': tg.initData
+                },
+                body: JSON.stringify({ answers: nightlyAnswers })
+            })
+            .then(res => res.json().then(data => ({ status: res.status, data })))
+            .then(({ status, data }) => {
+                if (status !== 200 || data.error) {
+                    tg.showAlert(data.message || 'خطا در ثبت پاسخ‌ها.');
+
+                    // بازگرداندن به صفحه سوالات
+                    document.getElementById('quiz-result-screen').style.display = 'none';
+                    document.getElementById('quiz-active-screen').style.display = 'flex';
+                    document.getElementById('quiz-start-screen').style.display = 'none';
+                    return;
+                }
+
+                // نمایش نتیجه
+                showQuizResult(data);
+            })
+            .catch(err => {
+                console.error('Quiz submit error:', err);
+                tg.showAlert('خطا در ارتباط با سرور.');
+            });
+        }
+
+        // نمایش صفحه نتیجه
+        function showQuizResult(data) {
+            if (!data) {
+                // دریافت داده از وضعیت فعلی
+                fetch(`${BASE_URL}/api/nightly/status`, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json', 'X-Telegram-Init-Data': tg.initData }
+                })
+                .then(res => res.json())
+                .then(statusData => {
+                    if (statusData.error) return;
+                    document.getElementById('quiz-result-screen').innerHTML = generateQuizResultHTML(statusData);
+                    document.getElementById('quiz-active-screen').style.display = 'none';
+                    document.getElementById('quiz-start-screen').style.display = 'none';
+                });
+                return;
+            }
+
+            // با داده‌های دریافتی
+            document.getElementById('quiz-result-screen').innerHTML = generateQuizResultHTML(data);
+
+            // تغییر به صفحه نتیجه
+            document.getElementById('quiz-active-screen').style.display = 'none';
+            document.getElementById('quiz-start-screen').style.display = 'none';
+            document.getElementById('quiz-result-screen').style.display = 'block';
+
+            // به‌روزرسانی نتایج در داشبورد
+            document.getElementById('nightly-result-score').innerText = `${data.score} از ${data.total}`;
+            const m = Math.floor(data.duration_seconds / 60), s = data.duration_seconds % 60;
+            document.getElementById('nightly-result-desc').innerText =
+                `زمان صرف‌شده شما: ${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')} دقیقه`;
+        }
+
+        // تولید HTML نتایج
+        function generateQuizResultHTML(data) {
+            const score = data.score || 0;
+            const total = data.total || 10;
+            const duration = data.duration_seconds || 180;
+
+            const minutes = Math.floor(duration / 60);
+            const seconds = duration % 60;
+
+            let title = '';
+            if (score === total) {
+                title = '🎉 عالی‌ترین نمره!';
+            } else if (score >= total * 0.8) {
+                title = '🎯 عملکرد عالی!';
+            } else if (score >= total * 0.6) {
+                title = '👍 عملکرد خوب!';
+            } else {
+                title = '📚 بیشتر تمرین کنید!';
+            }
+
+            return `
+                <div class="quiz-result-icon">${score === total ? '🏆' : '⭐'}</div>
+                <h1 class="quiz-result-title">${title}</h1>
+                <div class="quiz-result-score">
+                    ${score} از ${total}
+                </div>
+                <div class="quiz-result-time">
+                    زمان: ${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')} دقیقه
+                </div>
+                <div class="quiz-result-details">
+                    ${data.results ? data.results.map((r, idx) => `
+                        <div class="quiz-result-item">
+                            <span class="quiz-result-item-icon">${r.is_correct ? '✅' : '❌'}</span>
+                            <span class="quiz-result-item-text">
+                                <strong>سوال ${idx + 1}</strong> (${r.topic})
+                                ${r.is_correct ? '✅ صحیح' : `❌ نادرست | صحیح: ${r.correct_answer}`}
+                                <br><small>💡 ${r.explanation}</small>
+                            </span>
+                        </div>
+                    `).join('') : ''}
+                </div>
+                <button class="quiz-result-close-btn" onclick="closeQuizModal()">
+                    🏠 بازگشت به منوی اصلی
+                </button>
+            `;
+        }
+
+        // سیستم خودکار برای نمایش مدالیت وقتی کاربر دکمه "شروع آپالیگ" را می‌زنه
+        function showQuizStartOverlay() {
+            // این تابع وقتی کاربر روی دکمه شروع کلیک می‌کنه فراخوانی می‌شه
+            openQuizModal();
         }
 
     </script>
