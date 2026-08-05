@@ -806,7 +806,11 @@
             align-items: center;
             justify-content: flex-start;
             padding: 20px;
+            padding-top: max(20px, env(safe-area-inset-top));
+            padding-bottom: max(20px, env(safe-area-inset-bottom));
             animation: quizOverlayIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         @keyframes quizOverlayIn {
@@ -937,6 +941,10 @@
             padding: 24px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             animation: questionSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            flex-shrink: 0;
+            max-height: calc(100vh - 280px);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         @keyframes questionSlideIn {
@@ -972,6 +980,8 @@
             color: #0f172a;
             margin-bottom: 20px;
             white-space: pre-wrap;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .quiz-options {
@@ -995,6 +1005,9 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            hyphens: auto;
         }
 
         .quiz-option-btn:hover {
@@ -1065,6 +1078,11 @@
             text-align: center;
             color: white;
             padding: 40px 20px;
+            padding-top: max(40px, env(safe-area-inset-top));
+            padding-bottom: max(40px, env(safe-area-inset-bottom));
+            max-height: 100vh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .quiz-start-icon {
@@ -1122,6 +1140,11 @@
             text-align: center;
             color: white;
             padding: 40px 20px;
+            padding-top: max(40px, env(safe-area-inset-top));
+            padding-bottom: max(40px, env(safe-area-inset-bottom));
+            max-height: 100vh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .quiz-result-icon {
@@ -1231,31 +1254,96 @@
 
         /* ریسپانسیو */
         @media (max-width: 400px) {
+            .quiz-overlay {
+                padding: 12px;
+            }
+
+            .quiz-header {
+                margin-bottom: 12px;
+            }
+
             .quiz-question-card {
-                padding: 18px;
+                padding: 16px;
+                border-radius: 20px;
             }
 
             .quiz-question-text {
                 font-size: 14px;
+                line-height: 1.8;
+                margin-bottom: 16px;
             }
 
             .quiz-option-btn {
                 padding: 14px;
                 font-size: 14px;
+                border-radius: 14px;
+            }
+
+            .quiz-option-letter {
+                width: 28px;
+                height: 28px;
+                font-size: 13px;
             }
 
             .quiz-timer-container {
-                width: 80px;
-                height: 80px;
+                width: 70px;
+                height: 70px;
+                margin-bottom: 16px;
             }
 
             .quiz-timer-svg {
-                width: 80px;
-                height: 80px;
+                width: 70px;
+                height: 70px;
             }
 
             .quiz-timer-text {
+                font-size: 20px;
+            }
+
+            .quiz-progress {
+                font-size: 12px;
+            }
+
+            .quiz-progress-dot {
+                width: 8px;
+                height: 8px;
+            }
+
+            .quiz-next-btn {
+                padding: 16px;
+                font-size: 14px;
+            }
+
+            .quiz-start-title {
                 font-size: 22px;
+            }
+
+            .quiz-start-subtitle {
+                font-size: 13px;
+            }
+
+            .quiz-start-btn {
+                padding: 16px 32px;
+                font-size: 16px;
+            }
+
+            .quiz-result-score {
+                font-size: 36px;
+            }
+
+            .quiz-result-icon {
+                font-size: 60px;
+            }
+        }
+
+        /* ریسپانسیو برای تبلت */
+        @media (min-width: 401px) and (max-width: 768px) {
+            .quiz-question-card {
+                padding: 20px;
+            }
+
+            .quiz-option-btn {
+                padding: 15px;
             }
         }
     </style>
@@ -1649,7 +1737,7 @@
         </div>
 
         <!-- صفحه سوالات -->
-        <div id="quiz-active-screen" style="display:none; width: 100%; flex-direction: column; align-items: center;">
+        <div id="quiz-active-screen" style="display:none; width: 100%; flex-direction: column; align-items: center; padding-bottom: 20px;">
             <!-- هدر -->
             <div class="quiz-header">
                 <div class="quiz-progress">
