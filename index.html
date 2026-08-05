@@ -1010,6 +1010,12 @@
             hyphens: auto;
         }
 
+        .quiz-option-text {
+            flex: 1;
+            font-weight: 600;
+            line-height: 1.6;
+        }
+
         .quiz-option-btn:hover {
             border-color: #0284c7;
             background: #f0f9ff;
@@ -1333,6 +1339,11 @@
 
             .quiz-result-icon {
                 font-size: 60px;
+            }
+
+            .quiz-option-text {
+                font-size: 13px;
+                line-height: 1.5;
             }
         }
 
@@ -3258,6 +3269,78 @@
         // توابع جدید آزمون تعاملی با مدالیت
         // ============================================
 
+        // تابع استخراج گزینه‌ها از متن سوال
+        function extractOptionsFromQuestion(questionText) {
+            const options = [];
+
+            // الگوهای مختلف فرمت گزینه‌ها
+            const patterns = [
+                // الف) ... ب) ... ج) ... د) ...
+                /الف\)\s*(.+?)(?=ب\)|$)/s,
+                /ب\)\s*(.+?)(?=ج\)|$)/s,
+                /ج\)\s*(.+?)(?=د\)|$)/s,
+                /د\)\s*(.+?)$/s,
+                // الف. ... ب. ... ج. ... د. ...
+                /الف\.\s*(.+?)(?=ب\.|$)/s,
+                /ب\.\s*(.+?)(?=ج\.|$)/s,
+                /ج\.\s*(.+?)(?=د\.|$)/s,
+                /د\.\s*(.+?)$/s,
+                // الف: ... ب: ... ج: ... د: ...
+                /الف:\s*(.+?)(?=ب:|$)/s,
+                /ب:\s*(.+?)(?=ج:|$)/s,
+                /ج:\s*(.+?)(?=د:|$)/s,
+                /د:\s*(.+?)$/s,
+                // 1) ... 2) ... 3) ... 4) ... (تبدیل به الف-ب-ج-د)
+                /1\)\s*(.+?)(?=2\)|$)/s,
+                /2\)\s*(.+?)(?=3\)|$)/s,
+                /3\)\s*(.+?)(?=4\)|$)/s,
+                /4\)\s*(.+?)$/s,
+            ];
+
+            // استخراج گزینه الف
+            let match = questionText.match(/الف\)\s*(.+?)(?=ب\)|$)/s);
+            if (match) options.push(match[1].trim());
+
+            // استخراج گزینه ب
+            match = questionText.match(/ب\)\s*(.+?)(?=ج\)|$)/s);
+            if (match) options.push(match[1].trim());
+
+            // استخراج گزینه ج
+            match = questionText.match(/ج\)\s*(.+?)(?=د\)|$)/s);
+            if (match) options.push(match[1].trim());
+
+            // استخراج گزینه د
+            match = questionText.match(/د\)\s*(.+?)$/s);
+            if (match) options.push(match[1].trim());
+
+            // اگر با الگوی الف) پیدا نشد، الگوی الف. رو امتحان کن
+            if (options.length === 0) {
+                match = questionText.match(/الف\.\s*(.+?)(?=ب\.|$)/s);
+                if (match) options.push(match[1].trim());
+
+                match = questionText.match(/ب\.\s*(.+?)(?=ج\.|$)/s);
+                if (match) options.push(match[1].trim());
+
+                match = questionText.match(/ج\.\s*(.+?)(?=د\.|$)/s);
+                if (match) options.push(match[1].trim());
+
+                match = questionText.match(/د\.\s*(.+?)$/s);
+                if (match) options.push(match[1].trim());
+            }
+
+            // اگر هیچ گزینه‌ای پیدا نشد، ۴ گزینه پیش‌فرض برگردان
+            if (options.length === 0) {
+                return ['گزینه الف', 'گزینه ب', 'گزینه ج', 'گزینه د'];
+            }
+
+            // تکمیل گزینه‌های کمتر از ۴
+            while (options.length < 4) {
+                options.push(`گزینه ${['الف', 'ب', 'ج', 'د'][options.length]}`);
+            }
+
+            return options;
+        }
+
         // باز کردن مدالیت و نمایش صفحه شروع
         function openQuizModal(adminStarted = false) {
             const modal = document.getElementById('quiz-modal');
@@ -3332,21 +3415,23 @@
             document.getElementById('quiz-question-number').textContent =
                 `سوال ${index + 1} از ${nightlyQuestions.length}`;
 
+            // استخراج گزینه‌ها از متن سوال
+            const extractedOptions = extractOptionsFromQuestion(q.question);
+
             // ساخت گزینه‌ها
             const optionsDiv = document.getElementById('quiz-options');
             optionsDiv.innerHTML = '';
 
             ['الف', 'ب', 'ج', 'د'].forEach((letter, idx) => {
-                const option = q.options && q.options[idx] ? q.options[idx] : letter;
+                const optionText = extractedOptions[idx] || `گزینه ${letter}`;
                 const btn = document.createElement('button');
-                btn.textContent = option;
-                btn.innerHTML = `
-                    <span class="quiz-option-letter">${letter}</span>
-                    <span>${option}</span>
-                `;
                 btn.className = 'quiz-option-btn';
                 btn.dataset.letter = letter;
                 btn.onclick = () => selectQuizAnswer(letter, btn);
+                btn.innerHTML = `
+                    <span class="quiz-option-letter">${letter}</span>
+                    <span class="quiz-option-text">${optionText}</span>
+                `;
                 optionsDiv.appendChild(btn);
             });
 
