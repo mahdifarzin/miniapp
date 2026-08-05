@@ -1345,7 +1345,7 @@
                 <p style="font-size: 12px; opacity: 0.95; font-weight: 600; margin-bottom: 10px; background: rgba(255,255,255,0.15); padding: 8px 12px; border-radius: 10px; line-height: 1.6;">
                     مسابقه شبانه پزشکی آپامد | رقابت علمی بین اکسترن‌ها | هر شب ساعت ۲۱:۰۰
                 </p>
-                <p style="font-size: 13px; opacity: 0.9; font-weight: 500;">📚 ۱۰ سوال بالینی از ۱۰ مبحث | ۶ دقیقه فرصت پاسخ‌دهی</p>
+                <p style="font-size: 13px; opacity: 0.9; font-weight: 500;">📚 ۱۰ سوال بالینی از ۱۰ مبحث | ⏱️ ۳۰ ثانیه برای هر سوال</p>
                 <div style="display:flex; gap:16px; margin-top:10px; font-size:12px; font-weight:700;">
                     <span>💳 هزینه ورودی: <span id="nightly-entry-fee">--</span> تومان</span>
                 </div>
@@ -1836,6 +1836,7 @@
         let quizTimeRemaining = 30;
         let quizSelectedAnswer = null;
         let quizStartTime = null;
+        let isAdminQuiz = false; // آیا آزمون توسط ادمین شروع شده
         const QUIZ_TIME_PER_QUESTION = 30;
 
         function formatMMSS(totalSeconds) {
@@ -2110,7 +2111,7 @@
                 }
 
                 // فراخوانی مدالیت آزمون تعاملی
-                openQuizModal();
+                openQuizModal(data.admin_started || false);
 
                 if (nightlyQuizCountdownInterval) clearInterval(nightlyQuizCountdownInterval);
                 let remaining = data.seconds_to_end;
@@ -3170,13 +3171,14 @@
         // ============================================
 
         // باز کردن مدالیت و نمایش صفحه شروع
-        function openQuizModal() {
+        function openQuizModal(adminStarted = false) {
             const modal = document.getElementById('quiz-modal');
             modal.style.display = 'flex';
 
             // بازنشانی وضعیت
             currentQuizQuestionIndex = 0;
             quizSelectedAnswer = null;
+            isAdminQuiz = adminStarted;
 
             // نمایش صفحه شروع
             document.getElementById('quiz-start-screen').style.display = 'block';
@@ -3315,7 +3317,7 @@
                         if (currentQuizQuestionIndex < nightlyQuestions.length - 1) {
                             showQuestion(currentQuizQuestionIndex + 1);
                         } else {
-                            submitQuiz();
+                            submitQuiz(isAdminQuiz);
                         }
                     }, 500);
                 }
@@ -3386,12 +3388,12 @@
             if (currentQuizQuestionIndex < nightlyQuestions.length - 1) {
                 showQuestion(currentQuizQuestionIndex + 1);
             } else {
-                submitQuiz();
+                submitQuiz(isAdminQuiz);
             }
         }
 
         // ارسال نهایی پاسخ‌ها
-        function submitQuiz() {
+        function submitQuiz(isAdminSubmit = false) {
             clearInterval(quizTimerInterval);
 
             fetch(`${BASE_URL}/api/nightly/submit`, {
@@ -3400,7 +3402,7 @@
                     'Content-Type': 'application/json',
                     'X-Telegram-Init-Data': tg.initData
                 },
-                body: JSON.stringify({ answers: nightlyAnswers })
+                body: JSON.stringify({ answers: nightlyAnswers, admin_start: isAdminSubmit })
             })
             .then(res => res.json().then(data => ({ status: res.status, data })))
             .then(({ status, data }) => {
