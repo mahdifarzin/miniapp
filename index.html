@@ -1692,6 +1692,36 @@
                 </div>
                 <div class="card-desc" style="margin-bottom:12px;">ابزارهای مدیریت ویژه ادمین ربات</div>
 
+                <!-- کنترل حالت آزمون (رایگان/پولی) -->
+                <div style="background: var(--item-bg); padding: 16px; border-radius: 14px; margin-bottom: 12px; border: var(--card-border);">
+                    <div style="font-weight: 700; font-size: 13px; margin-bottom: 8px; color: var(--text-color);">🎯 کنترل دسترسی آپالیگ</div>
+                    <div style="font-size: 11px; color: var(--hint-color); margin-bottom: 12px; line-height: 1.6;">
+                        حالت آزمون را بین رایگان و پولی تغییر دهید.
+                    </div>
+                    <div id="admin-exam-mode-status" style="font-size: 11px; margin-bottom: 10px; padding: 8px; border-radius: 8px; display: none;"></div>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <button id="admin-exam-mode-btn" onclick="toggleExamMode()" style="
+                            flex: 1;
+                            padding: 12px;
+                            border-radius: 12px;
+                            font-size: 13px;
+                            font-weight: 800;
+                            border: none;
+                            cursor: pointer;
+                            transition: all 0.3s ease;
+                        ">در حال بارگذاری...</button>
+                        <button onclick="loadExamMode()" style="
+                            background: var(--item-bg);
+                            border: var(--card-border);
+                            color: var(--text-color);
+                            padding: 12px 16px;
+                            border-radius: 12px;
+                            font-size: 14px;
+                            cursor: pointer;
+                        ">🔄</button>
+                    </div>
+                </div>
+
                 <div style="background: var(--item-bg); padding: 16px; border-radius: 14px; margin-bottom: 12px; border: var(--card-border);">
                     <div style="font-weight: 700; font-size: 13px; margin-bottom: 8px; color: var(--text-color);">📦 پیش‌بارگذاری سوالات آپالیگ</div>
                     <div style="font-size: 11px; color: var(--hint-color); margin-bottom: 12px; line-height: 1.6;">
@@ -1922,7 +1952,8 @@
                 if (nightlyStatusPollInterval) clearInterval(nightlyStatusPollInterval);
                 nightlyStatusPollInterval = setInterval(loadNightlyStatus, 20000);
             } else if (tabName === 'admin') {
-                // پنل ادمین - نیازی به لود اضافی نیست
+                // پنل ادمین - لود وضعیت حالت آزمون
+                loadExamMode();
                 console.log('پنل ادمین باز شد');
             } else if (nightlyStatusPollInterval) {
                 clearInterval(nightlyStatusPollInterval);
@@ -2084,21 +2115,35 @@
                 const regStatusDiv = document.getElementById('nightly-registration-status');
                 const regBtn = document.getElementById('nightly-register-btn');
 
+                // نمایش وضعیت حالت آزمون (رایگان/پولی)
+                if (data.is_free_mode) {
+                    document.getElementById('nightly-entry-fee').innerHTML = '<span style="color:#10b981; font-weight:800;">رایگان 🎉</span>';
+                }
+
                 if (data.has_paid) {
                     regStatusDiv.style.display = 'block';
                     regStatusDiv.style.background = 'rgba(16, 185, 129, 0.2)';
                     regStatusDiv.style.color = '#10b981';
-                    regStatusDiv.innerHTML = '✅ ثبت‌نام شما برای آپالیگ امشب تایید شد';
+                    if (data.is_free_mode) {
+                        regStatusDiv.innerHTML = '✅ آپالیگ امشب رایگان است! منتظر شروع بمانید';
+                    } else {
+                        regStatusDiv.innerHTML = '✅ ثبت‌نام شما برای آپالیگ امشب تایید شد';
+                    }
                     regBtn.style.display = 'none';
                 } else {
                     regStatusDiv.style.display = 'block';
                     regStatusDiv.style.background = 'rgba(245, 158, 11, 0.2)';
                     regStatusDiv.style.color = '#f59e0b';
-                    regStatusDiv.innerHTML = '⏳ هنوز برای آپالیگ امشب ثبت‌نام نکرده‌اید<br><span style="font-size:10px; opacity:0.8;">⏰ ثبت‌نام را به ساعت پایانی موکول نکنید و هرچه زودتر اقدام کنید</span>';
-                    regBtn.style.display = 'block';
-                    regBtn.disabled = false;
-                    regBtn.innerText = `💳 ثبت‌نام و پرداخت ${data.entry_fee_toman.toLocaleString('fa-IR')} تومان`;
-                    regBtn.onclick = payNightlyExam;
+                    if (data.is_free_mode) {
+                        regStatusDiv.innerHTML = '🎉 آپالیگ امشب <b>رایگان</b> است! همه می‌توانند شرکت کنند.';
+                        regBtn.style.display = 'none';
+                    } else {
+                        regStatusDiv.innerHTML = '⏳ هنوز برای آپالیگ امشب ثبت‌نام نکرده‌اید<br><span style="font-size:10px; opacity:0.8;">⏰ ثبت‌نام را به ساعت پایانی موکول نکنید و هرچه زودتر اقدام کنید</span>';
+                        regBtn.style.display = 'block';
+                        regBtn.disabled = false;
+                        regBtn.innerText = `💳 ثبت‌نام و پرداخت ${data.entry_fee_toman.toLocaleString('fa-IR')} تومان`;
+                        regBtn.onclick = payNightlyExam;
+                    }
                 }
 
                 const badge = document.getElementById('nightly-status-badge');
@@ -3132,6 +3177,94 @@
                 }
             })
             .catch(err => console.error('Error checking preload status:', err));
+        }
+
+        // ---------- توابع کنترل حالت آزمون (رایگان/پولی) ----------
+        let currentExamMode = 'paid';
+
+        function loadExamMode() {
+            fetch(`${BASE_URL}/api/admin/exam-mode`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Telegram-Init-Data': tg.initData
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) {
+                    console.error('Error loading exam mode:', data);
+                    return;
+                }
+                currentExamMode = data.mode;
+                updateExamModeUI();
+            })
+            .catch(err => console.error('Error loading exam mode:', err));
+        }
+
+        function updateExamModeUI() {
+            const btn = document.getElementById('admin-exam-mode-btn');
+            const statusDiv = document.getElementById('admin-exam-mode-status');
+
+            if (currentExamMode === 'free') {
+                btn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+                btn.style.color = '#fff';
+                btn.innerHTML = '🟢 حالت فعلی: رایگان برای همه';
+                btn.onclick = () => setExamMode('paid');
+
+                statusDiv.style.display = 'block';
+                statusDiv.style.background = 'rgba(16, 185, 129, 0.2)';
+                statusDiv.style.color = '#10b981';
+                statusDiv.innerHTML = '✅ آپالیگ در حال حاضر برای همه کاربران <b>رایگان</b> است.';
+            } else {
+                btn.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+                btn.style.color = '#fff';
+                btn.innerHTML = '🔴 حالت فعلی: پولی (پرداخت اجباری)';
+                btn.onclick = () => setExamMode('free');
+
+                statusDiv.style.display = 'block';
+                statusDiv.style.background = 'rgba(239, 68, 68, 0.2)';
+                statusDiv.style.color = '#ef4444';
+                statusDiv.innerHTML = '🔒 آپالیگ در حال حاضر <b>پولی</b> است. کاربران باید هزینه ورودی را پرداخت کنند.';
+            }
+        }
+
+        function setExamMode(newMode) {
+            const modeLabel = newMode === 'free' ? 'رایگان' : 'پولی';
+            tg.showConfirm(
+                `آیا میخواهید حالت آپالیگ را به «${modeLabel}» تغییر دهید؟`,
+                (confirmed) => {
+                    if (!confirmed) return;
+
+                    fetch(`${BASE_URL}/api/admin/exam-mode`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Telegram-Init-Data': tg.initData
+                        },
+                        body: JSON.stringify({ mode: newMode })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.error) {
+                            tg.showAlert('❌ ' + (data.message || 'خطا در تغییر وضعیت'));
+                            return;
+                        }
+                        currentExamMode = data.mode;
+                        updateExamModeUI();
+                        tg.showAlert(`✅ ${data.message}`);
+                    })
+                    .catch(err => {
+                        console.error('Error setting exam mode:', err);
+                        tg.showAlert('❌ خطا در ارتباط با سرور');
+                    });
+                }
+            );
+        }
+
+        function toggleExamMode() {
+            const newMode = currentExamMode === 'free' ? 'paid' : 'free';
+            setExamMode(newMode);
         }
 
         function updateAdminPreloadStatus(data) {
