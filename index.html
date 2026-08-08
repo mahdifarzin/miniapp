@@ -1340,6 +1340,209 @@
             }
         }
 
+        /* بخش تحلیل سوال (آکاردئون) */
+        .analysis-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 8px;
+            padding: 6px 12px;
+            border-radius: 10px;
+            background: rgba(2, 132, 199, 0.08);
+            color: #0284c7;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            border: 1px solid rgba(2, 132, 199, 0.15);
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .analysis-toggle:active {
+            transform: scale(0.97);
+        }
+
+        body.dark-mode .analysis-toggle {
+            background: rgba(56, 189, 248, 0.1);
+            color: #38bdf8;
+            border-color: rgba(56, 189, 248, 0.2);
+        }
+
+        .analysis-toggle-icon {
+            transition: transform 0.3s ease;
+            font-size: 10px;
+        }
+
+        .analysis-toggle.open .analysis-toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .analysis-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1), padding 0.3s ease, opacity 0.25s ease;
+            opacity: 0;
+            padding: 0 4px;
+        }
+
+        .analysis-body.open {
+            max-height: 800px;
+            opacity: 1;
+            padding: 10px 4px 4px;
+        }
+
+        .analysis-section {
+            margin-bottom: 10px;
+        }
+
+        .analysis-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .analysis-label {
+            font-size: 10px;
+            font-weight: 800;
+            color: var(--hint-color);
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .analysis-question-text {
+            font-size: 12px;
+            line-height: 1.9;
+            color: var(--text-color);
+            background: var(--item-bg);
+            padding: 10px;
+            border-radius: 10px;
+            border: var(--card-border);
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .analysis-correct-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 800;
+            background: rgba(16, 185, 129, 0.12);
+            color: #10b981;
+        }
+
+        .analysis-explanation {
+            font-size: 12px;
+            line-height: 1.8;
+            color: var(--text-color);
+            background: var(--item-bg);
+            padding: 10px;
+            border-radius: 10px;
+            border: var(--card-border);
+        }
+
+        /* آیتم نتیجه آکاردئونی در مدالیت */
+        .quiz-result-item {
+            border-radius: 14px;
+            padding: 12px;
+            margin-bottom: 8px;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .quiz-result-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .quiz-result-item-icon {
+            font-size: 24px;
+        }
+
+        .quiz-result-item-text {
+            flex: 1;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .quiz-result-analysis-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            margin-top: 8px;
+            padding: 5px 10px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.12);
+            color: rgba(255,255,255,0.85);
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.15);
+            transition: all 0.2s ease;
+        }
+
+        .quiz-result-analysis-toggle:active {
+            transform: scale(0.97);
+        }
+
+        .quiz-result-analysis-toggle .analysis-toggle-icon {
+            transition: transform 0.3s ease;
+            font-size: 9px;
+        }
+
+        .quiz-result-analysis-toggle.open .analysis-toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .quiz-result-analysis-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+            opacity: 0;
+        }
+
+        .quiz-result-analysis-body.open {
+            max-height: 600px;
+            opacity: 1;
+        }
+
+        .quiz-analysis-question {
+            font-size: 12px;
+            line-height: 1.9;
+            color: white;
+            background: rgba(255,255,255,0.08);
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 8px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .quiz-analysis-correct {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 8px;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 800;
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+        }
+
+        .quiz-analysis-explanation {
+            font-size: 12px;
+            line-height: 1.8;
+            color: rgba(255,255,255,0.9);
+            background: rgba(255,255,255,0.08);
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 8px;
+        }
+
         /* ریسپانسیو برای تبلت */
         @media (min-width: 401px) and (max-width: 768px) {
             .quiz-question-card {
@@ -2171,7 +2374,7 @@
             document.getElementById('nightly-quiz-card').style.display = 'none';
             const resultCard = document.getElementById('nightly-result-card');
             resultCard.style.display = 'block';
-            document.getElementById('nightly-result-score').innerText = `${myResult.score} از ${myResult.total}`;
+            document.getElementById('nightly-result-score').innerText = `${formatScore(calculateAdjustedScore(myResult))} از ${calculateAdjustedTotal(myResult)}`;
             const m = Math.floor(myResult.duration_seconds / 60), s = myResult.duration_seconds % 60;
             document.getElementById('nightly-result-desc').innerText =
                 `زمان صرف‌شده شما: ${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')} دقیقه`;
@@ -2312,19 +2515,29 @@
                 document.getElementById('nightly-quiz-card').style.display = 'none';
                 const resultCard = document.getElementById('nightly-result-card');
                 resultCard.style.display = 'block';
-                document.getElementById('nightly-result-score').innerText = `${data.score} از ${data.total}`;
+                document.getElementById('nightly-result-score').innerText = `${formatScore(calculateAdjustedScore(data))} از ${calculateAdjustedTotal(data)}`;
                 const m = Math.floor(data.duration_seconds / 60), s = data.duration_seconds % 60;
                 document.getElementById('nightly-result-desc').innerText =
                     `زمان صرف‌شده شما: ${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')} دقیقه`;
 
                 const detailsDiv = document.getElementById('nightly-result-details');
-                detailsDiv.innerHTML = data.results.map((r, idx) => `
+                detailsDiv.innerHTML = data.results.map((r, idx) => {
+                    const qText = (nightlyQuestions && nightlyQuestions[idx]) ? nightlyQuestions[idx].question : '';
+                    let scoreLine = '';
+                    if (r.type === 'matching' && r.pairs && r.pairs.length > 0) {
+                        const correctPairs = r.pairs.filter((p, pi) => (r.selected_answer && r.selected_answer[pi]) === p.right).length;
+                        const matchingPoints = (correctPairs / r.pairs.length) * 2;
+                        scoreLine = `<div style="color:${r.is_correct ? '#10b981' : '#f59e0b'}; margin-top:3px; font-weight:700;">📝 نمره تطبیق: ${formatScore(matchingPoints)} از ۲ (${correctPairs}/${r.pairs.length})</div>`;
+                    } else {
+                        scoreLine = !r.is_correct ? `<div style="color:var(--hint-color);">پاسخ صحیح: ${r.correct_answer} | پاسخ شما: ${r.selected_answer || '—'}</div>` : '';
+                    }
+                    return `
                     <div style="font-size:12px; padding:8px; border-radius:10px; background:var(--item-bg); border:var(--card-border);">
-                        <div style="font-weight:700; margin-bottom:4px;">سوال ${idx + 1} (${r.topic}): ${r.is_correct ? '✅ صحیح' : '❌ نادرست'}</div>
-                        ${!r.is_correct ? `<div style="color:var(--hint-color);">پاسخ صحیح: ${r.correct_answer} | پاسخ شما: ${r.selected_answer || '—'}</div>` : ''}
-                        <div style="color:var(--hint-color); margin-top:3px;">💡 ${r.explanation}</div>
-                    </div>
-                `).join('');
+                        <div style="font-weight:700; margin-bottom:4px;">سوال ${idx + 1} (${r.topic}): ${r.is_correct ? '✅ صحیح' : (r.type === 'matching' ? '⚠️ ناقص' : '❌ نادرست')}</div>
+                        ${scoreLine}
+                        ${buildNightlyAnalysisHTML(r, idx, qText)}
+                    </div>`;
+                }).join('');
 
                 renderNightlyLeaderboard(data.leaderboard, 'جدول نفرات برتر آپالیگ');
             })
@@ -3678,16 +3891,112 @@
             document.getElementById('quiz-result-screen').style.display = 'block';
 
             // به‌روزرسانی نتایج در داشبورد
-            document.getElementById('nightly-result-score').innerText = `${data.score} از ${data.total}`;
+            document.getElementById('nightly-result-score').innerText = `${formatScore(calculateAdjustedScore(data))} از ${calculateAdjustedTotal(data)}`;
             const m = Math.floor(data.duration_seconds / 60), s = data.duration_seconds % 60;
             document.getElementById('nightly-result-desc').innerText =
                 `زمان صرف‌شده شما: ${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')} دقیقه`;
         }
 
+        // محاسبه نمره تعدیل‌شده: هر سوال تطبیقی ۲ نمره (هر تطبیق درست = ۰.۵)
+        function calculateAdjustedScore(data) {
+            if (!data || !data.results) return data.score;
+            let adjusted = data.score;
+            data.results.forEach(r => {
+                if (r.type === 'matching' && r.pairs && r.pairs.length > 0) {
+                    const totalPairs = r.pairs.length;
+                    const correctPairs = r.pairs.filter((p, i) => {
+                        const chosen = (r.selected_answer && r.selected_answer[i]) || null;
+                        return chosen === p.right;
+                    }).length;
+                    const fraction = correctPairs / totalPairs;
+                    // سرور: اگه همه درست باشه 1 میده، وگرنه 0
+                    // ما: هر تطبیق = ۰.۵ نمره → مجموع = fraction × ۲
+                    if (r.is_correct) {
+                        // سرور ۱ داده، ولی باید ۲ باشه → +۱
+                        adjusted += 1;
+                    } else {
+                        // سرور ۰ داده → نمره واقعی = fraction × ۲
+                        adjusted += fraction * 2;
+                    }
+                }
+            });
+            return Math.round(adjusted * 100) / 100;
+        }
+
+        // محاسبه مجموع نمره با احتساب تطبیقی‌ها (هر کدام ۲ نمره)
+        function calculateAdjustedTotal(data) {
+            if (!data || !data.results) return data.total;
+            let extra = 0;
+            data.results.forEach(r => {
+                if (r.type === 'matching') extra += 1; // تطبیقی ۱ نمره بیشتر از سرور
+            });
+            return (data.total || 10) + extra;
+        }
+
+        // نمایش نمره (اگه اعشاری بود با نیم‌نمره نشون بده)
+        function formatScore(score) {
+            if (score % 1 === 0.5) return score.toFixed(1);
+            if (score % 1 === 0) return score.toString();
+            return score.toFixed(1);
+        }
+
+        // تغییر وضعیت نمایش تحلیل سوال
+        function toggleAnalysis(id) {
+            const body = document.getElementById('analysis-body-' + id);
+            const toggle = document.getElementById('analysis-toggle-' + id);
+            if (!body || !toggle) return;
+            const isOpen = body.classList.contains('open');
+            body.classList.toggle('open');
+            toggle.classList.toggle('open');
+        }
+
+        // تولید HTML بخش تحلیل برای مدالیت آزمون
+        function buildQuizAnalysisHTML(r, idx, qText) {
+            const questionText = r.question || qText || 'متن سوال موجود نیست';
+            const uid = 'qr-' + idx;
+            return `
+                <div class="quiz-result-analysis-toggle" id="analysis-toggle-${uid}" onclick="toggleAnalysis('${uid}')">
+                    <span>🔍</span>
+                    <span>صورت سوال و تحلیل</span>
+                    <span class="analysis-toggle-icon">▼</span>
+                </div>
+                <div class="quiz-result-analysis-body" id="analysis-body-${uid}">
+                    <div class="quiz-analysis-question">${questionText}</div>
+                    <div class="quiz-analysis-correct">✅ پاسخ صحیح: ${r.correct_answer}</div>
+                    <div class="quiz-analysis-explanation">💡 ${r.explanation}</div>
+                </div>`;
+        }
+
+        // تولید HTML بخش تحلیل برای تب آپالیگ (دارک مود)
+        function buildNightlyAnalysisHTML(r, idx, qText) {
+            const questionText = r.question || qText || 'متن سوال موجود نیست';
+            const uid = 'nr-' + idx;
+            return `
+                <div class="analysis-toggle" id="analysis-toggle-${uid}" onclick="toggleAnalysis('${uid}')">
+                    <span>🔍</span>
+                    <span>صورت سوال و تحلیل</span>
+                    <span class="analysis-toggle-icon">▼</span>
+                </div>
+                <div class="analysis-body" id="analysis-body-${uid}">
+                    <div class="analysis-section">
+                        <div class="analysis-label">📄 صورت سوال</div>
+                        <div class="analysis-question-text">${questionText}</div>
+                    </div>
+                    <div class="analysis-section">
+                        <div class="analysis-label">✅ پاسخ صحیح</div>
+                        <div class="analysis-correct-badge">${r.correct_answer}</div>
+                    </div>
+                    <div class="analysis-section">
+                        <div class="analysis-label">💡 توضیح تشریحی</div>
+                        <div class="analysis-explanation">${r.explanation}</div>
+                    </div>
+                </div>`;
+        }
+
         // تولید HTML نتایج
         function generateQuizResultHTML(data) {
-            const score = data.score || 0;
-            const total = data.total || 10;
+            const score = calculateAdjustedScore(data);
+            const total = calculateAdjustedTotal(data);
             const duration = data.duration_seconds || 180;
 
             const minutes = Math.floor(duration / 60);
@@ -3708,27 +4017,34 @@
                 <div class="quiz-result-icon">${score === total ? '🏆' : '⭐'}</div>
                 <h1 class="quiz-result-title">${title}</h1>
                 <div class="quiz-result-score">
-                    ${score} از ${total}
+                    ${formatScore(score)} از ${total}
                 </div>
                 <div class="quiz-result-time">
                     زمان: ${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')} دقیقه
                 </div>
                 <div class="quiz-result-details">
                     ${data.results ? data.results.map((r, idx) => {
+                        const qText = (nightlyQuestions && nightlyQuestions[idx]) ? nightlyQuestions[idx].question : '';
                         if (r.type === 'matching') {
-                            const pairsHtml = (r.pairs || []).map((p, pi) => {
+                            const pairsArr = r.pairs || [];
+                            const pairsHtml = pairsArr.map((p, pi) => {
                                 const chosen = (r.selected_answer && r.selected_answer[pi]) || '—';
                                 const ok = chosen === p.right;
                                 return `${ok ? '✅' : '❌'} ${p.left} ⬅ ${chosen}${ok ? '' : ` (صحیح: ${p.right})`}`;
                             }).join('<br>');
+                            const correctPairs = pairsArr.filter((p, pi) => (r.selected_answer && r.selected_answer[pi]) === p.right).length;
+                            const pairScore = pairsArr.length > 0 ? correctPairs / pairsArr.length : 0;
+                            const matchingPoints = pairScore * 2;
+                            const scoreLabel = pairScore === 1 ? '✅ همه تطبیق‌ها صحیح (۲ از ۲)' : `نمره: ${formatScore(matchingPoints)} از ۲`;
                             return `
                                 <div class="quiz-result-item">
-                                    <span class="quiz-result-item-icon">${r.is_correct ? '✅' : '❌'}</span>
+                                    <span class="quiz-result-item-icon">${r.is_correct ? '✅' : '⚠️'}</span>
                                     <span class="quiz-result-item-text">
                                         <strong>سوال ${idx + 1}</strong> (${r.topic} — تطبیق)
                                         <br>${pairsHtml}
-                                        <br><small>💡 ${r.explanation}</small>
+                                        <br><small style="color:${r.is_correct ? '#10b981' : '#f59e0b'}; font-weight:700;">${scoreLabel} (${correctPairs}/${pairsArr.length})</small>
                                     </span>
+                                    ${buildQuizAnalysisHTML(r, idx, qText)}
                                 </div>`;
                         }
                         return `
@@ -3737,8 +4053,8 @@
                                 <span class="quiz-result-item-text">
                                     <strong>سوال ${idx + 1}</strong> (${r.topic})
                                     ${r.is_correct ? '✅ صحیح' : `❌ نادرست | صحیح: ${r.correct_answer}`}
-                                    <br><small>💡 ${r.explanation}</small>
                                 </span>
+                                ${buildQuizAnalysisHTML(r, idx, qText)}
                             </div>`;
                     }).join('') : ''}
                 </div>
