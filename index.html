@@ -975,13 +975,14 @@
         }
 
         .quiz-question-text {
-            font-size: 15px;
-            line-height: 2;
+            font-size: 17px;
+            line-height: 2.1;
             color: #0f172a;
             margin-bottom: 20px;
             white-space: pre-wrap;
             word-wrap: break-word;
             overflow-wrap: break-word;
+            font-weight: 600;
         }
 
         .quiz-options {
@@ -992,20 +993,20 @@
 
         .quiz-option-btn {
             width: 100%;
-            padding: 16px;
+            padding: 14px;
             border-radius: 16px;
             background: #f8fafc;
             border: 3px solid #e2e8f0;
             color: #0f172a;
-            font-size: 15px;
-            font-weight: 700;
+            font-size: 14px;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             text-align: center;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            gap: 10px;
         }
 
         .quiz-option-btn:hover {
@@ -1266,14 +1267,14 @@
             }
 
             .quiz-question-text {
-                font-size: 14px;
-                line-height: 1.8;
+                font-size: 15px;
+                line-height: 1.9;
                 margin-bottom: 16px;
             }
 
             .quiz-option-btn {
-                padding: 14px;
-                font-size: 14px;
+                padding: 12px;
+                font-size: 13px;
                 border-radius: 14px;
             }
 
@@ -1638,7 +1639,7 @@
                         <span id="challenge-question-topic">چالش بالینی</span>
                     </span>
                 </div>
-                <div class="card-desc" id="challenge-question-text" style="white-space: pre-wrap; line-height: 1.9; margin-bottom: 14px;"></div>
+                <div id="challenge-question-text" style="white-space: pre-wrap; line-height: 2.1; margin-bottom: 16px; font-size: 16px; font-weight: 600; color: var(--text-color);"></div>
                 <div id="challenge-options" style="display:flex; flex-direction:column; gap:8px;"></div>
             </div>
 
@@ -1650,7 +1651,7 @@
                         <span id="challenge-result-title">نتیجه</span>
                     </span>
                 </div>
-                <div class="card-desc" id="challenge-result-text" style="white-space: pre-wrap; line-height: 1.9; margin-bottom: 14px;"></div>
+                <div id="challenge-result-text" style="white-space: pre-wrap; line-height: 2; margin-bottom: 14px; font-size: 15px; color: var(--text-color);"></div>
                 <button class="exam-btn" onclick="resetChallengeFlow()">🔁 چالش جدید</button>
             </div>
         </div>
@@ -1719,6 +1720,68 @@
                             font-size: 14px;
                             cursor: pointer;
                         ">🔄</button>
+                    </div>
+                </div>
+
+                <!-- انتخاب موضوعات سوالات -->
+                <div style="background: var(--item-bg); padding: 16px; border-radius: 14px; margin-bottom: 12px; border: var(--card-border);">
+                    <div style="font-weight: 700; font-size: 13px; margin-bottom: 8px; color: var(--text-color);">📌 انتخاب موضوعات سوالات</div>
+                    <div style="font-size: 11px; color: var(--hint-color); margin-bottom: 12px; line-height: 1.6;">
+                        موضوعات مورد نظر را انتخاب کنید. اگر کمتر از ۱۰ موضوع انتخاب شود، از برخی موضوعات چند سوال ساخته می‌شود.
+                    </div>
+                    <div id="admin-topics-status" style="font-size: 11px; margin-bottom: 10px; padding: 8px; border-radius: 8px; display: none;"></div>
+                    <div id="admin-topics-list" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+                        <p style="color: var(--hint-color); font-size: 12px;">در حال بارگذاری موضوعات...</p>
+                    </div>
+                    <div style="display: flex; gap: 6px; margin-bottom: 10px;">
+                        <button onclick="selectAllTopics()" style="
+                            flex: 1;
+                            padding: 8px;
+                            border-radius: 10px;
+                            font-size: 11px;
+                            font-weight: 700;
+                            border: 1px solid var(--card-border);
+                            background: var(--secondary-bg);
+                            color: var(--text-color);
+                            cursor: pointer;
+                        ">✅ انتخاب همه</button>
+                        <button onclick="deselectAllTopics()" style="
+                            flex: 1;
+                            padding: 8px;
+                            border-radius: 10px;
+                            font-size: 11px;
+                            font-weight: 700;
+                            border: 1px solid var(--card-border);
+                            background: var(--secondary-bg);
+                            color: var(--text-color);
+                            cursor: pointer;
+                        ">❌ حذف انتخاب</button>
+                    </div>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <button onclick="saveExamTopics()" style="
+                            flex: 1;
+                            padding: 12px;
+                            border-radius: 12px;
+                            font-size: 13px;
+                            font-weight: 800;
+                            border: none;
+                            cursor: pointer;
+                            background: linear-gradient(135deg, #0284c7, #0ea5e9);
+                            color: white;
+                            transition: all 0.3s ease;
+                        ">💾 ذخیره موضوعات</button>
+                        <button onclick="loadExamTopics()" style="
+                            background: var(--item-bg);
+                            border: var(--card-border);
+                            color: var(--text-color);
+                            padding: 12px 16px;
+                            border-radius: 12px;
+                            font-size: 14px;
+                            cursor: pointer;
+                        ">🔄</button>
+                    </div>
+                    <div style="margin-top: 10px; padding: 8px; background: rgba(2, 132, 199, 0.1); border-radius: 8px; font-size: 11px; color: var(--med-cyan);">
+                        💡 تعداد موضوعات انتخاب شده: <span id="admin-topics-count" style="font-weight: 800;">0</span> | تعداد کل سوالات: <span style="font-weight: 800;">۱۰</span>
                     </div>
                 </div>
 
@@ -1952,8 +2015,9 @@
                 if (nightlyStatusPollInterval) clearInterval(nightlyStatusPollInterval);
                 nightlyStatusPollInterval = setInterval(loadNightlyStatus, 20000);
             } else if (tabName === 'admin') {
-                // پنل ادمین - لود وضعیت حالت آزمون
+                // پنل ادمین - لود وضعیت حالت آزمون و موضوعات
                 loadExamMode();
+                loadExamTopics();
                 console.log('پنل ادمین باز شد');
             } else if (nightlyStatusPollInterval) {
                 clearInterval(nightlyStatusPollInterval);
@@ -2605,8 +2669,11 @@
                     btn.innerText = opt;
                     btn.style.cssText = `
                         background: var(--item-bg); border: var(--card-border); color: var(--text-color);
-                        padding: 12px; border-radius: 14px; font-size: 14px; font-weight: 700; cursor:pointer; width:100%;
+                        padding: 13px; border-radius: 14px; font-size: 13px; font-weight: 600; cursor:pointer; width:100%;
+                        transition: all 0.2s ease;
                     `;
+                    btn.onmouseover = function() { this.style.borderColor = 'var(--med-cyan)'; };
+                    btn.onmouseout = function() { this.style.borderColor = 'var(--card-border)'; };
                     btn.onclick = () => submitChallengeAnswer(opt);
                     optionsDiv.appendChild(btn);
                 });
@@ -3265,6 +3332,126 @@
         function toggleExamMode() {
             const newMode = currentExamMode === 'free' ? 'paid' : 'free';
             setExamMode(newMode);
+        }
+
+        // ---------- توابع انتخاب موضوعات سوالات ----------
+        let availableTopics = [];
+        let selectedTopics = [];
+
+        function loadExamTopics() {
+            fetch(`${BASE_URL}/api/admin/exam-topics`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Telegram-Init-Data': tg.initData
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) {
+                    console.error('Error loading topics:', data);
+                    return;
+                }
+                availableTopics = data.available_topics || [];
+                selectedTopics = data.selected_topics || [];
+                renderTopicsUI();
+            })
+            .catch(err => console.error('Error loading topics:', err));
+        }
+
+        function renderTopicsUI() {
+            const container = document.getElementById('admin-topics-list');
+            const countSpan = document.getElementById('admin-topics-count');
+            const statusDiv = document.getElementById('admin-topics-status');
+
+            countSpan.textContent = selectedTopics.length;
+
+            container.innerHTML = availableTopics.map(topic => {
+                const isSelected = selectedTopics.includes(topic);
+                return `
+                    <button onclick="toggleTopic('${topic}')" style="
+                        padding: 10px 14px;
+                        border-radius: 12px;
+                        font-size: 12px;
+                        font-weight: 700;
+                        border: 2px solid ${isSelected ? 'var(--med-cyan)' : 'var(--card-border)'};
+                        background: ${isSelected ? 'rgba(2, 132, 199, 0.15)' : 'var(--secondary-bg)'};
+                        color: ${isSelected ? 'var(--med-cyan)' : 'var(--text-color)'};
+                        cursor: pointer;
+                        transition: all 0.2s ease;
+                    ">${isSelected ? '✅ ' : ''}${topic}</button>
+                `;
+            }).join('');
+
+            // نمایش وضعیت
+            if (selectedTopics.length > 0) {
+                statusDiv.style.display = 'block';
+                statusDiv.style.background = 'rgba(16, 185, 129, 0.2)';
+                statusDiv.style.color = '#10b981';
+                const qPerTopic = selectedTopics.length <= 10 ? Math.ceil(10 / selectedTopics.length) : 1;
+                statusDiv.innerHTML = `📌 ${selectedTopics.length} موضوع انتخاب شده — هر موضوع حدود ${qPerTopic} سوال خواهد داشت`;
+            } else {
+                statusDiv.style.display = 'block';
+                statusDiv.style.background = 'rgba(245, 158, 11, 0.2)';
+                statusDiv.style.color = '#f59e0b';
+                statusDiv.innerHTML = '⚠️ هنوز موضوعی انتخاب نشده. اگر موضوعی انتخاب نکنید، به صورت تصادفی از همه موضوعات سوال ساخته می‌شود.';
+            }
+        }
+
+        function toggleTopic(topic) {
+            const idx = selectedTopics.indexOf(topic);
+            if (idx >= 0) {
+                selectedTopics.splice(idx, 1);
+            } else {
+                selectedTopics.push(topic);
+            }
+            renderTopicsUI();
+        }
+
+        function selectAllTopics() {
+            selectedTopics = [...availableTopics];
+            renderTopicsUI();
+        }
+
+        function deselectAllTopics() {
+            selectedTopics = [];
+            renderTopicsUI();
+        }
+
+        function saveExamTopics() {
+            if (selectedTopics.length === 0) {
+                tg.showAlert('⚠️ حداقل یک موضوع انتخاب کنید.');
+                return;
+            }
+
+            tg.showConfirm(
+                `آیا میخواهید ${selectedTopics.length} موضوع ذخیره کنید؟\n\nموضوعات: ${selectedTopics.join('، ')}\n\n⚠️ سوالات قبلی حذف و دوباره ساخته می‌شوند.`,
+                (confirmed) => {
+                    if (!confirmed) return;
+
+                    fetch(`${BASE_URL}/api/admin/exam-topics`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Telegram-Init-Data': tg.initData
+                        },
+                        body: JSON.stringify({ topics: selectedTopics })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.error) {
+                            tg.showAlert('❌ ' + (data.message || 'خطا در ذخیره موضوعات'));
+                            return;
+                        }
+                        tg.showAlert(`✅ ${data.message}`);
+                        renderTopicsUI();
+                    })
+                    .catch(err => {
+                        console.error('Error saving topics:', err);
+                        tg.showAlert('❌ خطا در ارتباط با سرور');
+                    });
+                }
+            );
         }
 
         function updateAdminPreloadStatus(data) {
