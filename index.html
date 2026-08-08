@@ -2374,7 +2374,7 @@
             document.getElementById('nightly-quiz-card').style.display = 'none';
             const resultCard = document.getElementById('nightly-result-card');
             resultCard.style.display = 'block';
-            document.getElementById('nightly-result-score').innerText = `${formatScore(calculateAdjustedScore(myResult))} از ${calculateAdjustedTotal(myResult)}`;
+            document.getElementById('nightly-result-score').innerText = `${formatScore(myResult.score)} از ${myResult.total}`;
             const m = Math.floor(myResult.duration_seconds / 60), s = myResult.duration_seconds % 60;
             document.getElementById('nightly-result-desc').innerText =
                 `زمان صرف‌شده شما: ${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')} دقیقه`;
@@ -2515,7 +2515,7 @@
                 document.getElementById('nightly-quiz-card').style.display = 'none';
                 const resultCard = document.getElementById('nightly-result-card');
                 resultCard.style.display = 'block';
-                document.getElementById('nightly-result-score').innerText = `${formatScore(calculateAdjustedScore(data))} از ${calculateAdjustedTotal(data)}`;
+                document.getElementById('nightly-result-score').innerText = `${formatScore(data.score)} از ${data.total}`;
                 const m = Math.floor(data.duration_seconds / 60), s = data.duration_seconds % 60;
                 document.getElementById('nightly-result-desc').innerText =
                     `زمان صرف‌شده شما: ${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')} دقیقه`;
@@ -3891,46 +3891,10 @@
             document.getElementById('quiz-result-screen').style.display = 'block';
 
             // به‌روزرسانی نتایج در داشبورد
-            document.getElementById('nightly-result-score').innerText = `${formatScore(calculateAdjustedScore(data))} از ${calculateAdjustedTotal(data)}`;
+            document.getElementById('nightly-result-score').innerText = `${formatScore(data.score)} از ${data.total}`;
             const m = Math.floor(data.duration_seconds / 60), s = data.duration_seconds % 60;
             document.getElementById('nightly-result-desc').innerText =
                 `زمان صرف‌شده شما: ${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')} دقیقه`;
-        }
-
-        // محاسبه نمره تعدیل‌شده: هر سوال تطبیقی ۲ نمره (هر تطبیق درست = ۰.۵)
-        function calculateAdjustedScore(data) {
-            if (!data || !data.results) return data.score;
-            let adjusted = data.score;
-            data.results.forEach(r => {
-                if (r.type === 'matching' && r.pairs && r.pairs.length > 0) {
-                    const totalPairs = r.pairs.length;
-                    const correctPairs = r.pairs.filter((p, i) => {
-                        const chosen = (r.selected_answer && r.selected_answer[i]) || null;
-                        return chosen === p.right;
-                    }).length;
-                    const fraction = correctPairs / totalPairs;
-                    // سرور: اگه همه درست باشه 1 میده، وگرنه 0
-                    // ما: هر تطبیق = ۰.۵ نمره → مجموع = fraction × ۲
-                    if (r.is_correct) {
-                        // سرور ۱ داده، ولی باید ۲ باشه → +۱
-                        adjusted += 1;
-                    } else {
-                        // سرور ۰ داده → نمره واقعی = fraction × ۲
-                        adjusted += fraction * 2;
-                    }
-                }
-            });
-            return Math.round(adjusted * 100) / 100;
-        }
-
-        // محاسبه مجموع نمره با احتساب تطبیقی‌ها (هر کدام ۲ نمره)
-        function calculateAdjustedTotal(data) {
-            if (!data || !data.results) return data.total;
-            let extra = 0;
-            data.results.forEach(r => {
-                if (r.type === 'matching') extra += 1; // تطبیقی ۱ نمره بیشتر از سرور
-            });
-            return (data.total || 10) + extra;
         }
 
         // نمایش نمره (اگه اعشاری بود با نیم‌نمره نشون بده)
@@ -3995,8 +3959,8 @@
 
         // تولید HTML نتایج
         function generateQuizResultHTML(data) {
-            const score = calculateAdjustedScore(data);
-            const total = calculateAdjustedTotal(data);
+            const score = data.score || 0;
+            const total = data.total || 10;
             const duration = data.duration_seconds || 180;
 
             const minutes = Math.floor(duration / 60);
