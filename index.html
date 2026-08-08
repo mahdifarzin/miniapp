@@ -975,14 +975,13 @@
         }
 
         .quiz-question-text {
-            font-size: 17px;
-            line-height: 2.1;
+            font-size: 15px;
+            line-height: 2;
             color: #0f172a;
             margin-bottom: 20px;
             white-space: pre-wrap;
             word-wrap: break-word;
             overflow-wrap: break-word;
-            font-weight: 600;
         }
 
         .quiz-options {
@@ -993,20 +992,20 @@
 
         .quiz-option-btn {
             width: 100%;
-            padding: 14px;
+            padding: 16px;
             border-radius: 16px;
             background: #f8fafc;
             border: 3px solid #e2e8f0;
             color: #0f172a;
-            font-size: 14px;
-            font-weight: 600;
+            font-size: 15px;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             text-align: center;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         .quiz-option-btn:hover {
@@ -1267,14 +1266,14 @@
             }
 
             .quiz-question-text {
-                font-size: 15px;
-                line-height: 1.9;
+                font-size: 14px;
+                line-height: 1.8;
                 margin-bottom: 16px;
             }
 
             .quiz-option-btn {
-                padding: 12px;
-                font-size: 13px;
+                padding: 14px;
+                font-size: 14px;
                 border-radius: 14px;
             }
 
@@ -1639,7 +1638,7 @@
                         <span id="challenge-question-topic">چالش بالینی</span>
                     </span>
                 </div>
-                <div id="challenge-question-text" style="white-space: pre-wrap; line-height: 2.1; margin-bottom: 16px; font-size: 16px; font-weight: 600; color: var(--text-color);"></div>
+                <div class="card-desc" id="challenge-question-text" style="white-space: pre-wrap; line-height: 1.9; margin-bottom: 14px;"></div>
                 <div id="challenge-options" style="display:flex; flex-direction:column; gap:8px;"></div>
             </div>
 
@@ -1651,7 +1650,7 @@
                         <span id="challenge-result-title">نتیجه</span>
                     </span>
                 </div>
-                <div id="challenge-result-text" style="white-space: pre-wrap; line-height: 2; margin-bottom: 14px; font-size: 15px; color: var(--text-color);"></div>
+                <div class="card-desc" id="challenge-result-text" style="white-space: pre-wrap; line-height: 1.9; margin-bottom: 14px;"></div>
                 <button class="exam-btn" onclick="resetChallengeFlow()">🔁 چالش جدید</button>
             </div>
         </div>
@@ -2669,11 +2668,8 @@
                     btn.innerText = opt;
                     btn.style.cssText = `
                         background: var(--item-bg); border: var(--card-border); color: var(--text-color);
-                        padding: 13px; border-radius: 14px; font-size: 13px; font-weight: 600; cursor:pointer; width:100%;
-                        transition: all 0.2s ease;
+                        padding: 12px; border-radius: 14px; font-size: 14px; font-weight: 700; cursor:pointer; width:100%;
                     `;
-                    btn.onmouseover = function() { this.style.borderColor = 'var(--med-cyan)'; };
-                    btn.onmouseout = function() { this.style.borderColor = 'var(--card-border)'; };
                     btn.onclick = () => submitChallengeAnswer(opt);
                     optionsDiv.appendChild(btn);
                 });
