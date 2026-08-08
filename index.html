@@ -984,68 +984,6 @@
             overflow-wrap: break-word;
         }
 
-        /* پنل اطلاعات بالینی پرونده */
-        .case-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: linear-gradient(135deg, #7c3aed, #a855f7);
-            color: #fff;
-            font-size: 11px;
-            font-weight: 700;
-            padding: 4px 12px;
-            border-radius: 20px;
-            margin-bottom: 10px;
-        }
-        .case-clinical-info {
-            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
-            border-right: 4px solid #0ea5e9;
-            border-radius: 12px;
-            padding: 14px 16px;
-            margin-bottom: 16px;
-            font-size: 13.5px;
-            line-height: 2;
-            color: #334155;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            max-height: 180px;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-        .case-clinical-info.collapsed {
-            max-height: 60px;
-            overflow: hidden;
-            position: relative;
-        }
-        .case-clinical-info.collapsed::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 30px;
-            background: linear-gradient(transparent, #e0f2fe);
-        }
-        .case-expand-btn {
-            background: none;
-            border: none;
-            color: #0ea5e9;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            padding: 4px 0;
-            margin-bottom: 8px;
-        }
-        [data-theme="dark"] .case-clinical-info {
-            background: linear-gradient(135deg, #1e293b, #1a2744);
-            border-right-color: #7c3aed;
-            color: #cbd5e1;
-        }
-        [data-theme="dark"] .case-clinical-info.collapsed::after {
-            background: linear-gradient(transparent, #1a2744);
-        }
-
         .quiz-options {
             display: flex;
             flex-direction: column;
@@ -1794,8 +1732,9 @@
             <div class="quiz-start-icon">🏆</div>
             <h1 class="quiz-start-title">آپالیگ امشب</h1>
             <p class="quiz-start-subtitle">
-                ۲ پرونده بالینی چندمرحله‌ای + ۴ سوال MCQ<br>
-                ⏱️ ۴۵ ثانیه برای پرونده‌ها • ۳۰ ثانیه برای MCQ<br>
+                ۱۰ سوال بالینی از ۱۰ مبحث مختلف<br>
+                🎲 ترکیبی از سوالات چهارگزینه‌ای، تطبیقی و سناریوهای پیشرونده<br>
+                ⏱️ زمان هر سوال بسته به نوعش متفاوت است<br>
                 🎯 پاسخ صحیح = ۱ امتیاز<br><br>
                 <strong>آماده‌اید؟</strong>
             </p>
@@ -1988,11 +1927,22 @@
         let currentQuizQuestionIndex = 0;
         let quizTimerInterval = null;
         let quizTimeRemaining = 30;
+        let quizCurrentDuration = 30; // مدت‌زمان تایمر سوال جاری (بسته به نوع سوال متفاوت است)
         let quizSelectedAnswer = null;
         let quizStartTime = null;
         let isAdminQuiz = false; // آیا آزمون توسط ادمین شروع شده
-        let currentQuizTimeLimit = 30;
         const QUIZ_TIME_PER_QUESTION = 30;
+
+        // زمان مجاز هر نوع سوال (ثانیه) — سوالات تطبیقی و سناریوی پیشرونده به خواندن بیشتری نیاز دارند
+        const QUIZ_TIME_BY_TYPE = { mcq: 30, matching: 40, case_progression: 45 };
+        const QUIZ_OPTION_LETTERS = ['الف', 'ب', 'ج', 'د'];
+
+        // وضعیت مخصوص سوالات تطبیقی
+        let quizMatchingSelection = null; // آرایه‌ای هم‌طول pairs_left؛ هر خانه متن گزینه راست انتخاب‌شده
+
+        // وضعیت مخصوص سوالات سناریوی پیشرونده
+        let quizCaseStages = [];
+        let quizCaseStageIndex = 0;
 
         function formatMMSS(totalSeconds) {
             const s = Math.max(0, totalSeconds);
@@ -3335,7 +3285,6 @@
             currentQuizQuestionIndex = 0;
             quizSelectedAnswer = null;
             isAdminQuiz = adminStarted;
-            currentQuizTimeLimit = QUIZ_TIME_PER_QUESTION;
 
             // نمایش صفحه شروع
             document.getElementById('quiz-start-screen').style.display = 'block';
@@ -3376,7 +3325,7 @@
             showQuestion(0);
         }
 
-        // نمایش یک سوال خاص
+        // نمایش یک سوال خاص (بر اساس نوع سوال: mcq / matching / case_progression)
         function showQuestion(index) {
             if (!nightlyQuestions || index >= nightlyQuestions.length) {
                 showQuizResult();
@@ -3394,72 +3343,151 @@
 
             const q = nightlyQuestions[index];
             quizSelectedAnswer = null;
+            quizMatchingSelection = null;
+            quizCaseStages = q.stages || [];
+            quizCaseStageIndex = 0;
 
-            // تنظیم متن سوال
+            // تنظیم عنوان و شماره سوال
             document.getElementById('quiz-question-topic').textContent = q.topic || 'سوال بالینی';
             document.getElementById('quiz-question-number').textContent =
                 `سوال ${index + 1} از ${nightlyQuestions.length}`;
 
-            // حذف پنل قبلی (در صورت وجود)
-            const oldCasePanel = document.querySelector('.case-panel-wrapper');
-            if (oldCasePanel) oldCasePanel.remove();
+            // دکمه بعدی به‌صورت پیش‌فرض غیرفعال است؛ فقط سوالات تطبیقی صریحاً آن را فعال می‌کنند
+            const nextBtn = document.getElementById('quiz-next-btn');
+            if (nextBtn) nextBtn.disabled = true;
 
-            // نمایش پنل اطلاعات بالینی برای سوالات پرونده‌ای
-            const questionCard = document.querySelector('.quiz-question-card');
-            if (q.case_id && q.clinical_info) {
-                // برچسب پرونده
-                const badge = document.createElement('div');
-                badge.className = 'case-badge';
-                const stageLabels = {1: 'شرح‌حال', 2: 'معاینه و لابراتوار', 3: 'تشخیص و درمان'};
-                badge.innerHTML = `📋 پرونده ${q.case_id} — مرحله ${q.stage || '?'} از ۳ — ${stageLabels[q.stage] || q.stage_label || ''}`;
+            renderQuestionBody(q);
 
-                // پنل اطلاعات بالینی
-                const clinicalDiv = document.createElement('div');
-                clinicalDiv.className = 'case-clinical-info collapsed';
-                clinicalDiv.textContent = q.clinical_info;
+            // شروع تایمر متناسب با نوع سوال
+            startQuestionTimer(q.type || 'mcq');
+        }
 
-                // دکمه باز/بسته
-                const expandBtn = document.createElement('button');
-                expandBtn.className = 'case-expand-btn';
-                expandBtn.textContent = 'مشاهده اطلاعات کامل ▼';
-                expandBtn.onclick = () => {
-                    if (clinicalDiv.classList.contains('collapsed')) {
-                        clinicalDiv.classList.remove('collapsed');
-                        expandBtn.textContent = 'بستن اطلاعات ▲';
-                    } else {
-                        clinicalDiv.classList.add('collapsed');
-                        expandBtn.textContent = 'مشاهده اطلاعات کامل ▼';
-                    }
-                };
-
-                // قرار دادن قبل از topic
-                const panelWrapper = document.createElement('div');
-                panelWrapper.className = 'case-panel-wrapper';
-                panelWrapper.appendChild(badge);
-                panelWrapper.appendChild(expandBtn);
-                panelWrapper.appendChild(clinicalDiv);
-                questionCard.insertBefore(panelWrapper, questionCard.firstChild);
-            }
-
-            document.getElementById('quiz-question-text').textContent = q.question;
-
-            // ساخت گزینه‌ها (فقط حروف الف-ب-ج-د)
+        // رندر بدنه سوال بر اساس نوعش
+        function renderQuestionBody(q) {
+            const textEl = document.getElementById('quiz-question-text');
             const optionsDiv = document.getElementById('quiz-options');
             optionsDiv.innerHTML = '';
 
-            ['الف', 'ب', 'ج', 'د'].forEach((letter) => {
+            if (q.type === 'matching') {
+                textEl.textContent = q.instruction || 'موارد زیر را به‌درستی به هم تطبیق دهید.';
+                renderMatchingOptions(q, optionsDiv);
+            } else if (q.type === 'case_progression') {
+                renderCaseProgressionStage(q, textEl, optionsDiv);
+            } else {
+                textEl.textContent = q.question;
+                renderMcqOptions(optionsDiv);
+            }
+        }
+
+        // گزینه‌های چهارگزینه‌ای استاندارد (هم برای mcq و هم برای مرحله نهایی سناریوی پیشرونده استفاده می‌شود)
+        function renderMcqOptions(optionsDiv) {
+            QUIZ_OPTION_LETTERS.forEach((letter) => {
                 const btn = document.createElement('button');
                 btn.className = 'quiz-option-btn';
                 btn.dataset.letter = letter;
                 btn.onclick = () => selectQuizAnswer(letter, btn);
-                btn.innerHTML = `
-                    <span class="quiz-option-letter">${letter}</span>
-                `;
+                btn.innerHTML = `<span class="quiz-option-letter">${letter}</span>`;
                 optionsDiv.appendChild(btn);
             });
+        }
 
-            // شروع تایمر (45 ثانیه برای پرونده، 30 ثانیه برای MCQ)
-            startQuestionTimer(q);
+        // نمایش مرحله‌به‌مرحله سناریوی بالینی پیشرونده؛ بعد از آخرین مرحله سوال نهایی چهارگزینه‌ای نشان داده می‌شود
+        function renderCaseProgressionStage(q, textEl, optionsDiv) {
+            const stages = quizCaseStages;
+            const isFinalStageDone = quizCaseStageIndex >= stages.length;
+
+            if (isFinalStageDone) {
+                textEl.textContent = q.question;
+                optionsDiv.innerHTML = '';
+                renderMcqOptions(optionsDiv);
+                return;
+            }
+
+            textEl.textContent = `📖 مرحله ${quizCaseStageIndex + 1} از ${stages.length}\n\n${stages[quizCaseStageIndex]}`;
+            optionsDiv.innerHTML = '';
+
+            const nextStageBtn = document.createElement('button');
+            nextStageBtn.className = 'quiz-option-btn';
+            nextStageBtn.style.justifyContent = 'center';
+            nextStageBtn.textContent = quizCaseStageIndex < stages.length - 1
+                ? '➡️ ادامه سناریو'
+                : '❓ مشاهده سوال نهایی';
+            nextStageBtn.onclick = () => {
+                quizCaseStageIndex++;
+                renderCaseProgressionStage(q, textEl, optionsDiv);
+            };
+            optionsDiv.appendChild(nextStageBtn);
+        }
+
+        // نمایش رابط سوال تطبیقی: کاربر ابتدا یک مورد از ستون چپ را انتخاب، سپس گزینه راست متناظر را می‌زند
+        function renderMatchingOptions(q, optionsDiv) {
+            const lefts = q.pairs_left || [];
+            const rightsShuffled = (q.pairs_right || []).map((text) => ({ text }));
+            for (let i = rightsShuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [rightsShuffled[i], rightsShuffled[j]] = [rightsShuffled[j], rightsShuffled[i]];
+            }
+
+            quizMatchingSelection = new Array(lefts.length).fill(null);
+            let selectedLeftIndex = null;
+
+            const wrap = document.createElement('div');
+            wrap.style.cssText = 'display:flex; flex-direction:column; gap:16px; width:100%;';
+
+            const leftCol = document.createElement('div');
+            leftCol.style.cssText = 'display:flex; flex-direction:column; gap:8px;';
+            const leftRows = [];
+            lefts.forEach((leftText, li) => {
+                const row = document.createElement('button');
+                row.className = 'quiz-option-btn';
+                row.style.cssText = 'justify-content:space-between; text-align:right; font-size:13px; padding:12px 14px;';
+                row.innerHTML = `<span>${li + 1}) ${leftText}</span><span style="font-weight:800; color:#0284c7; margin-right:8px;">؟</span>`;
+                row.onclick = () => {
+                    leftRows.forEach(r => r.style.borderColor = '#e2e8f0');
+                    selectedLeftIndex = li;
+                    row.style.borderColor = '#0284c7';
+                };
+                leftRows.push(row);
+                leftCol.appendChild(row);
+            });
+
+            const hint = document.createElement('div');
+            hint.style.cssText = 'font-size:11px; color:#64748b; font-weight:700; text-align:center;';
+            hint.textContent = '👆 اول یک مورد از بالا رو انتخاب کن، بعد گزینه تطبیق‌شونده‌ش رو از پایین بزن';
+
+            const rightCol = document.createElement('div');
+            rightCol.style.cssText = 'display:flex; flex-direction:column; gap:8px;';
+            rightsShuffled.forEach((item, ri) => {
+                const btn = document.createElement('button');
+                btn.className = 'quiz-option-btn';
+                btn.style.cssText = 'justify-content:flex-start; text-align:right; font-size:13px; padding:12px 14px;';
+                btn.innerHTML = `<span class="quiz-option-letter">${QUIZ_OPTION_LETTERS[ri] || (ri + 1)}</span><span>${item.text}</span>`;
+                btn.onclick = () => {
+                    if (selectedLeftIndex === null) {
+                        tg.showAlert('اول یک مورد از ستون بالا رو انتخاب کن، بعد گزینه تطبیق‌شونده رو بزن.');
+                        return;
+                    }
+                    quizMatchingSelection[selectedLeftIndex] = item.text;
+                    const targetSpan = leftRows[selectedLeftIndex].lastElementChild;
+                    targetSpan.textContent = `${QUIZ_OPTION_LETTERS[ri] || (ri + 1)} ✓`;
+                    leftRows[selectedLeftIndex].style.borderColor = '#10b981';
+                    leftRows[selectedLeftIndex].style.background = 'rgba(16,185,129,0.08)';
+                    selectedLeftIndex = null;
+
+                    if (quizMatchingSelection.every((v) => v !== null)) {
+                        quizSelectedAnswer = quizMatchingSelection;
+                        nightlyAnswers[currentQuizQuestionIndex] = quizMatchingSelection;
+                        const nextBtn = document.getElementById('quiz-next-btn');
+                        if (nextBtn) nextBtn.disabled = false;
+                    }
+                };
+                rightCol.appendChild(btn);
+            });
+
+            wrap.appendChild(leftCol);
+            wrap.appendChild(hint);
+            wrap.appendChild(rightCol);
+            optionsDiv.appendChild(wrap);
         }
 
         // به‌روزرسانی نقاط پیشرفت
@@ -3481,17 +3509,15 @@
             });
         }
 
-        // شروع تایمر سوال جاری
-        function startQuestionTimer(q) {
+        // شروع تایمر سوال جاری (مدت‌زمان بسته به نوع سوال متفاوت است)
+        function startQuestionTimer(questionType) {
             // پاک‌کردن تایمر قبلی
             if (quizTimerInterval) {
                 clearInterval(quizTimerInterval);
             }
 
-            // 45 ثانیه برای پرونده بالینی، 30 ثانیه برای MCQ
-            const timeForQuestion = (q && q.case_id) ? 45 : QUIZ_TIME_PER_QUESTION;
-            currentQuizTimeLimit = timeForQuestion;
-            quizTimeRemaining = timeForQuestion;
+            quizCurrentDuration = QUIZ_TIME_BY_TYPE[questionType] || QUIZ_TIME_PER_QUESTION;
+            quizTimeRemaining = quizCurrentDuration;
             updateTimerDisplay();
 
             // به‌روزرسانی دایره تایمر
@@ -3531,7 +3557,8 @@
         // به‌روزرسانی دایره تایمر
         function updateTimerCircle() {
             const circle = document.getElementById('quiz-timer-circle');
-            const progress = (currentQuizTimeLimit - quizTimeRemaining) / currentQuizTimeLimit;
+            const total = quizCurrentDuration || QUIZ_TIME_PER_QUESTION;
+            const progress = (total - quizTimeRemaining) / total;
             const radius = 42;
             const circumference = 2 * Math.PI * radius;
             const offset = circumference * (1 - progress);
@@ -3687,16 +3714,33 @@
                     زمان: ${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')} دقیقه
                 </div>
                 <div class="quiz-result-details">
-                    ${data.results ? data.results.map((r, idx) => `
-                        <div class="quiz-result-item">
-                            <span class="quiz-result-item-icon">${r.is_correct ? '✅' : '❌'}</span>
-                            <span class="quiz-result-item-text">
-                                <strong>سوال ${idx + 1}</strong> (${r.topic})
-                                ${r.is_correct ? '✅ صحیح' : `❌ نادرست | صحیح: ${r.correct_answer}`}
-                                <br><small>💡 ${r.explanation}</small>
-                            </span>
-                        </div>
-                    `).join('') : ''}
+                    ${data.results ? data.results.map((r, idx) => {
+                        if (r.type === 'matching') {
+                            const pairsHtml = (r.pairs || []).map((p, pi) => {
+                                const chosen = (r.selected_answer && r.selected_answer[pi]) || '—';
+                                const ok = chosen === p.right;
+                                return `${ok ? '✅' : '❌'} ${p.left} ⬅ ${chosen}${ok ? '' : ` (صحیح: ${p.right})`}`;
+                            }).join('<br>');
+                            return `
+                                <div class="quiz-result-item">
+                                    <span class="quiz-result-item-icon">${r.is_correct ? '✅' : '❌'}</span>
+                                    <span class="quiz-result-item-text">
+                                        <strong>سوال ${idx + 1}</strong> (${r.topic} — تطبیق)
+                                        <br>${pairsHtml}
+                                        <br><small>💡 ${r.explanation}</small>
+                                    </span>
+                                </div>`;
+                        }
+                        return `
+                            <div class="quiz-result-item">
+                                <span class="quiz-result-item-icon">${r.is_correct ? '✅' : '❌'}</span>
+                                <span class="quiz-result-item-text">
+                                    <strong>سوال ${idx + 1}</strong> (${r.topic})
+                                    ${r.is_correct ? '✅ صحیح' : `❌ نادرست | صحیح: ${r.correct_answer}`}
+                                    <br><small>💡 ${r.explanation}</small>
+                                </span>
+                            </div>`;
+                    }).join('') : ''}
                 </div>
                 <button class="quiz-result-close-btn" onclick="closeQuizModal()">
                     🏠 بازگشت به منوی اصلی
