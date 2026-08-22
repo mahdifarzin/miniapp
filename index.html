@@ -13,73 +13,50 @@
     
     <style>
         /* ---------------------------------------------------- */
-        /* ۱. متغیرهای تم روز (Clinical Light Mode) */
+        /* ۱. متغیرهای تم روز (Light Mode) - پیش‌فرض */
         /* ---------------------------------------------------- */
         :root {
-            --bg-color: #F8FAFC;
-            --secondary-bg: #FFFFFF;
-            --text-color: #0F172A;
-            --hint-color: #64748B;
-            --primary-teal: #0D9488;
-            --primary-teal-light: #14B8A6;
-            --accent-orange: #F97316;
-            --accent-orange-light: #FB923C;
-            --success-green: #10B981;
-            --highlight-gold: #FBBF24;
-            --vital-gradient: linear-gradient(135deg, #0D9488 0%, #0891B2 50%, #0EA5E9 100%);
-            --orange-gradient: linear-gradient(135deg, #F97316 0%, #FB923C 100%);
-            --card-shadow: 0 4px 20px -4px rgba(13, 148, 136, 0.12), 0 2px 8px -2px rgba(0, 0, 0, 0.06);
-            --card-shadow-hover: 0 12px 32px -8px rgba(13, 148, 136, 0.18), 0 4px 12px -4px rgba(0, 0, 0, 0.08);
-            --card-border: 1px solid rgba(13, 148, 136, 0.15);
-            --glass-nav-bg: rgba(255, 255, 255, 0.92);
-            --item-bg: #F1F5F9;
-            --item-border: #E2E8F0;
-            --pulse-color: rgba(13, 148, 136, 0.15);
+            --bg-color: #f0f4f8;
+            --secondary-bg: #ffffff;
+            --text-color: #0f172a;
+            --hint-color: #64748b;
+            --med-cyan: #0284c7;
+            --med-emerald: #10b981;
+            --med-navy: #0f172a;
+            --med-blue-gradient: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0284c7 100%);
+            --card-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 8px 10px -6px rgba(15, 23, 42, 0.03);
+            --card-border: 1px solid rgba(226, 232, 240, 0.8);
+            --glass-nav-bg: rgba(255, 255, 255, 0.85);
+            --item-bg: #f8fafc;
+            --item-border: #f1f5f9;
             
-            /* EKG Pulse Pattern */
-            --ekg-pattern: url("data:image/svg+xml,%3Csvg width='120' height='30' viewBox='0 0 120 30' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 15H25L30 5L40 25L50 10L55 15H80L85 8L95 22L100 15H120' stroke='%230D9488' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' opacity='0.12'/%3E%3C/svg%3E");
-            
-            /* Backward compatibility aliases */
-            --med-cyan: var(--primary-teal);
-            --med-emerald: var(--success-green);
-            --med-navy: var(--text-color);
-            --med-blue-gradient: var(--vital-gradient);
-            /* Clinical Grid Pattern */
-            --bg-pattern-grid: 
-                linear-gradient(rgba(13, 148, 136, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(13, 148, 136, 0.03) 1px, transparent 1px);
+            /* پترن پزشکی پس‌زمینه (روز) */
+            --bg-pattern-cross: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 14V26M14 20H26' stroke='%230284c7' stroke-width='1.5' stroke-linecap='round' stroke-opacity='0.08'/%3E%3C/svg%3E");
+            --bg-pattern-dots: radial-gradient(rgba(2, 132, 199, 0.08) 1.2px, transparent 1.2px);
         }
 
         /* ---------------------------------------------------- */
-        /* ۲. متغیرهای تم شب (Clinical Dark Mode) */
+        /* ۲. متغیرهای تم شب (Dark Mode) */
         /* ---------------------------------------------------- */
-        body.dark-mode {
+        body.dark-mode, @media (prefers-color-scheme: dark) {
             :root {
-                --bg-color: #0F172A;
-                --secondary-bg: #1E293B;
-                --text-color: #F1F5F9;
-                --hint-color: #94A3B8;
-                --primary-teal: #14B8A6;
-                --primary-teal-light: #2DD4BF;
-                --accent-orange: #FB923C;
-                --accent-orange-light: #FDBA74;
-                --success-green: #34D399;
-                --highlight-gold: #FCD34D;
-                --vital-gradient: linear-gradient(135deg, #14B8A6 0%, #06B6D4 50%, #38BDF8 100%);
-                --orange-gradient: linear-gradient(135deg, #FB923C 0%, #FDBA74 100%);
-                --card-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.4), 0 2px 8px -2px rgba(20, 184, 166, 0.1);
-                --card-shadow-hover: 0 12px 36px -8px rgba(0, 0, 0, 0.5), 0 4px 12px -4px rgba(20, 184, 166, 0.15);
-                --card-border: 1px solid rgba(20, 184, 166, 0.2);
-                --glass-nav-bg: rgba(15, 23, 42, 0.95);
-                --item-bg: #1E293B;
-                --item-border: #334155;
-                --pulse-color: rgba(20, 184, 166, 0.2);
-                
-                --ekg-pattern: url("data:image/svg+xml,%3Csvg width='120' height='30' viewBox='0 0 120 30' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 15H25L30 5L40 25L50 10L55 15H80L85 8L95 22L100 15H120' stroke='%2314B8A6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' opacity='0.15'/%3E%3C/svg%3E");
-                
-                --bg-pattern-grid: 
-                    linear-gradient(rgba(20, 184, 166, 0.04) 1px, transparent 1px),
-                    linear-gradient(90deg, rgba(20, 184, 166, 0.04) 1px, transparent 1px);
+                --bg-color: #0b1329;
+                --secondary-bg: #152238;
+                --text-color: #f1f5f9;
+                --hint-color: #94a3b8;
+                --med-cyan: #38bdf8;
+                --med-emerald: #34d399;
+                --med-navy: #f8fafc;
+                --med-blue-gradient: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #1e3a8a 100%);
+                --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+                --card-border: 1px solid rgba(255, 255, 255, 0.08);
+                --glass-nav-bg: rgba(21, 34, 56, 0.85);
+                --item-bg: #1e2d4a;
+                --item-border: rgba(255, 255, 255, 0.05);
+
+                /* پترن پزشکی پس‌زمینه (شب) */
+                --bg-pattern-cross: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 14V26M14 20H26' stroke='%2338bdf8' stroke-width='1.5' stroke-linecap='round' stroke-opacity='0.12'/%3E%3C/svg%3E");
+                --bg-pattern-dots: radial-gradient(rgba(56, 189, 248, 0.12) 1.2px, transparent 1.2px);
             }
         }
 
@@ -91,23 +68,19 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* ---------------------------------------------------- */
-        /* ۳. پس‌زمینه و ساختار کلی */
-        /* ---------------------------------------------------- */
+        /* استایل پس‌زمینه طرح‌دار پزشکی */
         body {
             background-color: var(--bg-color);
-            background-image: var(--bg-pattern-grid);
-            background-size: 24px 24px;
+            background-image: var(--bg-pattern-dots), var(--bg-pattern-cross);
+            background-size: 20px 20px, 40px 40px;
             color: var(--text-color);
             padding-bottom: 95px;
             user-select: none;
             overflow-x: hidden;
-            transition: background-color 0.4s ease, color 0.4s ease;
+            transition: background-color 0.4s ease, color 0.4s ease, background-image 0.4s ease;
         }
 
-        /* ---------------------------------------------------- */
-        /* ۴. هدر بالای صفحه با افکت EKG */
-        /* ---------------------------------------------------- */
+        /* هدر بالای صفحه */
         .app-header {
             background: var(--secondary-bg);
             padding: 16px 20px;
@@ -116,27 +89,10 @@
             justify-content: space-between;
             border-bottom-left-radius: 24px;
             border-bottom-right-radius: 24px;
-            box-shadow: var(--card-shadow);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
             margin-bottom: 18px;
-            border-bottom: 3px solid var(--primary-teal);
-            position: relative;
-            overflow: hidden;
-            transition: background 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .app-header::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 20px;
-            background: var(--ekg-pattern);
-            background-size: 120px 30px;
-            background-position: bottom center;
-            background-repeat: repeat-x;
-            opacity: 0.6;
-            pointer-events: none;
+            border-bottom: var(--card-border);
+            transition: background 0.3s ease;
         }
 
         .user-info h3 {
@@ -145,58 +101,37 @@
             color: var(--text-color);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         .user-info p {
             font-size: 12px;
             color: var(--hint-color);
-            margin-top: 3px;
+            margin-top: 2px;
             font-weight: 500;
         }
 
         .avatar {
-            width: 50px;
-            height: 50px;
+            width: 46px;
+            height: 46px;
             border-radius: 16px;
-            background: var(--vital-gradient);
-            color: #FFFFFF;
+            background: var(--med-blue-gradient);
+            color: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 800;
-            font-size: 20px;
-            box-shadow: 0 4px 16px rgba(13, 148, 136, 0.35);
-            position: relative;
-            z-index: 1;
+            font-size: 18px;
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
         }
 
-        .avatar::before {
-            content: '';
-            position: absolute;
-            inset: -3px;
-            border-radius: 19px;
-            background: var(--vital-gradient);
-            z-index: -1;
-            opacity: 0.4;
-            animation: avatar-pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes avatar-pulse {
-            0%, 100% { transform: scale(1); opacity: 0.4; }
-            50% { transform: scale(1.08); opacity: 0.2; }
-        }
-
-        /* ---------------------------------------------------- */
-        /* ۵. کانتینر و تب‌ها */
-        /* ---------------------------------------------------- */
         .container {
             padding: 0 16px;
         }
 
         .tab-content {
             display: none;
-            animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .tab-content.active {
@@ -204,561 +139,321 @@
         }
 
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(12px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* ---------------------------------------------------- */
-        /* ۶. کارت‌های اصلی */
-        /* ---------------------------------------------------- */
+        /* کارت‌های شیشه‌ای */
         .card {
             background: var(--secondary-bg);
             border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 16px;
+            padding: 18px;
+            margin-bottom: 14px;
             box-shadow: var(--card-shadow);
             border: var(--card-border);
             position: relative;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .card:hover {
-            box-shadow: var(--card-shadow-hover);
-            transform: translateY(-2px);
+            transition: background 0.3s ease, border-color 0.3s ease;
         }
 
         .card-title {
             font-size: 13px;
             font-weight: 700;
             color: var(--hint-color);
-            margin-bottom: 14px;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         .card-title-icon {
             display: inline-flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .icon-badge {
-            width: 32px;
-            height: 32px;
-            border-radius: 10px;
-            background: var(--pulse-color);
-            color: var(--primary-teal);
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: rgba(2, 132, 199, 0.12);
+            color: var(--med-cyan);
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
-
-        .card:hover .icon-badge {
-            background: var(--primary-teal);
-            color: #FFFFFF;
-            transform: scale(1.1);
+            font-size: 14px;
         }
 
         .card-value {
-            font-size: 28px;
+            font-size: 22px;
             font-weight: 800;
             color: var(--text-color);
-            margin-bottom: 6px;
-            line-height: 1.2;
+            margin-bottom: 4px;
         }
 
         .card-desc {
-            font-size: 14px;
+            font-size: 13px;
             color: var(--hint-color);
-            line-height: 1.6;
+            line-height: 1.5;
             font-weight: 400;
         }
 
-        /* ---------------------------------------------------- */
-        /* ۷. کارت‌های رنگی بخش‌ها */
-        /* ---------------------------------------------------- */
-        .card-ai {
-            border-right: 4px solid var(--accent-orange);
-            background: linear-gradient(135deg, var(--secondary-bg) 0%, rgba(249, 115, 22, 0.03) 100%);
-        }
+        /* کارت‌های رنگی بخش‌ها */
+        .card-ai { border-right: 4px solid #10b981; }
+        .card-challenge { border-right: 4px solid #0284c7; }
+        .card-tracker { border-right: 4px solid #f59e0b; }
+        .card-nightly { border-right: 4px solid #8b5cf6; }
 
-        .card-challenge {
-            border-right: 4px solid var(--success-green);
-            background: linear-gradient(135deg, var(--secondary-bg) 0%, rgba(16, 185, 129, 0.03) 100%);
-        }
-
-        .card-tracker {
-            border-right: 4px solid var(--primary-teal);
-            background: linear-gradient(135deg, var(--secondary-bg) 0%, rgba(13, 148, 136, 0.03) 100%);
-        }
-
-        .card-nightly {
-            border-right: 4px solid var(--highlight-gold);
-            background: linear-gradient(135deg, var(--secondary-bg) 0%, rgba(251, 191, 36, 0.05) 100%);
-        }
-
-        /* ---------------------------------------------------- */
-        /* ۸. دکمه‌ها */
-        /* ---------------------------------------------------- */
-        .cta-button {
-            background: var(--vital-gradient);
-            color: #FFFFFF;
-            border: none;
-            padding: 14px 28px;
-            border-radius: 14px;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 4px 16px rgba(13, 148, 136, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cta-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .cta-button:hover::before {
-            left: 100%;
-        }
-
-        .cta-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(13, 148, 136, 0.4);
-        }
-
-        .cta-button:active {
-            transform: translateY(0);
-        }
-
-        .cta-button:disabled {
-            background: linear-gradient(135deg, #94A3B8 0%, #64748B 100%);
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-
-        .cta-button:disabled::before {
-            display: none;
-        }
-
-        .cta-button-orange {
-            background: var(--orange-gradient);
-            box-shadow: 0 4px 16px rgba(249, 115, 22, 0.3);
-        }
-
-        .cta-button-orange:hover {
-            box-shadow: 0 8px 24px rgba(249, 115, 22, 0.4);
-        }
-
-        /* ---------------------------------------------------- */
-        /* ۹. نوار پایین (Bottom Navigation) */
-        /* ---------------------------------------------------- */
-        .bottom-nav {
-            position: fixed;
-            bottom: 12px;
-            left: 12px;
-            right: 12px;
-            background: var(--glass-nav-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 6px;
-            border-radius: 20px;
-            box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(13, 148, 136, 0.1);
-            border: var(--card-border);
-            z-index: 1000;
+        /* دکمه‌های بهبود یافته */
+        .exam-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            box-shadow: 0 4px 15px rgba(16, 189, 129, 0.4);
             transition: all 0.3s ease;
         }
 
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-            color: var(--hint-color);
-            font-size: 11px;
-            font-weight: 600;
-            cursor: pointer;
-            width: 20%;
-            padding: 8px 4px;
-            border-radius: 14px;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
+        .exam-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 189, 129, 0.5);
+        }
+
+        .exam-btn:active {
+            transform: translateY(0);
+        }
+
+        /* دکمه پرداخت با افکت درخشش */
+        .pay-btn {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+            animation: glow-pulse 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow-pulse {
+            from { box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4); }
+            to { box-shadow: 0 4px 25px rgba(245, 158, 11, 0.6); }
+        }
+
+        /* آیکون نوبار فعال با درخشش */
+        .nav-item.active .nav-icon {
+            transform: scale(1.2);
+            filter: drop-shadow(0 2px 8px rgba(2, 132, 199, 0.5));
         }
 
         .nav-item.active {
-            color: var(--primary-teal);
-            background: var(--pulse-color);
-            font-weight: 700;
+            position: relative;
         }
 
         .nav-item.active::after {
             content: '';
             position: absolute;
             bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
             width: 20px;
             height: 3px;
-            background: var(--primary-teal);
+            background: var(--med-cyan);
             border-radius: 2px;
         }
 
-        .nav-item:active {
-            transform: scale(0.92);
+        /* بالون نوتیفیکیشن روی تب‌ها */
+        .nav-badge {
+            position: absolute;
+            top: 2px;
+            right: 15px;
+            width: 8px;
+            height: 8px;
+            background: #ef4444;
+            border-radius: 50%;
+            border: 2px solid var(--secondary-bg);
         }
 
-        .nav-icon {
-            font-size: 22px;
-            transition: transform 0.3s ease;
-        }
-
-        .nav-item.active .nav-icon {
-            transform: scale(1.15);
-        }
-
-        /* ---------------------------------------------------- */
-        /* ۱۰. بخش آپالیگ (Quiz/Competition) */
-        /* ---------------------------------------------------- */
-        .banner-nightly {
-            background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0D9488 100%);
-            border-radius: 24px;
-            padding: 28px 24px;
-            margin-bottom: 18px;
+        /* گزینه‌های آپالیگ بهبود یافته */
+        .option-btn {
+            border-radius: 50px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
             overflow: hidden;
-            box-shadow: 0 8px 32px rgba(13, 148, 136, 0.25);
         }
 
-        .banner-nightly::before {
+        .option-btn::before {
             content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--ekg-pattern);
-            background-size: 120px 30px;
-            opacity: 0.15;
-        }
-
-        .banner-nightly h2 {
-            font-size: 26px;
-            font-weight: 800;
-            margin-bottom: 10px;
-            color: #FFFFFF;
-            position: relative;
-            z-index: 1;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        }
-
-        .banner-nightly p {
-            font-size: 15px;
-            color: rgba(255,255,255,0.85);
-            line-height: 1.6;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* ---------------------------------------------------- */
-        /* ۱۱. تایمر دایره‌ای آزمون */
-        /* ---------------------------------------------------- */
-        .quiz-timer-container {
-            position: relative;
-            width: 110px;
-            height: 110px;
-            margin: 0 auto 24px;
-        }
-
-        .quiz-timer-svg {
-            transform: rotate(-90deg);
-            width: 110px;
-            height: 110px;
-        }
-
-        .quiz-timer-bg {
-            fill: none;
-            stroke: var(--pulse-color);
-            stroke-width: 8;
-        }
-
-        .quiz-timer-progress {
-            fill: none;
-            stroke: url(#timer-gradient);
-            stroke-width: 8;
-            stroke-linecap: round;
-            transition: stroke-dashoffset 1s linear;
-        }
-
-        .quiz-timer-text {
             position: absolute;
             top: 50%;
             left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
             transform: translate(-50%, -50%);
-            font-size: 32px;
-            font-weight: 800;
-            color: var(--primary-teal);
+            transition: width 0.4s, height 0.4s;
         }
 
-        /* ---------------------------------------------------- */
-        /* ۱۲. گزینه‌های آزمون */
-        /* ---------------------------------------------------- */
-        .quiz-option {
-            background: var(--secondary-bg);
-            border: 2px solid var(--item-border);
-            border-radius: 16px;
-            padding: 18px 20px;
-            margin-bottom: 12px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            position: relative;
-            overflow: hidden;
+        .option-btn:active::before {
+            width: 200px;
+            height: 200px;
         }
 
-        .quiz-option::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 4px;
-            height: 100%;
-            background: var(--primary-teal);
-            transform: scaleY(0);
-            transition: transform 0.3s ease;
+        .option-btn.selected {
+            background: linear-gradient(135deg, #0284c7, #0ea5e9);
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
         }
 
-        .quiz-option:hover {
-            border-color: var(--primary-teal);
-            box-shadow: 0 4px 16px rgba(13, 148, 136, 0.15);
-            transform: translateX(-4px);
+        /* نفر اول جدول با افکت ویژه */
+        .leader-item.golden {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 2px solid #f59e0b;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+            animation: golden-glow 2s ease-in-out infinite alternate;
         }
 
-        .quiz-option:hover::before {
-            transform: scaleY(1);
+        @keyframes golden-glow {
+            from { box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3); }
+            to { box-shadow: 0 4px 25px rgba(245, 158, 11, 0.5); }
         }
 
-        .quiz-option.selected {
-            border-color: var(--primary-teal);
-            background: var(--pulse-color);
+        .leader-medal {
+            font-size: 24px;
+            animation: medal-bounce 1s ease-in-out infinite;
         }
 
-        .quiz-option.selected::before {
-            transform: scaleY(1);
+        @keyframes medal-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
         }
 
-        .quiz-option.correct {
-            border-color: var(--success-green);
-            background: rgba(16, 185, 129, 0.1);
-        }
-
-        .quiz-option.correct::before {
-            background: var(--success-green);
-            transform: scaleY(1);
-        }
-
-        .quiz-option.wrong {
-            border-color: #EF4444;
-            background: rgba(239, 68, 68, 0.1);
-        }
-
-        .quiz-option.wrong::before {
-            background: #EF4444;
-            transform: scaleY(1);
-        }
-
-        .quiz-option-letter {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            background: var(--item-bg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 15px;
-            color: var(--text-color);
-            flex-shrink: 0;
-            transition: all 0.3s ease;
-        }
-
-        .quiz-option.selected .quiz-option-letter {
-            background: var(--primary-teal);
-            color: #FFFFFF;
-        }
-
-        .quiz-option.correct .quiz-option-letter {
-            background: var(--success-green);
-            color: #FFFFFF;
-        }
-
-        .quiz-option.wrong .quiz-option-letter {
-            background: #EF4444;
-            color: #FFFFFF;
-        }
-
-        .quiz-option-text {
-            font-size: 15px;
-            font-weight: 600;
-            line-height: 1.5;
-            color: var(--text-color);
-        }
-
-        /* ---------------------------------------------------- */
-        /* ۱۳. پیشرفت آزمون */
-        /* ---------------------------------------------------- */
-        .quiz-progress-bar {
-            width: 100%;
-            height: 6px;
-            background: var(--item-bg);
-            border-radius: 3px;
-            overflow: hidden;
-            margin-bottom: 20px;
-        }
-
-        .quiz-progress-fill {
-            height: 100%;
-            background: var(--vital-gradient);
-            border-radius: 3px;
-            transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
-        }
-
-        .quiz-progress-fill::after {
-            content: '';
-            position: absolute;
+        /* مودال تبریک نفر اول */
+        .celebration-overlay {
+            position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            animation: shimmer 2s infinite;
-        }
-
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        /* ---------------------------------------------------- */
-        /* ۱۴. مدالیت نتیجه */
-        /* ---------------------------------------------------- */
-        .quiz-result-modal {
-            background: var(--secondary-bg);
-            border-radius: 28px;
-            padding: 32px 24px;
-            text-align: center;
-            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
-        }
-
-        .quiz-result-score {
-            font-size: 56px;
-            font-weight: 800;
-            color: var(--primary-teal);
-            margin-bottom: 8px;
-            line-height: 1;
-        }
-
-        .quiz-result-label {
-            font-size: 14px;
-            color: var(--hint-color);
-            margin-bottom: 24px;
-        }
-
-        .quiz-result-message {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--text-color);
-            margin-bottom: 24px;
-            line-height: 1.5;
-        }
-
-        /* ---------------------------------------------------- */
-        /* ۱۵. جدول نفرات برتر */
-        /* ---------------------------------------------------- */
-        .leaderboard-item {
-            display: flex;
-            align-items: center;
-            padding: 14px 12px;
-            border-radius: 14px;
-            margin-bottom: 10px;
-            background: var(--item-bg);
-            border: 1px solid var(--item-border);
-            transition: all 0.3s ease;
-        }
-
-        .leaderboard-item:hover {
-            background: var(--secondary-bg);
-            box-shadow: 0 4px 12px rgba(13, 148, 136, 0.1);
-        }
-
-        .leaderboard-item.top-1 {
-            background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(251, 191, 36, 0.05) 100%);
-            border: 2px solid var(--highlight-gold);
-        }
-
-        .leader-rank {
-            font-weight: 800;
-            font-size: 18px;
-            width: 36px;
-            text-align: center;
-            color: var(--primary-teal);
-        }
-
-        .leaderboard-item.top-1 .leader-rank {
-            color: var(--highlight-gold);
-        }
-
-        .leader-avatar {
-            width: 42px;
-            height: 42px;
-            border-radius: 12px;
-            background: var(--pulse-color);
+            background: rgba(0, 0, 0, 0.85);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
-            margin-left: 12px;
+            z-index: 10000;
+            animation: fadeIn 0.3s ease;
         }
 
-        .leader-user {
-            flex-grow: 1;
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
-        .leader-name {
-            font-weight: 700;
+        .celebration-card {
+            background: linear-gradient(135deg, #1e3a8a, #0284c7);
+            border-radius: 24px;
+            padding: 32px;
+            text-align: center;
+            color: white;
+            max-width: 320px;
+            animation: celebrationPop 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes celebrationPop {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .celebration-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(255, 215, 0, 0.3), transparent);
+            animation: rotate 3s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .celebration-trophy {
+            font-size: 80px;
+            animation: trophy-bounce 0.6s ease-in-out;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes trophy-bounce {
+            0% { transform: scale(0) rotate(-20deg); }
+            50% { transform: scale(1.2) rotate(10deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        .celebration-title {
+            font-size: 24px;
+            font-weight: 800;
+            margin: 16px 0 8px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .celebration-subtitle {
             font-size: 14px;
-            color: var(--text-color);
-            margin-bottom: 2px;
+            opacity: 0.9;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
         }
 
-        .leader-score {
-            font-size: 13px;
-            color: var(--primary-teal);
-            font-weight: 600;
+        .celebration-stats {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
         }
 
-        /* ---------------------------------------------------- */
-        /* ۱۶. انیمیشن‌ها */
-        /* ---------------------------------------------------- */
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.05); opacity: 0.8; }
+        .celebration-stat {
+            font-size: 32px;
+            font-weight: 800;
+        }
+
+        .celebration-stat-label {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .celebration-btn {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #1e3a8a;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .celebration-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(251, 191, 36, 0.5);
+        }
+
+        /* کانفetti */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            opacity: 0;
+        }
+
+        /* افکت‌های متحرک برای بخش‌ها */
+        .slide-up {
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         @keyframes slideUp {
@@ -766,104 +461,345 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .slide-up {
-            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        .pulse {
+            animation: pulse 1.5s ease-in-out infinite;
         }
 
-        /* ---------------------------------------------------- */
-        /* ۱۷. حالت تاریک - اضافه‌ها */
-        /* ---------------------------------------------------- */
-        body.dark-mode .app-header {
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
-        body.dark-mode .card {
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+        .shake {
+            animation: shake 0.5s ease-in-out;
         }
 
-        body.dark-mode .bottom-nav {
-            box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.3);
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
         }
 
-        body.dark-mode .quiz-option {
-            background: var(--secondary-bg);
+        /* تایپوگرافی بهبود یافته */
+        .section-subtitle {
+            font-size: 14px;
+            color: var(--hint-color);
+            font-weight: 600;
+            margin-bottom: 12px;
         }
 
-        body.dark-mode .quiz-option:hover {
+        .highlight-text {
+            font-weight: 700;
+            color: var(--med-cyan);
+        }
+
+        /* آواتار بهبود یافته */
+        .avatar {
+            background: linear-gradient(135deg, #0284c7, #0ea5e9);
+            box-shadow: 0 4px 15px rgba(2, 132, 199, 0.4);
+            animation: avatar-glow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes avatar-glow {
+            from { box-shadow: 0 4px 15px rgba(2, 132, 199, 0.4); }
+            to { box-shadow: 0 4px 25px rgba(2, 132, 199, 0.6); }
+        }
+
+        /* دکمه تغییر تم */
+        #theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        #theme-toggle:active {
+            transform: scale(0.95);
+        }
+
+        body.dark-mode #theme-toggle {
             background: var(--item-bg);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         }
 
-        /* ---------------------------------------------------- */
-        /* ۱۸. واکنش‌گرایی (Responsive) */
-        /* ---------------------------------------------------- */
-        @media (max-width: 380px) {
-            .app-header {
-                padding: 14px 16px;
-            }
-            
-            .user-info h3 {
-                font-size: 15px;
-            }
-            
-            .avatar {
-                width: 44px;
-                height: 44px;
-                font-size: 18px;
-            }
-            
-            .card {
-                padding: 16px;
-                border-radius: 16px;
-            }
-            
-            .card-value {
-                font-size: 24px;
-            }
+        /* بخش جوایز پویا */
+        .prize-section {
+            transition: all 0.3s ease;
         }
 
-        @media (min-width: 768px) {
-            .container {
-                max-width: 600px;
-                margin: 0 auto;
-            }
+        .prize-highlight {
+            animation: prizeUpdate 0.5s ease;
         }
 
-        /* ---------------------------------------------------- */
-        /* ۱۹. پشتیبانی از Reduced Motion */
-        /* ---------------------------------------------------- */
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
+        @keyframes prizeUpdate {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); background: rgba(255,215,0,0.3); }
+            100% { transform: scale(1); }
         }
 
-        /* ---------------------------------------------------- */
-        /* ۲۰. فوکوس قابل مشاهده (Accessibility) */
-        /* ---------------------------------------------------- */
-        *:focus-visible {
-            outline: 3px solid var(--primary-teal);
-            outline-offset: 2px;
+        .prize-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 700;
+            margin-left: 4px;
         }
 
-        .quiz-option:focus-visible,
-        .cta-button:focus-visible,
-        .nav-item:focus-visible {
-            outline: 3px solid var(--primary-teal);
-            outline-offset: 2px;
+        .prize-badge-new {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            animation: pulse 1s ease-in-out infinite;
         }
 
-        /* ---------------------------------------------------- */
-        /* ۲۱. اورلی آزمون (Quiz Overlay) */
-        /* ---------------------------------------------------- */
+        /* وضعیت ثبت‌نام */
+        #nightly-registration-status {
+            transition: all 0.3s ease;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* دکمه ثبت‌نام بزرگ و جذاب */
+        #nightly-register-btn {
+            width: 100%;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 800;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(16, 189, 129, 0.4);
+            transition: all 0.3s ease;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        #nightly-register-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16, 189, 129, 0.5);
+        }
+
+        #nightly-register-btn:active {
+            transform: translateY(0);
+        }
+
+        #nightly-register-btn:disabled {
+            background: linear-gradient(135deg, #9ca3af, #6b7280);
+            cursor: not-allowed;
+            animation: none;
+        }
+
+        /* آمار چالش‌ها */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .stat-box {
+            background: var(--item-bg);
+            padding: 12px 8px;
+            border-radius: 14px;
+            text-align: center;
+            border: var(--card-border);
+        }
+
+        .stat-box .num {
+            font-size: 17px;
+            font-weight: 800;
+        }
+
+        .stat-box .label {
+            font-size: 11px;
+            color: var(--hint-color);
+            margin-top: 2px;
+            font-weight: 600;
+        }
+
+        /* بنر ویژه آپالیگ */
+        .exam-banner {
+            background: var(--med-blue-gradient);
+            color: white;
+            border-radius: 24px;
+            padding: 22px 20px;
+            margin-bottom: 16px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 12px 28px rgba(15, 23, 42, 0.25);
+        }
+
+        .exam-banner::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            width: 140px;
+            height: 140px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 50%;
+        }
+
+        .exam-status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(8px);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            animation: pulse 1.6s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        .exam-btn {
+            background: #ffffff;
+            color: #0f172a;
+            border: none;
+            width: 100%;
+            padding: 14px;
+            border-radius: 16px;
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            margin-top: 16px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+            transition: transform 0.1s, background-color 0.2s;
+        }
+
+        .exam-btn:active {
+            transform: scale(0.98);
+            background-color: #f8fafc;
+        }
+
+        /* جدول نفرات برتر */
+        .leader-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 10px;
+            border-radius: 14px;
+            margin-bottom: 8px;
+            background: var(--item-bg);
+            border: var(--card-border);
+        }
+
+        .leader-rank {
+            font-weight: 800;
+            font-size: 16px;
+            width: 32px;
+            text-align: center;
+        }
+
+        .leader-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-grow: 1;
+        }
+
+        .leader-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            background: rgba(2, 132, 199, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .leader-score {
+            text-align: left;
+            font-weight: 800;
+            font-size: 13px;
+        }
+
+        .leader-time {
+            font-size: 11px;
+            color: var(--hint-color);
+            margin-top: 1px;
+        }
+
+        /* تب بار شناور پایینی */
+        .bottom-nav {
+            position: fixed;
+            bottom: 12px;
+            left: 12px;
+            right: 12px;
+            background: var(--glass-nav-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 4px;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+            border: var(--card-border);
+            z-index: 1000;
+            transition: background 0.3s ease;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: var(--hint-color);
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 20%;
+            padding: 6px 0;
+            border-radius: 16px;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .nav-item.active {
+            color: var(--med-cyan);
+            background: rgba(2, 132, 199, 0.12);
+            font-weight: 700;
+        }
+
+        .nav-item:active {
+            transform: scale(0.92);
+        }
+
+        .nav-icon {
+            font-size: 20px;
+        }
+
+        /* ============================================ */
+        /* استایل‌های مدالیت آزمون تعاملی */
+        /* ============================================ */
+
         .quiz-overlay {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0D9488 100%);
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0284c7 100%);
             z-index: 100000;
             display: flex;
             flex-direction: column;
@@ -914,18 +850,18 @@
         }
 
         .quiz-progress-dot.active {
-            background: var(--highlight-gold);
+            background: #fbbf24;
             transform: scale(1.2);
             box-shadow: 0 0 12px rgba(251, 191, 36, 0.6);
         }
 
         .quiz-progress-dot.answered {
-            background: var(--success-green);
+            background: #10b981;
         }
 
         .quiz-close-btn {
-            width: 44px;
-            height: 44px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             background: rgba(255,255,255,0.1);
             border: 2px solid rgba(255,255,255,0.3);
@@ -940,16 +876,67 @@
 
         .quiz-close-btn:hover {
             background: rgba(239, 68, 68, 0.3);
-            border-color: #EF4444;
+            border-color: #ef4444;
         }
 
-        /* ---------------------------------------------------- */
-        /* ۲۲. کارت سوال آزمون */
-        /* ---------------------------------------------------- */
+        /* تایمر دایره‌ای */
+        .quiz-timer-container {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin-bottom: 24px;
+        }
+
+        .quiz-timer-svg {
+            transform: rotate(-90deg);
+            width: 100px;
+            height: 100px;
+        }
+
+        .quiz-timer-bg {
+            fill: none;
+            stroke: rgba(255,255,255,0.15);
+            stroke-width: 8;
+        }
+
+        .quiz-timer-progress {
+            fill: none;
+            stroke: #10b981;
+            stroke-width: 8;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1s linear, stroke 0.3s ease;
+        }
+
+        .quiz-timer-progress.warning {
+            stroke: #f59e0b;
+        }
+
+        .quiz-timer-progress.danger {
+            stroke: #ef4444;
+            animation: timerPulse 0.5s ease-in-out infinite;
+        }
+
+        @keyframes timerPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .quiz-timer-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 28px;
+            font-weight: 800;
+            color: white;
+            font-family: 'Vazirmatn', monospace;
+        }
+
+        /* کارت سوال */
         .quiz-question-card {
             width: 100%;
             max-width: 500px;
-            background: var(--secondary-bg);
+            background: rgba(255,255,255,0.95);
             border-radius: 24px;
             padding: 24px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
@@ -968,16 +955,21 @@
         .quiz-question-topic {
             font-size: 12px;
             font-weight: 700;
-            color: var(--primary-teal);
+            color: #0284c7;
             margin-bottom: 12px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
+        .quiz-question-topic::before {
+            content: '📚';
+            font-size: 16px;
+        }
+
         .quiz-question-number {
             font-size: 11px;
-            color: var(--hint-color);
+            color: #64748b;
             margin-bottom: 8px;
             font-weight: 600;
         }
@@ -985,7 +977,7 @@
         .quiz-question-text {
             font-size: 15px;
             line-height: 2;
-            color: var(--text-color);
+            color: #0f172a;
             margin-bottom: 20px;
             white-space: pre-wrap;
             word-wrap: break-word;
@@ -1002,33 +994,45 @@
             width: 100%;
             padding: 16px;
             border-radius: 16px;
-            background: var(--item-bg);
-            border: 3px solid var(--item-border);
-            color: var(--text-color);
+            background: #f8fafc;
+            border: 3px solid #e2e8f0;
+            color: #0f172a;
             font-size: 15px;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            text-align: right;
+            text-align: center;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 12px;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
         }
 
         .quiz-option-btn:hover {
-            border-color: var(--primary-teal);
-            background: var(--pulse-color);
+            border-color: #0284c7;
+            background: #f0f9ff;
             transform: translateX(-4px);
         }
 
         .quiz-option-btn.selected {
-            background: var(--vital-gradient);
-            border-color: var(--primary-teal);
+            background: linear-gradient(135deg, #0284c7, #0ea5e9);
+            border-color: #0284c7;
             color: white;
             transform: scale(1.02);
-            box-shadow: 0 8px 20px rgba(13, 148, 136, 0.4);
+            box-shadow: 0 8px 20px rgba(2, 132, 199, 0.4);
+        }
+
+        .quiz-option-letter {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            background: rgba(2, 132, 199, 0.1);
+            color: #0284c7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 14px;
         }
 
         .quiz-option-btn.selected .quiz-option-letter {
@@ -1036,40 +1040,36 @@
             color: white;
         }
 
-        /* ---------------------------------------------------- */
-        /* ۲۳. دکمه بعدی آزمون */
-        /* ---------------------------------------------------- */
+        /* دکمه بعدی */
         .quiz-next-btn {
             width: 100%;
             max-width: 500px;
             margin-top: 20px;
             padding: 18px;
             border-radius: 16px;
-            background: var(--vital-gradient);
+            background: linear-gradient(135deg, #10b981, #059669);
             color: white;
             font-size: 16px;
             font-weight: 800;
             border: none;
             cursor: pointer;
-            box-shadow: 0 8px 25px rgba(13, 148, 136, 0.4);
+            box-shadow: 0 8px 25px rgba(16, 189, 129, 0.4);
             transition: all 0.3s ease;
         }
 
         .quiz-next-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 12px 30px rgba(13, 148, 136, 0.5);
+            box-shadow: 0 12px 30px rgba(16, 189, 129, 0.5);
         }
 
         .quiz-next-btn:disabled {
-            background: linear-gradient(135deg, #94A3B8, #64748B);
+            background: linear-gradient(135deg, #9ca3af, #6b7280);
             cursor: not-allowed;
             box-shadow: none;
             transform: none;
         }
 
-        /* ---------------------------------------------------- */
-        /* ۲۴. صفحه شروع آزمون */
-        /* ---------------------------------------------------- */
+        /* صفحه شروع */
         .quiz-start-screen {
             width: 100%;
             max-width: 500px;
@@ -1111,29 +1111,27 @@
         .quiz-start-btn {
             padding: 20px 48px;
             border-radius: 50px;
-            background: var(--orange-gradient);
-            color: white;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #0f172a;
             font-size: 18px;
             font-weight: 800;
             border: none;
             cursor: pointer;
-            box-shadow: 0 10px 30px rgba(249, 115, 22, 0.5);
+            box-shadow: 0 10px 30px rgba(251, 191, 36, 0.5);
             transition: all 0.3s ease;
             animation: pulseGlow 2s ease-in-out infinite;
         }
 
         @keyframes pulseGlow {
-            0%, 100% { box-shadow: 0 10px 30px rgba(249, 115, 22, 0.5); }
-            50% { box-shadow: 0 15px 40px rgba(249, 115, 22, 0.7); }
+            0%, 100% { box-shadow: 0 10px 30px rgba(251, 191, 36, 0.5); }
+            50% { box-shadow: 0 15px 40px rgba(251, 191, 36, 0.7); }
         }
 
         .quiz-start-btn:hover {
             transform: scale(1.05);
         }
 
-        /* ---------------------------------------------------- */
-        /* ۲۵. صفحه نتیجه آزمون */
-        /* ---------------------------------------------------- */
+        /* صفحه نتیجه */
         .quiz-result-screen {
             width: 100%;
             max-width: 500px;
@@ -1156,6 +1154,13 @@
             font-size: 24px;
             font-weight: 800;
             margin-bottom: 8px;
+        }
+
+        .quiz-result-score {
+            font-size: 48px;
+            font-weight: 800;
+            margin: 20px 0;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
 
         .quiz-result-score span {
@@ -1187,193 +1192,187 @@
             background: rgba(255,255,255,0.1);
         }
 
-        /* ---------------------------------------------------- */
-        /* ۲۶. مودال تبریک */
-        /* ---------------------------------------------------- */
-        .celebration-overlay {
-            position: fixed;
-            inset: 0;
-            background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0D9488 100%);
-            z-index: 1000000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+        .quiz-result-item:last-child {
+            margin-bottom: 0;
         }
 
-        .celebration-content {
-            text-align: center;
-            color: white;
-            position: relative;
-            z-index: 1;
-        }
-
-        .celebration-title {
+        .quiz-result-item-icon {
             font-size: 24px;
-            font-weight: 800;
-            margin-bottom: 16px;
-            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
 
-        .celebration-text {
-            font-size: 16px;
-            opacity: 0.9;
-            margin-bottom: 24px;
-            line-height: 1.8;
-        }
-
-        .celebration-stats {
-            background: rgba(255,255,255,0.1);
-            border-radius: 16px;
-            padding: 16px;
-            margin-bottom: 24px;
-        }
-
-        .celebration-stat {
-            font-size: 32px;
-            font-weight: 800;
-        }
-
-        .celebration-stat-label {
-            font-size: 12px;
-            opacity: 0.8;
-        }
-
-        .celebration-btn {
-            background: var(--orange-gradient);
-            color: white;
-            border: none;
-            padding: 16px 36px;
-            border-radius: 50px;
-            font-size: 16px;
-            font-weight: 800;
-            cursor: pointer;
-            box-shadow: 0 6px 24px rgba(249, 115, 22, 0.4);
-            transition: all 0.3s ease;
-        }
-
-        .celebration-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 32px rgba(249, 115, 22, 0.5);
-        }
-
-        /* ---------------------------------------------------- */
-        /* ۲۷. آیتم‌های لیست */
-        /* ---------------------------------------------------- */
-        .list-item {
-            background: var(--secondary-bg);
-            border: var(--card-border);
-            border-radius: 16px;
-            padding: 16px;
-            margin-bottom: 12px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .list-item:hover {
-            box-shadow: var(--card-shadow-hover);
-            transform: translateX(-4px);
-        }
-
-        .list-item-title {
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--text-color);
-            margin-bottom: 4px;
-        }
-
-        .list-item-desc {
+        .quiz-result-item-text {
+            flex: 1;
             font-size: 13px;
-            color: var(--hint-color);
+            line-height: 1.6;
         }
 
-        /* ---------------------------------------------------- */
-        /* ۲۸. بنر ویژه */
-        /* ---------------------------------------------------- */
-        .special-banner {
-            background: var(--vital-gradient);
-            border-radius: 20px;
-            padding: 24px;
-            margin-bottom: 16px;
+        .quiz-result-close-btn {
+            padding: 18px 48px;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #10b981, #059669);
             color: white;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .special-banner::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--ekg-pattern);
-            background-size: 120px 30px;
-            opacity: 0.2;
-        }
-
-        .special-banner-title {
-            font-size: 20px;
+            font-size: 16px;
             font-weight: 800;
-            margin-bottom: 8px;
-            position: relative;
-            z-index: 1;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(16, 189, 129, 0.4);
+            transition: all 0.3s ease;
         }
 
-        .special-banner-text {
-            font-size: 14px;
-            opacity: 0.9;
-            position: relative;
-            z-index: 1;
+        .quiz-result-close-btn:hover {
+            transform: translateY(-2px);
         }
 
-        /* ---------------------------------------------------- */
-        /* ۲۹. بخش آمار */
-        /* ---------------------------------------------------- */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-top: 16px;
+        /* انیمیشن‌های اضافی */
+        .shake-animation {
+            animation: shake 0.5s ease-in-out;
         }
 
-        .stat-box {
-            background: var(--item-bg);
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-10px); }
+            40% { transform: translateX(10px); }
+            60% { transform: translateX(-10px); }
+            80% { transform: translateX(10px); }
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            pointer-events: none;
+            z-index: 100001;
+            animation: confettiFall 3s ease-out forwards;
+        }
+
+        @keyframes confettiFall {
+            0% { opacity: 1; transform: translateY(0) rotate(0deg); }
+            100% { opacity: 0; transform: translateY(100vh) rotate(720deg); }
+        }
+
+        /* ریسپانسیو */
+        @media (max-width: 400px) {
+            .quiz-overlay {
+                padding: 12px;
+            }
+
+            .quiz-header {
+                margin-bottom: 12px;
+            }
+
+            .quiz-question-card {
+                padding: 16px;
+                border-radius: 20px;
+            }
+
+            .quiz-question-text {
+                font-size: 14px;
+                line-height: 1.8;
+                margin-bottom: 16px;
+            }
+
+            .quiz-option-btn {
+                padding: 14px;
+                font-size: 14px;
+                border-radius: 14px;
+            }
+
+            .quiz-option-letter {
+                width: 28px;
+                height: 28px;
+                font-size: 13px;
+            }
+
+            .quiz-timer-container {
+                width: 70px;
+                height: 70px;
+                margin-bottom: 16px;
+            }
+
+            .quiz-timer-svg {
+                width: 70px;
+                height: 70px;
+            }
+
+            .quiz-timer-text {
+                font-size: 20px;
+            }
+
+            .quiz-progress {
+                font-size: 12px;
+            }
+
+            .quiz-progress-dot {
+                width: 8px;
+                height: 8px;
+            }
+
+            .quiz-next-btn {
+                padding: 16px;
+                font-size: 14px;
+            }
+
+            .quiz-start-title {
+                font-size: 22px;
+            }
+
+            .quiz-start-subtitle {
+                font-size: 13px;
+            }
+
+            .quiz-start-btn {
+                padding: 16px 32px;
+                font-size: 16px;
+            }
+
+            .quiz-result-score {
+                font-size: 36px;
+            }
+
+            .quiz-result-icon {
+                font-size: 60px;
+            }
+
+            .quiz-option-letter {
+                width: 36px;
+                height: 36px;
+                font-size: 16px;
+            }
+        }
+
+        /* آیتم نتیجه در مدالیت */
+        .quiz-result-item {
             border-radius: 14px;
-            padding: 14px 10px;
-            text-align: center;
-            border: 1px solid var(--item-border);
+            padding: 12px;
+            margin-bottom: 8px;
+            background: rgba(255,255,255,0.1);
         }
 
-        .stat-value {
-            font-size: 22px;
-            font-weight: 800;
-            color: var(--primary-teal);
-            margin-bottom: 4px;
+        .quiz-result-item:last-child {
+            margin-bottom: 0;
         }
 
-        .stat-label {
-            font-size: 11px;
-            color: var(--hint-color);
-            font-weight: 600;
+        .quiz-result-item-icon {
+            font-size: 24px;
         }
 
-        /* ---------------------------------------------------- */
-        /* ۳۰. حالت بارگذاری */
-        /* ---------------------------------------------------- */
-        .loading-skeleton {
-            background: linear-gradient(90deg, var(--item-bg) 25%, var(--pulse-color) 50%, var(--item-bg) 75%);
-            background-size: 200% 100%;
-            animation: skeleton-loading 1.5s infinite;
-            border-radius: 8px;
+        .quiz-result-item-text {
+            flex: 1;
+            font-size: 13px;
+            line-height: 1.6;
         }
 
-        @keyframes skeleton-loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
+        /* ریسپانسیو برای تبلت */
+        @media (min-width: 401px) and (max-width: 768px) {
+            .quiz-question-card {
+                padding: 20px;
+            }
+
+            .quiz-option-btn {
+                padding: 15px;
+            }
         }
     </style>
-
 </head>
 <body>
 
@@ -1460,7 +1459,7 @@
                 <p style="font-size: 12px; opacity: 0.95; font-weight: 600; margin-bottom: 10px; background: rgba(255,255,255,0.15); padding: 8px 12px; border-radius: 10px; line-height: 1.6;">
                     مسابقه شبانه پزشکی آپامد | رقابت علمی بین اکسترن‌ها | هر شب ساعت ۲۱:۰۰
                 </p>
-                <p style="font-size: 13px; opacity: 0.9; font-weight: 500;">📚 ۱۰ سوال بالینی از ۱۰ مبحث | ⏱️ ۳۰ ثانیه برای هر سوال</p>
+                <p style="font-size: 13px; opacity: 0.9; font-weight: 500;">📚 ۱۰ سوال بالینی از ۱۰ مبحث | ⏱️ ۴۰ تا ۴۵ ثانیه برای هر سوال</p>
                 <div style="display:flex; gap:16px; margin-top:10px; font-size:12px; font-weight:700;">
                     <span>💳 هزینه ورودی: <span id="nightly-entry-fee">--</span> تومان</span>
                 </div>
@@ -1693,6 +1692,98 @@
                 </div>
                 <div class="card-desc" style="margin-bottom:12px;">ابزارهای مدیریت ویژه ادمین ربات</div>
 
+                <!-- کنترل حالت آزمون (رایگان/پولی) -->
+                <div style="background: var(--item-bg); padding: 16px; border-radius: 14px; margin-bottom: 12px; border: var(--card-border);">
+                    <div style="font-weight: 700; font-size: 13px; margin-bottom: 8px; color: var(--text-color);">🎯 کنترل دسترسی آپالیگ</div>
+                    <div style="font-size: 11px; color: var(--hint-color); margin-bottom: 12px; line-height: 1.6;">
+                        حالت آزمون را بین رایگان و پولی تغییر دهید.
+                    </div>
+                    <div id="admin-exam-mode-status" style="font-size: 11px; margin-bottom: 10px; padding: 8px; border-radius: 8px; display: none;"></div>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <button id="admin-exam-mode-btn" onclick="toggleExamMode()" style="
+                            flex: 1;
+                            padding: 12px;
+                            border-radius: 12px;
+                            font-size: 13px;
+                            font-weight: 800;
+                            border: none;
+                            cursor: pointer;
+                            transition: all 0.3s ease;
+                        ">در حال بارگذاری...</button>
+                        <button onclick="loadExamMode()" style="
+                            background: var(--item-bg);
+                            border: var(--card-border);
+                            color: var(--text-color);
+                            padding: 12px 16px;
+                            border-radius: 12px;
+                            font-size: 14px;
+                            cursor: pointer;
+                        ">🔄</button>
+                    </div>
+                </div>
+
+                <!-- انتخاب موضوعات سوالات -->
+                <div style="background: var(--item-bg); padding: 16px; border-radius: 14px; margin-bottom: 12px; border: var(--card-border);">
+                    <div style="font-weight: 700; font-size: 13px; margin-bottom: 8px; color: var(--text-color);">📌 انتخاب موضوعات سوالات</div>
+                    <div style="font-size: 11px; color: var(--hint-color); margin-bottom: 12px; line-height: 1.6;">
+                        موضوعات مورد نظر را انتخاب کنید. اگر کمتر از ۱۰ موضوع انتخاب شود، از برخی موضوعات چند سوال ساخته می‌شود.
+                    </div>
+                    <div id="admin-topics-status" style="font-size: 11px; margin-bottom: 10px; padding: 8px; border-radius: 8px; display: none;"></div>
+                    <div id="admin-topics-list" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+                        <p style="color: var(--hint-color); font-size: 12px;">در حال بارگذاری موضوعات...</p>
+                    </div>
+                    <div style="display: flex; gap: 6px; margin-bottom: 10px;">
+                        <button onclick="selectAllTopics()" style="
+                            flex: 1;
+                            padding: 8px;
+                            border-radius: 10px;
+                            font-size: 11px;
+                            font-weight: 700;
+                            border: 1px solid var(--card-border);
+                            background: var(--secondary-bg);
+                            color: var(--text-color);
+                            cursor: pointer;
+                        ">✅ انتخاب همه</button>
+                        <button onclick="deselectAllTopics()" style="
+                            flex: 1;
+                            padding: 8px;
+                            border-radius: 10px;
+                            font-size: 11px;
+                            font-weight: 700;
+                            border: 1px solid var(--card-border);
+                            background: var(--secondary-bg);
+                            color: var(--text-color);
+                            cursor: pointer;
+                        ">❌ حذف انتخاب</button>
+                    </div>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <button onclick="saveExamTopics()" style="
+                            flex: 1;
+                            padding: 12px;
+                            border-radius: 12px;
+                            font-size: 13px;
+                            font-weight: 800;
+                            border: none;
+                            cursor: pointer;
+                            background: linear-gradient(135deg, #0284c7, #0ea5e9);
+                            color: white;
+                            transition: all 0.3s ease;
+                        ">💾 ذخیره موضوعات</button>
+                        <button onclick="loadExamTopics()" style="
+                            background: var(--item-bg);
+                            border: var(--card-border);
+                            color: var(--text-color);
+                            padding: 12px 16px;
+                            border-radius: 12px;
+                            font-size: 14px;
+                            cursor: pointer;
+                        ">🔄</button>
+                    </div>
+                    <div style="margin-top: 10px; padding: 8px; background: rgba(2, 132, 199, 0.1); border-radius: 8px; font-size: 11px; color: var(--med-cyan);">
+                        💡 تعداد موضوعات انتخاب شده: <span id="admin-topics-count" style="font-weight: 800;">0</span> | تعداد کل سوالات: <span style="font-weight: 800;">۱۰</span>
+                    </div>
+                </div>
+
                 <div style="background: var(--item-bg); padding: 16px; border-radius: 14px; margin-bottom: 12px; border: var(--card-border);">
                     <div style="font-weight: 700; font-size: 13px; margin-bottom: 8px; color: var(--text-color);">📦 پیش‌بارگذاری سوالات آپالیگ</div>
                     <div style="font-size: 11px; color: var(--hint-color); margin-bottom: 12px; line-height: 1.6;">
@@ -1756,7 +1847,8 @@
             <h1 class="quiz-start-title">آپالیگ امشب</h1>
             <p class="quiz-start-subtitle">
                 ۱۰ سوال بالینی از ۱۰ مبحث مختلف<br>
-                ⏱️ ۳۰ ثانیه فرصت برای هر سوال<br>
+                🎲 ترکیبی از سوالات چهارگزینه‌ای، تطبیقی و سناریوهای پیشرونده<br>
+                ⏱️ زمان هر سوال بسته به نوعش متفاوت است<br>
                 🎯 پاسخ صحیح = ۱ امتیاز<br><br>
                 <strong>آماده‌اید؟</strong>
             </p>
@@ -1922,7 +2014,9 @@
                 if (nightlyStatusPollInterval) clearInterval(nightlyStatusPollInterval);
                 nightlyStatusPollInterval = setInterval(loadNightlyStatus, 20000);
             } else if (tabName === 'admin') {
-                // پنل ادمین - نیازی به لود اضافی نیست
+                // پنل ادمین - لود وضعیت حالت آزمون و موضوعات
+                loadExamMode();
+                loadExamTopics();
                 console.log('پنل ادمین باز شد');
             } else if (nightlyStatusPollInterval) {
                 clearInterval(nightlyStatusPollInterval);
@@ -1949,10 +2043,22 @@
         let currentQuizQuestionIndex = 0;
         let quizTimerInterval = null;
         let quizTimeRemaining = 30;
+        let quizCurrentDuration = 30; // مدت‌زمان تایمر سوال جاری (بسته به نوع سوال متفاوت است)
         let quizSelectedAnswer = null;
         let quizStartTime = null;
         let isAdminQuiz = false; // آیا آزمون توسط ادمین شروع شده
         const QUIZ_TIME_PER_QUESTION = 30;
+
+        // زمان مجاز هر نوع سوال (ثانیه) — سوالات تطبیقی و سناریوی پیشرونده به خواندن بیشتری نیاز دارند
+        const QUIZ_TIME_BY_TYPE = { mcq: 40, matching: 40, case_progression: 45 };
+        const QUIZ_OPTION_LETTERS = ['الف', 'ب', 'ج', 'د'];
+
+        // وضعیت مخصوص سوالات تطبیقی
+        let quizMatchingSelection = null; // آرایه‌ای هم‌طول pairs_left؛ هر خانه متن گزینه راست انتخاب‌شده
+
+        // وضعیت مخصوص سوالات سناریوی پیشرونده
+        let quizCaseStages = [];
+        let quizCaseStageIndex = 0;
 
         function formatMMSS(totalSeconds) {
             const s = Math.max(0, totalSeconds);
@@ -2072,21 +2178,35 @@
                 const regStatusDiv = document.getElementById('nightly-registration-status');
                 const regBtn = document.getElementById('nightly-register-btn');
 
+                // نمایش وضعیت حالت آزمون (رایگان/پولی)
+                if (data.is_free_mode) {
+                    document.getElementById('nightly-entry-fee').innerHTML = '<span style="color:#10b981; font-weight:800;">رایگان 🎉</span>';
+                }
+
                 if (data.has_paid) {
                     regStatusDiv.style.display = 'block';
                     regStatusDiv.style.background = 'rgba(16, 185, 129, 0.2)';
                     regStatusDiv.style.color = '#10b981';
-                    regStatusDiv.innerHTML = '✅ ثبت‌نام شما برای آپالیگ امشب تایید شد';
+                    if (data.is_free_mode) {
+                        regStatusDiv.innerHTML = '✅ آپالیگ امشب رایگان است! منتظر شروع بمانید';
+                    } else {
+                        regStatusDiv.innerHTML = '✅ ثبت‌نام شما برای آپالیگ امشب تایید شد';
+                    }
                     regBtn.style.display = 'none';
                 } else {
                     regStatusDiv.style.display = 'block';
                     regStatusDiv.style.background = 'rgba(245, 158, 11, 0.2)';
                     regStatusDiv.style.color = '#f59e0b';
-                    regStatusDiv.innerHTML = '⏳ هنوز برای آپالیگ امشب ثبت‌نام نکرده‌اید<br><span style="font-size:10px; opacity:0.8;">⏰ ثبت‌نام را به ساعت پایانی موکول نکنید و هرچه زودتر اقدام کنید</span>';
-                    regBtn.style.display = 'block';
-                    regBtn.disabled = false;
-                    regBtn.innerText = `💳 ثبت‌نام و پرداخت ${data.entry_fee_toman.toLocaleString('fa-IR')} تومان`;
-                    regBtn.onclick = payNightlyExam;
+                    if (data.is_free_mode) {
+                        regStatusDiv.innerHTML = '🎉 آپالیگ امشب <b>رایگان</b> است! همه می‌توانند شرکت کنند.';
+                        regBtn.style.display = 'none';
+                    } else {
+                        regStatusDiv.innerHTML = '⏳ هنوز برای آپالیگ امشب ثبت‌نام نکرده‌اید<br><span style="font-size:10px; opacity:0.8;">⏰ ثبت‌نام را به ساعت پایانی موکول نکنید و هرچه زودتر اقدام کنید</span>';
+                        regBtn.style.display = 'block';
+                        regBtn.disabled = false;
+                        regBtn.innerText = `💳 ثبت‌نام و پرداخت ${data.entry_fee_toman.toLocaleString('fa-IR')} تومان`;
+                        regBtn.onclick = payNightlyExam;
+                    }
                 }
 
                 const badge = document.getElementById('nightly-status-badge');
@@ -2181,7 +2301,7 @@
             document.getElementById('nightly-quiz-card').style.display = 'none';
             const resultCard = document.getElementById('nightly-result-card');
             resultCard.style.display = 'block';
-            document.getElementById('nightly-result-score').innerText = `${myResult.score} از ${myResult.total}`;
+            document.getElementById('nightly-result-score').innerText = `${formatScore(myResult.score)} از ${myResult.total}`;
             const m = Math.floor(myResult.duration_seconds / 60), s = myResult.duration_seconds % 60;
             document.getElementById('nightly-result-desc').innerText =
                 `زمان صرف‌شده شما: ${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')} دقیقه`;
@@ -2322,7 +2442,7 @@
                 document.getElementById('nightly-quiz-card').style.display = 'none';
                 const resultCard = document.getElementById('nightly-result-card');
                 resultCard.style.display = 'block';
-                document.getElementById('nightly-result-score').innerText = `${data.score} از ${data.total}`;
+                document.getElementById('nightly-result-score').innerText = `${formatScore(data.score)} از ${data.total}`;
                 const m = Math.floor(data.duration_seconds / 60), s = data.duration_seconds % 60;
                 document.getElementById('nightly-result-desc').innerText =
                     `زمان صرف‌شده شما: ${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')} دقیقه`;
@@ -3122,6 +3242,214 @@
             .catch(err => console.error('Error checking preload status:', err));
         }
 
+        // ---------- توابع کنترل حالت آزمون (رایگان/پولی) ----------
+        let currentExamMode = 'paid';
+
+        function loadExamMode() {
+            fetch(`${BASE_URL}/api/admin/exam-mode`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Telegram-Init-Data': tg.initData
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) {
+                    console.error('Error loading exam mode:', data);
+                    return;
+                }
+                currentExamMode = data.mode;
+                updateExamModeUI();
+            })
+            .catch(err => console.error('Error loading exam mode:', err));
+        }
+
+        function updateExamModeUI() {
+            const btn = document.getElementById('admin-exam-mode-btn');
+            const statusDiv = document.getElementById('admin-exam-mode-status');
+
+            if (currentExamMode === 'free') {
+                btn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+                btn.style.color = '#fff';
+                btn.innerHTML = '🟢 حالت فعلی: رایگان برای همه';
+                btn.onclick = () => setExamMode('paid');
+
+                statusDiv.style.display = 'block';
+                statusDiv.style.background = 'rgba(16, 185, 129, 0.2)';
+                statusDiv.style.color = '#10b981';
+                statusDiv.innerHTML = '✅ آپالیگ در حال حاضر برای همه کاربران <b>رایگان</b> است.';
+            } else {
+                btn.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+                btn.style.color = '#fff';
+                btn.innerHTML = '🔴 حالت فعلی: پولی (پرداخت اجباری)';
+                btn.onclick = () => setExamMode('free');
+
+                statusDiv.style.display = 'block';
+                statusDiv.style.background = 'rgba(239, 68, 68, 0.2)';
+                statusDiv.style.color = '#ef4444';
+                statusDiv.innerHTML = '🔒 آپالیگ در حال حاضر <b>پولی</b> است. کاربران باید هزینه ورودی را پرداخت کنند.';
+            }
+        }
+
+        function setExamMode(newMode) {
+            const modeLabel = newMode === 'free' ? 'رایگان' : 'پولی';
+            tg.showConfirm(
+                `آیا میخواهید حالت آپالیگ را به «${modeLabel}» تغییر دهید؟`,
+                (confirmed) => {
+                    if (!confirmed) return;
+
+                    fetch(`${BASE_URL}/api/admin/exam-mode`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Telegram-Init-Data': tg.initData
+                        },
+                        body: JSON.stringify({ mode: newMode })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.error) {
+                            tg.showAlert('❌ ' + (data.message || 'خطا در تغییر وضعیت'));
+                            return;
+                        }
+                        currentExamMode = data.mode;
+                        updateExamModeUI();
+                        tg.showAlert(`✅ ${data.message}`);
+                    })
+                    .catch(err => {
+                        console.error('Error setting exam mode:', err);
+                        tg.showAlert('❌ خطا در ارتباط با سرور');
+                    });
+                }
+            );
+        }
+
+        function toggleExamMode() {
+            const newMode = currentExamMode === 'free' ? 'paid' : 'free';
+            setExamMode(newMode);
+        }
+
+        // ---------- توابع انتخاب موضوعات سوالات ----------
+        let availableTopics = [];
+        let selectedTopics = [];
+
+        function loadExamTopics() {
+            fetch(`${BASE_URL}/api/admin/exam-topics`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Telegram-Init-Data': tg.initData
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) {
+                    console.error('Error loading topics:', data);
+                    return;
+                }
+                availableTopics = data.available_topics || [];
+                selectedTopics = data.selected_topics || [];
+                renderTopicsUI();
+            })
+            .catch(err => console.error('Error loading topics:', err));
+        }
+
+        function renderTopicsUI() {
+            const container = document.getElementById('admin-topics-list');
+            const countSpan = document.getElementById('admin-topics-count');
+            const statusDiv = document.getElementById('admin-topics-status');
+
+            countSpan.textContent = selectedTopics.length;
+
+            container.innerHTML = availableTopics.map(topic => {
+                const isSelected = selectedTopics.includes(topic);
+                return `
+                    <button onclick="toggleTopic('${topic}')" style="
+                        padding: 10px 14px;
+                        border-radius: 12px;
+                        font-size: 12px;
+                        font-weight: 700;
+                        border: 2px solid ${isSelected ? 'var(--med-cyan)' : 'var(--card-border)'};
+                        background: ${isSelected ? 'rgba(2, 132, 199, 0.15)' : 'var(--secondary-bg)'};
+                        color: ${isSelected ? 'var(--med-cyan)' : 'var(--text-color)'};
+                        cursor: pointer;
+                        transition: all 0.2s ease;
+                    ">${isSelected ? '✅ ' : ''}${topic}</button>
+                `;
+            }).join('');
+
+            // نمایش وضعیت
+            if (selectedTopics.length > 0) {
+                statusDiv.style.display = 'block';
+                statusDiv.style.background = 'rgba(16, 185, 129, 0.2)';
+                statusDiv.style.color = '#10b981';
+                const qPerTopic = selectedTopics.length <= 10 ? Math.ceil(10 / selectedTopics.length) : 1;
+                statusDiv.innerHTML = `📌 ${selectedTopics.length} موضوع انتخاب شده — هر موضوع حدود ${qPerTopic} سوال خواهد داشت`;
+            } else {
+                statusDiv.style.display = 'block';
+                statusDiv.style.background = 'rgba(245, 158, 11, 0.2)';
+                statusDiv.style.color = '#f59e0b';
+                statusDiv.innerHTML = '⚠️ هنوز موضوعی انتخاب نشده. اگر موضوعی انتخاب نکنید، به صورت تصادفی از همه موضوعات سوال ساخته می‌شود.';
+            }
+        }
+
+        function toggleTopic(topic) {
+            const idx = selectedTopics.indexOf(topic);
+            if (idx >= 0) {
+                selectedTopics.splice(idx, 1);
+            } else {
+                selectedTopics.push(topic);
+            }
+            renderTopicsUI();
+        }
+
+        function selectAllTopics() {
+            selectedTopics = [...availableTopics];
+            renderTopicsUI();
+        }
+
+        function deselectAllTopics() {
+            selectedTopics = [];
+            renderTopicsUI();
+        }
+
+        function saveExamTopics() {
+            if (selectedTopics.length === 0) {
+                tg.showAlert('⚠️ حداقل یک موضوع انتخاب کنید.');
+                return;
+            }
+
+            tg.showConfirm(
+                `آیا میخواهید ${selectedTopics.length} موضوع ذخیره کنید؟\n\nموضوعات: ${selectedTopics.join('، ')}\n\n⚠️ سوالات قبلی حذف و دوباره ساخته می‌شوند.`,
+                (confirmed) => {
+                    if (!confirmed) return;
+
+                    fetch(`${BASE_URL}/api/admin/exam-topics`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Telegram-Init-Data': tg.initData
+                        },
+                        body: JSON.stringify({ topics: selectedTopics })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.error) {
+                            tg.showAlert('❌ ' + (data.message || 'خطا در ذخیره موضوعات'));
+                            return;
+                        }
+                        tg.showAlert(`✅ ${data.message}`);
+                        renderTopicsUI();
+                    })
+                    .catch(err => {
+                        console.error('Error saving topics:', err);
+                        tg.showAlert('❌ خطا در ارتباط با سرور');
+                    });
+                }
+            );
+        }
+
         function updateAdminPreloadStatus(data) {
             const statusDiv = document.getElementById('admin-preload-status');
             if (statusDiv) {
@@ -3285,100 +3613,7 @@
         // توابع جدید آزمون تعاملی با مدالیت
         // ============================================
 
-        // تابع استخراج سوال و گزینه‌ها از متن کامل
-        function extractQuestionAndOptions(fullText) {
-            // الگوهای مختلف برای جدا کردن سوال از گزینه‌ها
-            const patterns = [
-                // الف) ... ب) ... ج) ... د) ...
-                /^(.*?)الف\)\s*/s,
-                /^(.*?)الف\.\s*/s,
-                /^(.*?)الف:\s*/s,
-                /^(.*?)1\)\s*/s,
-            ];
-
-            let question = fullText;
-            let optionsText = fullText;
-
-            // پیدا کردن شروع گزینه‌ها
-            for (const pattern of patterns) {
-                const match = fullText.match(pattern);
-                if (match) {
-                    question = match[1].trim();
-                    // حذف علامت‌های اضافی انتهای سوال
-                    question = question.replace(/[?:؟]\s*$/, '').trim();
-                    optionsText = fullText.substring(match.index);
-                    break;
-                }
-            }
-
-            // استخراج گزینه‌ها
-            const options = [];
-
-            // استخراج گزینه الف
-            let optionMatch = optionsText.match(/الف\)\s*(.+?)(?=ب\)|$)/s);
-            if (optionMatch) options.push(optionMatch[1].trim());
-
-            // استخراج گزینه ب
-            optionMatch = optionsText.match(/ب\)\s*(.+?)(?=ج\)|$)/s);
-            if (optionMatch) options.push(optionMatch[1].trim());
-
-            // استخراج گزینه ج
-            optionMatch = optionsText.match(/ج\)\s*(.+?)(?=د\)|$)/s);
-            if (optionMatch) options.push(optionMatch[1].trim());
-
-            // استخراج گزینه د
-            optionMatch = optionsText.match(/د\)\s*(.+?)$/s);
-            if (optionMatch) options.push(optionMatch[1].trim());
-
-            // اگر با الگوی الف) پیدا نشد، الگوی الف. رو امتحان کن
-            if (options.length === 0) {
-                optionMatch = optionsText.match(/الف\.\s*(.+?)(?=ب\.|$)/s);
-                if (optionMatch) options.push(optionMatch[1].trim());
-
-                optionMatch = optionsText.match(/ب\.\s*(.+?)(?=ج\.|$)/s);
-                if (optionMatch) options.push(optionMatch[1].trim());
-
-                optionMatch = optionsText.match(/ج\.\s*(.+?)(?=د\.|$)/s);
-                if (optionMatch) options.push(optionMatch[1].trim());
-
-                optionMatch = optionsText.match(/د\.\s*(.+?)$/s);
-                if (optionMatch) options.push(optionMatch[1].trim());
-            }
-
-            // اگر با الگوی الف. پیدا نشد، الگوی شماره‌ای رو امتحان کن
-            if (options.length === 0) {
-                optionMatch = optionsText.match(/1\)\s*(.+?)(?=2\)|$)/s);
-                if (optionMatch) options.push(optionMatch[1].trim());
-
-                optionMatch = optionsText.match(/2\)\s*(.+?)(?=3\)|$)/s);
-                if (optionMatch) options.push(optionMatch[1].trim());
-
-                optionMatch = optionsText.match(/3\)\s*(.+?)(?=4\)|$)/s);
-                if (optionMatch) options.push(optionMatch[1].trim());
-
-                optionMatch = optionsText.match(/4\)\s*(.+?)$/s);
-                if (optionMatch) options.push(optionMatch[1].trim());
-            }
-
-            // اگر هیچ گزینه‌ای پیدا نشد، ۴ گزینه پیش‌فرض برگردان
-            if (options.length === 0) {
-                return {
-                    question: fullText,
-                    options: ['گزینه الف', 'گزینه ب', 'گزینه ج', 'گزینه د']
-                };
-            }
-
-            // تکمیل گزینه‌های کمتر از ۴
-            while (options.length < 4) {
-                options.push(`گزینه ${['الف', 'ب', 'ج', 'د'][options.length]}`);
-            }
-
-            return {
-                question: question,
-                options: options
-            };
-        }
-
+        // تابع استخراج گزینه‌ها از متن سوال
         // باز کردن مدالیت و نمایش صفحه شروع
         function openQuizModal(adminStarted = false) {
             const modal = document.getElementById('quiz-modal');
@@ -3428,7 +3663,7 @@
             showQuestion(0);
         }
 
-        // نمایش یک سوال خاص
+        // نمایش یک سوال خاص (بر اساس نوع سوال: mcq / matching / case_progression)
         function showQuestion(index) {
             if (!nightlyQuestions || index >= nightlyQuestions.length) {
                 showQuizResult();
@@ -3446,35 +3681,151 @@
 
             const q = nightlyQuestions[index];
             quizSelectedAnswer = null;
+            quizMatchingSelection = null;
+            quizCaseStages = q.stages || [];
+            quizCaseStageIndex = 0;
 
-            // استخراج سوال و گزینه‌ها از متن کامل
-            const extracted = extractQuestionAndOptions(q.question);
-
-            // تنظیم متن سوال (فقط بخش سوال، بدون گزینه‌ها)
+            // تنظیم عنوان و شماره سوال
             document.getElementById('quiz-question-topic').textContent = q.topic || 'سوال بالینی';
-            document.getElementById('quiz-question-text').textContent = extracted.question;
             document.getElementById('quiz-question-number').textContent =
                 `سوال ${index + 1} از ${nightlyQuestions.length}`;
 
-            // ساخت گزینه‌ها با متن استخراج شده
+            // دکمه بعدی به‌صورت پیش‌فرض غیرفعال است؛ فقط سوالات تطبیقی صریحاً آن را فعال می‌کنند
+            const nextBtn = document.getElementById('quiz-next-btn');
+            if (nextBtn) nextBtn.disabled = true;
+
+            renderQuestionBody(q);
+
+            // شروع تایمر متناسب با نوع سوال
+            startQuestionTimer(q.type || 'mcq');
+        }
+
+        // رندر بدنه سوال بر اساس نوعش
+        function renderQuestionBody(q) {
+            const textEl = document.getElementById('quiz-question-text');
             const optionsDiv = document.getElementById('quiz-options');
             optionsDiv.innerHTML = '';
 
-            ['الف', 'ب', 'ج', 'د'].forEach((letter, idx) => {
-                const optionText = extracted.options[idx] || `گزینه ${letter}`;
+            if (q.type === 'matching') {
+                textEl.textContent = q.instruction || 'موارد زیر را به‌درستی به هم تطبیق دهید.';
+                renderMatchingOptions(q, optionsDiv);
+            } else if (q.type === 'case_progression') {
+                renderCaseProgressionStage(q, textEl, optionsDiv);
+            } else {
+                textEl.textContent = q.question;
+                renderMcqOptions(optionsDiv);
+            }
+        }
+
+        // گزینه‌های چهارگزینه‌ای استاندارد (هم برای mcq و هم برای مرحله نهایی سناریوی پیشرونده استفاده می‌شود)
+        function renderMcqOptions(optionsDiv) {
+            QUIZ_OPTION_LETTERS.forEach((letter) => {
                 const btn = document.createElement('button');
                 btn.className = 'quiz-option-btn';
                 btn.dataset.letter = letter;
                 btn.onclick = () => selectQuizAnswer(letter, btn);
-                btn.innerHTML = `
-                    <span class="quiz-option-letter">${letter}</span>
-                    <span class="quiz-option-text">${optionText}</span>
-                `;
+                btn.innerHTML = `<span class="quiz-option-letter">${letter}</span>`;
                 optionsDiv.appendChild(btn);
             });
+        }
 
-            // شروع تایمر 30 ثانیه‌ای
-            startQuestionTimer();
+        // نمایش مرحله‌به‌مرحله سناریوی بالینی پیشرونده؛ بعد از آخرین مرحله سوال نهایی چهارگزینه‌ای نشان داده می‌شود
+        function renderCaseProgressionStage(q, textEl, optionsDiv) {
+            const stages = quizCaseStages;
+            const isFinalStageDone = quizCaseStageIndex >= stages.length;
+
+            if (isFinalStageDone) {
+                textEl.textContent = q.question;
+                optionsDiv.innerHTML = '';
+                renderMcqOptions(optionsDiv);
+                return;
+            }
+
+            textEl.textContent = `📖 مرحله ${quizCaseStageIndex + 1} از ${stages.length}\n\n${stages[quizCaseStageIndex]}`;
+            optionsDiv.innerHTML = '';
+
+            const nextStageBtn = document.createElement('button');
+            nextStageBtn.className = 'quiz-option-btn';
+            nextStageBtn.style.justifyContent = 'center';
+            nextStageBtn.textContent = quizCaseStageIndex < stages.length - 1
+                ? '➡️ ادامه سناریو'
+                : '❓ مشاهده سوال نهایی';
+            nextStageBtn.onclick = () => {
+                quizCaseStageIndex++;
+                renderCaseProgressionStage(q, textEl, optionsDiv);
+            };
+            optionsDiv.appendChild(nextStageBtn);
+        }
+
+        // نمایش رابط سوال تطبیقی: کاربر ابتدا یک مورد از ستون چپ را انتخاب، سپس گزینه راست متناظر را می‌زند
+        function renderMatchingOptions(q, optionsDiv) {
+            const lefts = q.pairs_left || [];
+            const rightsShuffled = (q.pairs_right || []).map((text) => ({ text }));
+            for (let i = rightsShuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [rightsShuffled[i], rightsShuffled[j]] = [rightsShuffled[j], rightsShuffled[i]];
+            }
+
+            quizMatchingSelection = new Array(lefts.length).fill(null);
+            let selectedLeftIndex = null;
+
+            const wrap = document.createElement('div');
+            wrap.style.cssText = 'display:flex; flex-direction:column; gap:16px; width:100%;';
+
+            const leftCol = document.createElement('div');
+            leftCol.style.cssText = 'display:flex; flex-direction:column; gap:8px;';
+            const leftRows = [];
+            lefts.forEach((leftText, li) => {
+                const row = document.createElement('button');
+                row.className = 'quiz-option-btn';
+                row.style.cssText = 'justify-content:space-between; text-align:right; font-size:13px; padding:12px 14px;';
+                row.innerHTML = `<span>${li + 1}) ${leftText}</span><span style="font-weight:800; color:#0284c7; margin-right:8px;">؟</span>`;
+                row.onclick = () => {
+                    leftRows.forEach(r => r.style.borderColor = '#e2e8f0');
+                    selectedLeftIndex = li;
+                    row.style.borderColor = '#0284c7';
+                };
+                leftRows.push(row);
+                leftCol.appendChild(row);
+            });
+
+            const hint = document.createElement('div');
+            hint.style.cssText = 'font-size:11px; color:#64748b; font-weight:700; text-align:center;';
+            hint.textContent = '👆 اول یک مورد از بالا رو انتخاب کن، بعد گزینه تطبیق‌شونده‌ش رو از پایین بزن';
+
+            const rightCol = document.createElement('div');
+            rightCol.style.cssText = 'display:flex; flex-direction:column; gap:8px;';
+            rightsShuffled.forEach((item, ri) => {
+                const btn = document.createElement('button');
+                btn.className = 'quiz-option-btn';
+                btn.style.cssText = 'justify-content:flex-start; text-align:right; font-size:13px; padding:12px 14px;';
+                btn.innerHTML = `<span class="quiz-option-letter">${QUIZ_OPTION_LETTERS[ri] || (ri + 1)}</span><span>${item.text}</span>`;
+                btn.onclick = () => {
+                    if (selectedLeftIndex === null) {
+                        tg.showAlert('اول یک مورد از ستون بالا رو انتخاب کن، بعد گزینه تطبیق‌شونده رو بزن.');
+                        return;
+                    }
+                    quizMatchingSelection[selectedLeftIndex] = item.text;
+                    const targetSpan = leftRows[selectedLeftIndex].lastElementChild;
+                    targetSpan.textContent = `${QUIZ_OPTION_LETTERS[ri] || (ri + 1)} ✓`;
+                    leftRows[selectedLeftIndex].style.borderColor = '#10b981';
+                    leftRows[selectedLeftIndex].style.background = 'rgba(16,185,129,0.08)';
+                    selectedLeftIndex = null;
+
+                    if (quizMatchingSelection.every((v) => v !== null)) {
+                        quizSelectedAnswer = quizMatchingSelection;
+                        nightlyAnswers[currentQuizQuestionIndex] = quizMatchingSelection;
+                        const nextBtn = document.getElementById('quiz-next-btn');
+                        if (nextBtn) nextBtn.disabled = false;
+                    }
+                };
+                rightCol.appendChild(btn);
+            });
+
+            wrap.appendChild(leftCol);
+            wrap.appendChild(hint);
+            wrap.appendChild(rightCol);
+            optionsDiv.appendChild(wrap);
         }
 
         // به‌روزرسانی نقاط پیشرفت
@@ -3496,14 +3847,15 @@
             });
         }
 
-        // شروع تایمر سوال جاری
-        function startQuestionTimer() {
+        // شروع تایمر سوال جاری (مدت‌زمان بسته به نوع سوال متفاوت است)
+        function startQuestionTimer(questionType) {
             // پاک‌کردن تایمر قبلی
             if (quizTimerInterval) {
                 clearInterval(quizTimerInterval);
             }
 
-            quizTimeRemaining = QUIZ_TIME_PER_QUESTION;
+            quizCurrentDuration = QUIZ_TIME_BY_TYPE[questionType] || QUIZ_TIME_PER_QUESTION;
+            quizTimeRemaining = quizCurrentDuration;
             updateTimerDisplay();
 
             // به‌روزرسانی دایره تایمر
@@ -3543,7 +3895,8 @@
         // به‌روزرسانی دایره تایمر
         function updateTimerCircle() {
             const circle = document.getElementById('quiz-timer-circle');
-            const progress = (QUIZ_TIME_PER_QUESTION - quizTimeRemaining) / QUIZ_TIME_PER_QUESTION;
+            const total = quizCurrentDuration || QUIZ_TIME_PER_QUESTION;
+            const progress = (total - quizTimeRemaining) / total;
             const radius = 42;
             const circumference = 2 * Math.PI * radius;
             const offset = circumference * (1 - progress);
@@ -3663,10 +4016,17 @@
             document.getElementById('quiz-result-screen').style.display = 'block';
 
             // به‌روزرسانی نتایج در داشبورد
-            document.getElementById('nightly-result-score').innerText = `${data.score} از ${data.total}`;
+            document.getElementById('nightly-result-score').innerText = `${formatScore(data.score)} از ${data.total}`;
             const m = Math.floor(data.duration_seconds / 60), s = data.duration_seconds % 60;
             document.getElementById('nightly-result-desc').innerText =
                 `زمان صرف‌شده شما: ${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')} دقیقه`;
+        }
+
+        // نمایش نمره (اگه اعشاری بود با نیم‌نمره نشون بده)
+        function formatScore(score) {
+            if (score % 1 === 0.5) return score.toFixed(1);
+            if (score % 1 === 0) return score.toString();
+            return score.toFixed(1);
         }
 
         // تولید HTML نتایج
@@ -3693,22 +4053,39 @@
                 <div class="quiz-result-icon">${score === total ? '🏆' : '⭐'}</div>
                 <h1 class="quiz-result-title">${title}</h1>
                 <div class="quiz-result-score">
-                    ${score} از ${total}
+                    ${formatScore(score)} از ${total}
                 </div>
                 <div class="quiz-result-time">
                     زمان: ${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')} دقیقه
                 </div>
                 <div class="quiz-result-details">
-                    ${data.results ? data.results.map((r, idx) => `
-                        <div class="quiz-result-item">
-                            <span class="quiz-result-item-icon">${r.is_correct ? '✅' : '❌'}</span>
-                            <span class="quiz-result-item-text">
-                                <strong>سوال ${idx + 1}</strong> (${r.topic})
-                                ${r.is_correct ? '✅ صحیح' : `❌ نادرست | صحیح: ${r.correct_answer}`}
-                                <br><small>💡 ${r.explanation}</small>
-                            </span>
-                        </div>
-                    `).join('') : ''}
+                    ${data.results ? data.results.map((r, idx) => {
+                        if (r.type === 'matching') {
+                            const pairsHtml = (r.pairs || []).map((p, pi) => {
+                                const chosen = (r.selected_answer && r.selected_answer[pi]) || '—';
+                                const ok = chosen === p.right;
+                                return `${ok ? '✅' : '❌'} ${p.left} ⬅ ${chosen}${ok ? '' : ` (صحیح: ${p.right})`}`;
+                            }).join('<br>');
+                            return `
+                                <div class="quiz-result-item">
+                                    <span class="quiz-result-item-icon">${r.is_correct ? '✅' : '❌'}</span>
+                                    <span class="quiz-result-item-text">
+                                        <strong>سوال ${idx + 1}</strong> (${r.topic} — تطبیق)
+                                        <br>${pairsHtml}
+                                        <br><small>💡 ${r.explanation}</small>
+                                    </span>
+                                </div>`;
+                        }
+                        return `
+                            <div class="quiz-result-item">
+                                <span class="quiz-result-item-icon">${r.is_correct ? '✅' : '❌'}</span>
+                                <span class="quiz-result-item-text">
+                                    <strong>سوال ${idx + 1}</strong> (${r.topic})
+                                    ${r.is_correct ? '✅ صحیح' : `❌ نادرست | صحیح: ${r.correct_answer}`}
+                                    <br><small>💡 ${r.explanation}</small>
+                                </span>
+                            </div>`;
+                    }).join('') : ''}
                 </div>
                 <button class="quiz-result-close-btn" onclick="closeQuizModal()">
                     🏠 بازگشت به منوی اصلی
