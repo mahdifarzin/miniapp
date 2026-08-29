@@ -1376,79 +1376,6 @@
 </head>
 <body>
 
-    <!-- لودینگ اسکریپت اولیه -->
-    <div id="loading-overlay" style="
-        position: fixed;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background: var(--secondary-bg);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 100000;
-    ">
-        <svg xmlns="http://www.w3.org/2000/svg" class="con" viewBox="0 0 64 64" width="96" height="96" fill="none" role="img" aria-label="Loading">
-            <style>
-                svg { color: var(--text-color); --rate: 1; }
-                .con { --dur: 2.4s; --step: .2s; }
-                .con-bound { stroke: currentColor; stroke-width: 1; opacity: .1; }
-                .con-link {
-                    stroke: currentColor;
-                    stroke-width: .7;
-                    opacity: .16;
-                    animation: con-carry calc(var(--dur) * var(--rate, 1)) ease-out infinite;
-                    animation-delay: calc(var(--h) * var(--step) * var(--rate, 1));
-                }
-                .con-node {
-                    fill: currentColor;
-                    opacity: .35;
-                    transform-box: fill-box;
-                    transform-origin: center;
-                    animation: con-fire calc(var(--dur) * var(--rate, 1)) ease-out infinite;
-                    animation-delay: calc(var(--h) * var(--step) * var(--rate, 1));
-                }
-                .con-seed { opacity: .7; }
-                @keyframes con-carry { 0% { opacity: .9; } 30% { opacity: .22; } 100% { opacity: .16; } }
-                @keyframes con-fire  { 0% { opacity: 1; transform: scale(1.45); } 35% { opacity: .45; transform: scale(1); } 100% { opacity: .35; transform: scale(1); } }
-                @media (prefers-reduced-motion: reduce) {
-                    .con-link { animation: none; opacity: .28; }
-                    .con-node { animation: none; opacity: calc(.85 - var(--h) * .12); }
-                }
-            </style>
-            <circle class="con-bound" cx="32" cy="32" r="30"/>
-            <line class="con-link" x1="31.26" y1="56.57" x2="37.31" y2="44.56" style="--h:2"/>
-            <line class="con-link" x1="31.26" y1="56.57" x2="17.60" y2="47.27" style="--h:2"/>
-            <line class="con-link" x1="31.26" y1="56.57" x2="25.09" y2="38.70" style="--h:2"/>
-            <line class="con-link" x1="41.24" y1="28.64" x2="53.04" y2="19.01" style="--h:2"/>
-            <line class="con-link" x1="41.24" y1="28.64" x2="37.31" y2="44.56" style="--h:2"/>
-            <line class="con-link" x1="41.24" y1="28.64" x2="32.00" y2="22.43" style="--h:1"/>
-            <line class="con-link" x1="41.24" y1="28.64" x2="44.02" y2="12.95" style="--h:1"/>
-            <line class="con-link" x1="41.24" y1="28.64" x2="25.09" y2="38.70" style="--h:1"/>
-            <line class="con-link" x1="53.04" y1="19.01" x2="44.02" y2="12.95" style="--h:2"/>
-            <line class="con-link" x1="12.10" y1="38.52" x2="19.90" y2="22.96" style="--h:2"/>
-            <line class="con-link" x1="12.10" y1="38.52" x2="17.60" y2="47.27" style="--h:2"/>
-            <line class="con-link" x1="12.10" y1="38.52" x2="25.09" y2="38.70" style="--h:2"/>
-            <line class="con-link" x1="37.31" y1="44.56" x2="17.60" y2="47.27" style="--h:2"/>
-            <line class="con-link" x1="37.31" y1="44.56" x2="53.05" y2="46.45" style="--h:3"/>
-            <line class="con-link" x1="37.31" y1="44.56" x2="25.09" y2="38.70" style="--h:2"/>
-            <line class="con-link" x1="19.90" y1="22.96" x2="32.00" y2="22.43" style="--h:1"/>
-            <line class="con-link" x1="19.90" y1="22.96" x2="25.09" y2="38.70" style="--h:1"/>
-            <line class="con-link" x1="17.60" y1="47.27" x2="25.09" y2="38.70" style="--h:2"/>
-            <line class="con-link" x1="32.00" y1="22.43" x2="44.02" y2="12.95" style="--h:1"/>
-            <line class="con-link" x1="32.00" y1="22.43" x2="25.09" y2="38.70" style="--h:1"/>
-            <circle class="con-node" cx="31.26" cy="56.57" r="1.7" style="--h:2"/>
-            <circle class="con-node" cx="41.24" cy="28.64" r="1.7" style="--h:1"/>
-            <circle class="con-node" cx="53.04" cy="19.01" r="1.7" style="--h:2"/>
-            <circle class="con-node" cx="12.10" cy="38.52" r="1.7" style="--h:2"/>
-            <circle class="con-node" cx="37.31" cy="44.56" r="1.7" style="--h:2"/>
-            <circle class="con-node" cx="19.90" cy="22.96" r="1.7" style="--h:1"/>
-            <circle class="con-node" cx="17.60" cy="47.27" r="1.7" style="--h:2"/>
-            <circle class="con-node" cx="53.05" cy="46.45" r="1.7" style="--h:3"/>
-            <circle class="con-node con-seed" cx="32.00" cy="22.43" r="2.3" style="--h:0"/>
-            <circle class="con-node" cx="44.02" cy="12.95" r="1.7" style="--h:1"/>
-            <circle class="con-node" cx="25.09" cy="38.70" r="1.7" style="--h:1"/>
-        </svg>
-    </div>
-
     <!-- هدر بالای صفحه -->
     <div class="app-header">
         <div class="user-info">
@@ -1754,7 +1681,83 @@
             </div>
         </div>
 
-        <!-- زبانه ۶: پنل ادمین (فقط برای ادمین قابل مشاهده) -->
+        <!-- زبانه ۶: تاریخچه‌گیری هوشمند -->
+        <div id="tab-history" class="tab-content">
+            <div class="card card-ai">
+                <div class="card-title">
+                    <span class="card-title-icon">
+                        <span class="icon-badge">📋</span>
+                        تاریخچه‌گیری هوشمند
+                    </span>
+                </div>
+                <div class="card-desc" style="margin-bottom:12px;">یادگیری متقابل تاریخچه‌گیری بالینی دقیق تحت راهنمایی هوش مصنوعی</div>
+
+                <!-- صفحه شروع -->
+                <div id="history-start-section" style="display:flex; flex-direction:column; gap:12px;">
+                    <div style="background: rgba(16, 185, 129, 0.08); padding:12px; border-radius:10px; border-left:3px solid #10b981;">
+                        <div style="font-weight:700; font-size:13px; color:var(--text-color); margin-bottom:6px;">📝 اطلاعات اولیه بیمار</div>
+                        <div style="font-size:11px; color:var(--hint-color);">لطفاً اطلاعات بیمار را وارد کنید و هوش مصنوعی سوالات مناسب به شما پیشنهاد خواهد کرد.</div>
+                    </div>
+
+                    <div style="display:flex; gap:8px;">
+                        <input type="text" id="history-patient-age" placeholder="سن بیمار" style="flex:1; padding:10px; border-radius:8px; border:var(--card-border); background:var(--item-bg); color:var(--text-color); font-size:12px;">
+                        <select id="history-patient-sex" style="flex:1; padding:10px; border-radius:8px; border:var(--card-border); background:var(--item-bg); color:var(--text-color); font-size:12px;">
+                            <option value="">جنسیت</option>
+                            <option value="مرد">مرد</option>
+                            <option value="زن">زن</option>
+                        </select>
+                    </div>
+
+                    <textarea id="history-chief-complaint" placeholder="شکایت اصلی (Chief Complaint)..." rows="3" style="width:100%; border-radius:8px; border:var(--card-border); background:var(--item-bg); color:var(--text-color); padding:10px; font-size:12px; resize:vertical;"></textarea>
+
+                    <textarea id="history-initial-info" placeholder="سابقه پزشکی، دارویی، حساسیت و سایر اطلاعات مرتبط..." rows="3" style="width:100%; border-radius:8px; border:var(--card-border); background:var(--item-bg); color:var(--text-color); padding:10px; font-size:12px; resize:vertical;"></textarea>
+
+                    <button class="exam-btn" onclick="startHistoryTaking()" style="background:linear-gradient(135deg, #10b981, #059669);">🚀 شروع تاریخچه‌گیری</button>
+                </div>
+
+                <!-- صفحه تاریخچه‌گیری فعال -->
+                <div id="history-active-section" style="display:none;">
+                    <div style="background: rgba(16, 185, 129, 0.08); padding:12px; border-radius:10px; border-left:3px solid #10b981; margin-bottom:12px;">
+                        <div style="font-weight:700; font-size:13px; color:var(--text-color);">👤 شرح خلاصه بیمار:</div>
+                        <div id="history-patient-summary" style="font-size:12px; color:var(--hint-color); margin-top:6px; line-height:1.6;"></div>
+                    </div>
+
+                    <div id="history-question-card" style="background:var(--item-bg); border:var(--card-border); border-radius:10px; padding:12px; margin-bottom:12px;">
+                        <div style="font-weight:700; font-size:12px; color:var(--text-color); margin-bottom:8px;">📍 سوال بعدی:</div>
+                        <div id="history-current-question" style="font-size:13px; color:var(--text-color); line-height:1.8; margin-bottom:12px;">در حال دریافت سوال...</div>
+                        
+                        <textarea id="history-answer-input" placeholder="پاسخ خود را اینجا بنویسید..." rows="3" style="width:100%; border-radius:8px; border:var(--card-border); background:var(--secondary-bg); color:var(--text-color); padding:10px; font-size:12px; resize:vertical; margin-bottom:10px;"></textarea>
+
+                        <div style="display:flex; gap:8px;">
+                            <button class="exam-btn" onclick="submitHistoryAnswer()" style="flex:1; background:linear-gradient(135deg, #10b981, #059669);">✅ ارسال پاسخ</button>
+                            <button class="exam-btn" onclick="finishHistoryTaking()" style="flex:1; background:linear-gradient(135deg, #8b5cf6, #7c3aed);">🎯 پایان تاریخچه‌گیری</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- صفحه نتیجه -->
+                <div id="history-result-section" style="display:none;">
+                    <div style="background:linear-gradient(135deg, #10b981, #059669); color:white; padding:16px; border-radius:10px; margin-bottom:12px; text-align:center;">
+                        <div style="font-size:32px; margin-bottom:8px;">✅</div>
+                        <div style="font-weight:700; font-size:16px;">تاریخچه‌گیری تکمیل شد!</div>
+                    </div>
+
+                    <div style="background:var(--item-bg); border:var(--card-border); border-radius:10px; padding:12px; margin-bottom:12px;">
+                        <div style="font-weight:700; font-size:13px; color:var(--text-color); margin-bottom:8px;">📝 خلاصه تاریخچه:</div>
+                        <div id="history-final-summary" style="font-size:12px; color:var(--hint-color); line-height:1.8; white-space:pre-wrap;"></div>
+                    </div>
+
+                    <div style="background:var(--item-bg); border:var(--card-border); border-radius:10px; padding:12px;">
+                        <div style="font-weight:700; font-size:13px; color:var(--text-color); margin-bottom:8px;">🩺 تشخیص‌های احتمالی:</div>
+                        <div id="history-differential-diagnosis" style="font-size:12px; color:var(--hint-color); line-height:1.8; white-space:pre-wrap;"></div>
+                    </div>
+
+                    <button class="exam-btn" onclick="resetHistoryTaking()" style="width:100%; margin-top:12px; background:linear-gradient(135deg, #0284c7, #0ea5e9);">🔄 شروع دوباره</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- زبانه ۷: پنل ادمین (فقط برای ادمین قابل مشاهده) -->
         <div id="tab-admin" class="tab-content">
             <div class="card" style="border-right: 4px solid #ef4444;">
                 <div class="card-title">
@@ -1989,6 +1992,10 @@
             <span class="nav-icon">🤖</span>
             <span>AI</span>
         </div>
+        <div class="nav-item" onclick="switchTab('history', this)">
+            <span class="nav-icon">📋</span>
+            <span>تاریخچه</span>
+        </div>
         <div class="nav-item" id="admin-nav-item" onclick="switchTab('admin', this)" style="display:none;">
             <span class="nav-icon">👑</span>
             <span>ادمین</span>
@@ -1999,9 +2006,6 @@
         const tg = window.Telegram.WebApp;
         tg.ready();
         tg.expand();
-
-        // مخفی کردن لودینگ اسکریپت اولیه
-        document.getElementById('loading-overlay').style.display = 'none';
 
         // 🌓 سیستم مدیریت تم (دارک مود و لایت مود)
         let currentTheme = localStorage.getItem('theme') || 'auto';
@@ -4174,6 +4178,188 @@
             // این تابع وقتی کاربر روی دکمه شروع کلیک می‌کنه فراخوانی می‌شه
             openQuizModal();
         }
+
+        // ========== بخش تاریخچه‌گیری هوشمند ==========
+        let historySessionId = null;
+        let historyPatientData = {};
+        let historyConversationLog = [];
+        let historyQuestionCount = 0;
+
+        async function startHistoryTaking() {
+            const age = document.getElementById('history-patient-age').value.trim();
+            const sex = document.getElementById('history-patient-sex').value.trim();
+            const cc = document.getElementById('history-chief-complaint').value.trim();
+            const info = document.getElementById('history-initial-info').value.trim();
+
+            if (!age || !sex || !cc) {
+                alert('لطفاً سن، جنسیت و شکایت اصلی بیمار را وارد کنید.');
+                return;
+            }
+
+            const payload = {
+                age: age,
+                sex: sex,
+                chief_complaint: cc,
+                initial_info: info
+            };
+
+            try {
+                const response = await fetch(`${BASE_URL}/api/history/start`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Telegram-Init-Data': tg.initData
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    alert(error.message || 'خطا در شروع تاریخچه‌گیری');
+                    return;
+                }
+
+                const data = await response.json();
+                historySessionId = data.session_id;
+                historyPatientData = {age, sex, cc, info};
+                historyConversationLog = [];
+                historyQuestionCount = 0;
+
+                // نمایش صفحه فعال
+                document.getElementById('history-start-section').style.display = 'none';
+                document.getElementById('history-active-section').style.display = 'block';
+                document.getElementById('history-result-section').style.display = 'none';
+
+                // نمایش خلاصه بیمار
+                document.getElementById('history-patient-summary').innerText = 
+                    `سن: ${age} | جنسیت: ${sex}\nشکایت اصلی: ${cc}\n${info ? 'اطلاعات اضافی: ' + info : ''}`;
+
+                // دریافت اولین سوال
+                await getNextHistoryQuestion();
+            } catch (error) {
+                alert('خطا: ' + error.message);
+            }
+        }
+
+        async function getNextHistoryQuestion() {
+            if (!historySessionId) return;
+
+            try {
+                const response = await fetch(`${BASE_URL}/api/history/question`, {
+                    method: 'GET',
+                    headers: {
+                        'X-Telegram-Init-Data': tg.initData
+                    }
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    if (error.error === 'history_complete') {
+                        // تاریخچه تکمیل شده
+                        await finishHistoryTaking();
+                        return;
+                    }
+                    alert(error.message || 'خطا در دریافت سوال');
+                    return;
+                }
+
+                const data = await response.json();
+                historyQuestionCount++;
+                document.getElementById('history-current-question').innerText = data.question;
+                document.getElementById('history-answer-input').value = '';
+                document.getElementById('history-answer-input').focus();
+            } catch (error) {
+                alert('خطا: ' + error.message);
+            }
+        }
+
+        async function submitHistoryAnswer() {
+            if (!historySessionId) return;
+
+            const answer = document.getElementById('history-answer-input').value.trim();
+            if (!answer) {
+                alert('لطفاً پاسخ خود را وارد کنید.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${BASE_URL}/api/history/answer`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Telegram-Init-Data': tg.initData
+                    },
+                    body: JSON.stringify({
+                        answer: answer
+                    })
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    alert(error.message || 'خطا در ارسال پاسخ');
+                    return;
+                }
+
+                historyConversationLog.push({
+                    type: 'answer',
+                    content: answer
+                });
+
+                // دریافت سوال بعدی
+                await getNextHistoryQuestion();
+            } catch (error) {
+                alert('خطا: ' + error.message);
+            }
+        }
+
+        async function finishHistoryTaking() {
+            if (!historySessionId) return;
+
+            try {
+                const response = await fetch(`${BASE_URL}/api/history/finish`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Telegram-Init-Data': tg.initData
+                    },
+                    body: JSON.stringify({})
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    alert(error.message || 'خطا در پایان تاریخچه‌گیری');
+                    return;
+                }
+
+                const data = await response.json();
+
+                // نمایش نتیجه
+                document.getElementById('history-active-section').style.display = 'none';
+                document.getElementById('history-result-section').style.display = 'block';
+                document.getElementById('history-final-summary').innerText = data.summary || 'خلاصه‌ای موجود نیست';
+                document.getElementById('history-differential-diagnosis').innerText = data.differential_diagnosis || 'تشخیص‌های احتمالی موجود نیست';
+            } catch (error) {
+                alert('خطا: ' + error.message);
+            }
+        }
+
+        function resetHistoryTaking() {
+            historySessionId = null;
+            historyPatientData = {};
+            historyConversationLog = [];
+            historyQuestionCount = 0;
+
+            document.getElementById('history-start-section').style.display = 'flex';
+            document.getElementById('history-active-section').style.display = 'none';
+            document.getElementById('history-result-section').style.display = 'none';
+
+            document.getElementById('history-patient-age').value = '';
+            document.getElementById('history-patient-sex').value = '';
+            document.getElementById('history-chief-complaint').value = '';
+            document.getElementById('history-initial-info').value = '';
+            document.getElementById('history-answer-input').value = '';
+        }
+
 
     </script>
 </body>
