@@ -1681,78 +1681,111 @@
             </div>
         </div>
 
-        <!-- زبانه ۶: تاریخچه‌گیری هوشمند -->
+        <!-- زبانه ۶: شرح حال گیری هوشمند -->
         <div id="tab-history" class="tab-content">
-            <div class="card card-ai">
+            <div class="card card-ai" style="background:linear-gradient(135deg, rgba(16,185,129,0.14), rgba(5,150,105,0.04)); border-right:4px solid #10b981;">
                 <div class="card-title">
                     <span class="card-title-icon">
-                        <span class="icon-badge">📋</span>
-                        تاریخچه‌گیری هوشمند
+                        <span class="icon-badge" style="background:rgba(16,185,129,0.16); color:#10b981;">🩺</span>
+                        شرح حال گیری هوشمند
                     </span>
                 </div>
-                <div class="card-desc" style="margin-bottom:12px;">یادگیری متقابل تاریخچه‌گیری بالینی دقیق تحت راهنمایی هوش مصنوعی</div>
+                <div class="card-desc" style="margin-bottom:10px;">شبیه‌ساز مصاحبه بالینی با هوش مصنوعی؛ هم برای آموزش گام‌به‌گام و هم برای تنظیم سریع شرح‌حال بیمار در محیط وات و کشیک</div>
+                <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                    <span style="background:rgba(16,185,129,0.12); color:#10b981; font-size:10px; font-weight:700; padding:4px 10px; border-radius:20px;">🎓 آموزش هدفمند</span>
+                    <span style="background:rgba(16,185,129,0.12); color:#10b981; font-size:10px; font-weight:700; padding:4px 10px; border-radius:20px;">🏥 مناسب بالین</span>
+                    <span style="background:rgba(16,185,129,0.12); color:#10b981; font-size:10px; font-weight:700; padding:4px 10px; border-radius:20px;">📋 خروجی قابل کپی</span>
+                </div>
 
                 <!-- صفحه شروع -->
-                <div id="history-start-section" style="display:flex; flex-direction:column; gap:12px;">
-                    <div style="background: rgba(16, 185, 129, 0.08); padding:12px; border-radius:10px; border-left:3px solid #10b981;">
+                <div id="history-start-section" style="display:flex; flex-direction:column; gap:12px; margin-top:14px;">
+                    <div style="background:var(--item-bg); padding:12px; border-radius:10px; border-left:3px solid #10b981;">
                         <div style="font-weight:700; font-size:13px; color:var(--text-color); margin-bottom:6px;">📝 اطلاعات اولیه بیمار</div>
-                        <div style="font-size:11px; color:var(--hint-color);">لطفاً اطلاعات بیمار را وارد کنید و هوش مصنوعی سوالات مناسب به شما پیشنهاد خواهد کرد.</div>
+                        <div style="font-size:11px; color:var(--hint-color); line-height:1.7;">هرچه دقیق‌تر بنویسید، سوالات هوش مصنوعی هدفمندتر می‌شود. در پایان، شرح‌حال کامل بیمارستانی آماده درج در پرونده دریافت می‌کنید.</div>
                     </div>
 
                     <div style="display:flex; gap:8px;">
-                        <input type="text" id="history-patient-age" placeholder="سن بیمار" style="flex:1; padding:10px; border-radius:8px; border:var(--card-border); background:var(--item-bg); color:var(--text-color); font-size:12px;">
-                        <select id="history-patient-sex" style="flex:1; padding:10px; border-radius:8px; border:var(--card-border); background:var(--item-bg); color:var(--text-color); font-size:12px;">
+                        <input type="text" id="history-patient-age" placeholder="سن بیمار" style="flex:1; padding:11px; border-radius:10px; border:var(--card-border); background:var(--item-bg); color:var(--text-color); font-size:12px;">
+                        <select id="history-patient-sex" style="flex:1; padding:11px; border-radius:10px; border:var(--card-border); background:var(--item-bg); color:var(--text-color); font-size:12px;">
                             <option value="">جنسیت</option>
                             <option value="مرد">مرد</option>
                             <option value="زن">زن</option>
                         </select>
                     </div>
 
-                    <textarea id="history-chief-complaint" placeholder="شکایت اصلی (Chief Complaint)..." rows="3" style="width:100%; border-radius:8px; border:var(--card-border); background:var(--item-bg); color:var(--text-color); padding:10px; font-size:12px; resize:vertical;"></textarea>
+                    <textarea id="history-chief-complaint" placeholder="شکایت اصلی بیمار (Chief Complaint) — مثال: سرفه خشک از سه روز پیش..." rows="3" style="width:100%; border-radius:10px; border:var(--card-border); background:var(--item-bg); color:var(--text-color); padding:11px; font-size:12px; resize:vertical;"></textarea>
 
-                    <textarea id="history-initial-info" placeholder="سابقه پزشکی، دارویی، حساسیت و سایر اطلاعات مرتبط..." rows="3" style="width:100%; border-radius:8px; border:var(--card-border); background:var(--item-bg); color:var(--text-color); padding:10px; font-size:12px; resize:vertical;"></textarea>
+                    <textarea id="history-initial-info" placeholder="اطلاعات اولیه: سابقه پزشکی، داروها، حساسیت‌ها و... (اختیاری)" rows="3" style="width:100%; border-radius:10px; border:var(--card-border); background:var(--item-bg); color:var(--text-color); padding:11px; font-size:12px; resize:vertical;"></textarea>
 
-                    <button class="exam-btn" onclick="startHistoryTaking()" style="background:linear-gradient(135deg, #10b981, #059669);">🚀 شروع تاریخچه‌گیری</button>
+                    <button class="exam-btn" id="history-start-btn" onclick="startHistoryTaking()" style="background:linear-gradient(135deg, #10b981, #059669);">🚀 شروع مصاحبه بالینی</button>
                 </div>
 
-                <!-- صفحه تاریخچه‌گیری فعال -->
-                <div id="history-active-section" style="display:none;">
-                    <div style="background: rgba(16, 185, 129, 0.08); padding:12px; border-radius:10px; border-left:3px solid #10b981; margin-bottom:12px;">
-                        <div style="font-weight:700; font-size:13px; color:var(--text-color);">👤 شرح خلاصه بیمار:</div>
-                        <div id="history-patient-summary" style="font-size:12px; color:var(--hint-color); margin-top:6px; line-height:1.6;"></div>
+                <!-- صفحه شرح حال گیری فعال -->
+                <div id="history-active-section" style="display:none; margin-top:14px;">
+                    <!-- نوار پیشرفت و فاز جاری -->
+                    <div style="background:var(--item-bg); border:var(--card-border); border-radius:12px; padding:12px; margin-bottom:12px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; gap:8px;">
+                            <span id="history-phase-badge" style="background:rgba(16,185,129,0.14); color:#10b981; font-size:10px; font-weight:800; padding:4px 10px; border-radius:20px;">🏷 شروع مصاحبه</span>
+                            <span id="history-q-counter" style="font-size:10px; font-weight:800; color:var(--hint-color); white-space:nowrap;">سوال ۰ از ۲۰</span>
+                        </div>
+                        <div style="height:6px; background:var(--secondary-bg); border-radius:6px; overflow:hidden;">
+                            <div id="history-progress-bar" style="height:100%; width:0%; background:linear-gradient(90deg, #10b981, #059669); border-radius:6px; transition:width 0.4s ease;"></div>
+                        </div>
                     </div>
 
-                    <div id="history-question-card" style="background:var(--item-bg); border:var(--card-border); border-radius:10px; padding:12px; margin-bottom:12px;">
-                        <div style="font-weight:700; font-size:12px; color:var(--text-color); margin-bottom:8px;">📍 سوال بعدی:</div>
-                        <div id="history-current-question" style="font-size:13px; color:var(--text-color); line-height:1.8; margin-bottom:12px;">در حال دریافت سوال...</div>
-                        
-                        <textarea id="history-answer-input" placeholder="پاسخ خود را اینجا بنویسید..." rows="3" style="width:100%; border-radius:8px; border:var(--card-border); background:var(--secondary-bg); color:var(--text-color); padding:10px; font-size:12px; resize:vertical; margin-bottom:10px;"></textarea>
+                    <!-- خلاصه بیمار -->
+                    <div style="background:var(--item-bg); border:var(--card-border); border-radius:10px; padding:12px; margin-bottom:12px;">
+                        <div style="font-weight:700; font-size:12px; color:var(--text-color); margin-bottom:4px;">👤 بیمار شما:</div>
+                        <div id="history-patient-summary" style="font-size:11px; color:var(--hint-color); line-height:1.7;"></div>
+                    </div>
+
+                    <!-- کارت سوال و پاسخ -->
+                    <div style="background:var(--item-bg); border:var(--card-border); border-radius:12px; padding:12px;">
+                        <div style="font-weight:700; font-size:12px; color:var(--text-color); margin-bottom:8px;">💬 سوال بعدی پزشک:</div>
+                        <div id="history-current-question" style="font-size:13px; color:var(--text-color); line-height:1.9; background:var(--secondary-bg); border-radius:10px; padding:12px; margin-bottom:12px; min-height:44px;">در حال دریافت سوال...</div>
+
+                        <textarea id="history-answer-input" placeholder="پاسخ بیمار را اینجا بنویسید..." rows="3" style="width:100%; border-radius:10px; border:var(--card-border); background:var(--secondary-bg); color:var(--text-color); padding:11px; font-size:12px; resize:vertical; margin-bottom:10px;"></textarea>
+
+                        <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px;">
+                            <span onclick="fillHistoryAnswer('بله')" style="background:var(--secondary-bg); border:1px solid var(--card-border); color:var(--text-color); font-size:11px; font-weight:700; padding:6px 14px; border-radius:20px; cursor:pointer;">بله</span>
+                            <span onclick="fillHistoryAnswer('خیر')" style="background:var(--secondary-bg); border:1px solid var(--card-border); color:var(--text-color); font-size:11px; font-weight:700; padding:6px 14px; border-radius:20px; cursor:pointer;">خیر</span>
+                            <span onclick="fillHistoryAnswer('منفی است')" style="background:var(--secondary-bg); border:1px solid var(--card-border); color:var(--text-color); font-size:11px; font-weight:700; padding:6px 14px; border-radius:20px; cursor:pointer;">منفی است</span>
+                            <span onclick="fillHistoryAnswer('نمی‌دانم')" style="background:var(--secondary-bg); border:1px solid var(--card-border); color:var(--text-color); font-size:11px; font-weight:700; padding:6px 14px; border-radius:20px; cursor:pointer;">نمی‌دانم</span>
+                        </div>
 
                         <div style="display:flex; gap:8px;">
-                            <button class="exam-btn" onclick="submitHistoryAnswer()" style="flex:1; background:linear-gradient(135deg, #10b981, #059669);">✅ ارسال پاسخ</button>
-                            <button class="exam-btn" onclick="finishHistoryTaking()" style="flex:1; background:linear-gradient(135deg, #8b5cf6, #7c3aed);">🎯 پایان تاریخچه‌گیری</button>
+                            <button class="exam-btn" id="history-submit-btn" onclick="submitHistoryAnswer()" style="flex:1.4; background:linear-gradient(135deg, #10b981, #059669);">✅ ارسال پاسخ</button>
+                            <button class="exam-btn" id="history-finish-btn" onclick="finishHistoryTaking()" style="flex:1; background:linear-gradient(135deg, #8b5cf6, #7c3aed);">🏁 پایان و دریافت گزارش</button>
                         </div>
                     </div>
                 </div>
 
                 <!-- صفحه نتیجه -->
-                <div id="history-result-section" style="display:none;">
-                    <div style="background:linear-gradient(135deg, #10b981, #059669); color:white; padding:16px; border-radius:10px; margin-bottom:12px; text-align:center;">
+                <div id="history-result-section" style="display:none; margin-top:14px;">
+                    <div style="background:linear-gradient(135deg, #10b981, #059669); color:white; padding:16px; border-radius:12px; margin-bottom:12px; text-align:center;">
                         <div style="font-size:32px; margin-bottom:8px;">✅</div>
-                        <div style="font-weight:700; font-size:16px;">تاریخچه‌گیری تکمیل شد!</div>
+                        <div style="font-weight:800; font-size:15px;">شرح حال گیری تکمیل شد!</div>
+                        <div style="font-size:11px; opacity:0.9; margin-top:4px;">گزارش زیر آماده درج در پرونده بیمار است</div>
                     </div>
 
-                    <div style="background:var(--item-bg); border:var(--card-border); border-radius:10px; padding:12px; margin-bottom:12px;">
-                        <div style="font-weight:700; font-size:13px; color:var(--text-color); margin-bottom:8px;">📝 خلاصه تاریخچه:</div>
-                        <div id="history-final-summary" style="font-size:12px; color:var(--hint-color); line-height:1.8; white-space:pre-wrap;"></div>
+                    <button class="exam-btn" id="history-copy-btn" onclick="copyHistoryNote()" style="width:100%; margin-bottom:12px; background:linear-gradient(135deg, #0284c7, #0ea5e9);">📋 کپی کل گزارش برای پرونده</button>
+
+                    <div style="background:var(--item-bg); border:var(--card-border); border-right:3px solid #10b981; border-radius:10px; padding:12px; margin-bottom:12px;">
+                        <div style="font-weight:800; font-size:13px; color:var(--text-color); margin-bottom:8px;">🏥 شرح حال کامل بیمارستانی</div>
+                        <div id="history-final-summary" style="font-size:12px; color:var(--text-color); line-height:2; white-space:pre-wrap;"></div>
                     </div>
 
-                    <div style="background:var(--item-bg); border:var(--card-border); border-radius:10px; padding:12px;">
-                        <div style="font-weight:700; font-size:13px; color:var(--text-color); margin-bottom:8px;">🩺 تشخیص‌های احتمالی:</div>
-                        <div id="history-differential-diagnosis" style="font-size:12px; color:var(--hint-color); line-height:1.8; white-space:pre-wrap;"></div>
+                    <div style="background:var(--item-bg); border:var(--card-border); border-right:3px solid #f59e0b; border-radius:10px; padding:12px; margin-bottom:12px;">
+                        <div style="font-weight:800; font-size:13px; color:var(--text-color); margin-bottom:8px;">🩺 تشخیص‌های افتراقی</div>
+                        <div id="history-differential-diagnosis" style="font-size:12px; color:var(--text-color); line-height:2; white-space:pre-wrap;"></div>
                     </div>
 
-                    <button class="exam-btn" onclick="resetHistoryTaking()" style="width:100%; margin-top:12px; background:linear-gradient(135deg, #0284c7, #0ea5e9);">🔄 شروع دوباره</button>
+                    <div id="history-workup-card" style="background:var(--item-bg); border:var(--card-border); border-right:3px solid #8b5cf6; border-radius:10px; padding:12px; margin-bottom:12px;">
+                        <div style="font-weight:800; font-size:13px; color:var(--text-color); margin-bottom:8px;">🔬 پاراکلینیک پیشنهادی</div>
+                        <div id="history-workup" style="font-size:12px; color:var(--text-color); line-height:2; white-space:pre-wrap;"></div>
+                    </div>
+
+                    <button class="exam-btn" onclick="resetHistoryTaking()" style="width:100%; background:linear-gradient(135deg, #0284c7, #0ea5e9);">🔄 شرح حال گیری جدید</button>
                 </div>
             </div>
         </div>
@@ -1994,7 +2027,7 @@
         </div>
         <div class="nav-item" onclick="switchTab('history', this)">
             <span class="nav-icon">📋</span>
-            <span>تاریخچه</span>
+            <span>شرح حال گیری</span>
         </div>
         <div class="nav-item" id="admin-nav-item" onclick="switchTab('admin', this)" style="display:none;">
             <span class="nav-icon">👑</span>
@@ -4179,11 +4212,48 @@
             openQuizModal();
         }
 
-        // ========== بخش تاریخچه‌گیری هوشمند ==========
+        // ========== بخش شرح حال گیری هوشمند ==========
         let historySessionId = null;
         let historyPatientData = {};
         let historyConversationLog = [];
         let historyQuestionCount = 0;
+        let historyLastResult = {};
+        const HISTORY_MAX_QUESTIONS = 20;
+
+        function hxFaNum(n) {
+            return String(n).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+        }
+
+        function hxHaptic(type) {
+            try {
+                if (tg.HapticFeedback) {
+                    if (type === 'success' || type === 'error' || type === 'warning') {
+                        tg.HapticFeedback.notificationOccurred(type);
+                    } else {
+                        tg.HapticFeedback.impactOccurred(type || 'light');
+                    }
+                }
+            } catch (e) {}
+        }
+
+        function hxSetLoading(btnId, loading) {
+            const btn = document.getElementById(btnId);
+            if (!btn) return;
+            btn.disabled = loading;
+            btn.style.opacity = loading ? '0.6' : '1';
+            btn.style.pointerEvents = loading ? 'none' : 'auto';
+        }
+
+        function hxUpdateProgress(phase) {
+            historyQuestionCount++;
+            const pct = Math.min(100, Math.round(historyQuestionCount / HISTORY_MAX_QUESTIONS * 100));
+            const bar = document.getElementById('history-progress-bar');
+            if (bar) bar.style.width = pct + '%';
+            const counter = document.getElementById('history-q-counter');
+            if (counter) counter.innerText = 'سوال ' + hxFaNum(historyQuestionCount) + ' از ' + hxFaNum(HISTORY_MAX_QUESTIONS);
+            const badge = document.getElementById('history-phase-badge');
+            if (badge && phase) badge.innerText = '🏷 ' + phase;
+        }
 
         async function startHistoryTaking() {
             const age = document.getElementById('history-patient-age').value.trim();
@@ -4195,6 +4265,10 @@
                 alert('لطفاً سن، جنسیت و شکایت اصلی بیمار را وارد کنید.');
                 return;
             }
+
+            hxSetLoading('history-start-btn', true);
+            document.getElementById('history-start-btn').innerText = '⏳ در حال آماده‌سازی...';
+            hxHaptic('light');
 
             const payload = {
                 age: age,
@@ -4215,7 +4289,7 @@
 
                 if (!response.ok) {
                     const error = await response.json();
-                    alert(error.message || 'خطا در شروع تاریخچه‌گیری');
+                    alert(error.message || 'خطا در شروع شرح حال گیری');
                     return;
                 }
 
@@ -4224,6 +4298,7 @@
                 historyPatientData = {age, sex, cc, info};
                 historyConversationLog = [];
                 historyQuestionCount = 0;
+                historyLastResult = {};
 
                 // نمایش صفحه فعال
                 document.getElementById('history-start-section').style.display = 'none';
@@ -4231,18 +4306,32 @@
                 document.getElementById('history-result-section').style.display = 'none';
 
                 // نمایش خلاصه بیمار
-                document.getElementById('history-patient-summary').innerText = 
-                    `سن: ${age} | جنسیت: ${sex}\nشکایت اصلی: ${cc}\n${info ? 'اطلاعات اضافی: ' + info : ''}`;
+                document.getElementById('history-patient-summary').innerText =
+                    `${age} ساله، ${sex} — شکایت اصلی: ${cc}${info ? '\n' + info : ''}`;
+
+                // ریست نوار پیشرفت
+                const bar = document.getElementById('history-progress-bar');
+                if (bar) bar.style.width = '0%';
+                const counter = document.getElementById('history-q-counter');
+                if (counter) counter.innerText = 'سوال ۰ از ۲۰';
+                const badge = document.getElementById('history-phase-badge');
+                if (badge) badge.innerText = '🏷 شروع مصاحبه';
 
                 // دریافت اولین سوال
                 await getNextHistoryQuestion();
             } catch (error) {
                 alert('خطا: ' + error.message);
+            } finally {
+                hxSetLoading('history-start-btn', false);
+                document.getElementById('history-start-btn').innerText = '🚀 شروع مصاحبه بالینی';
             }
         }
 
         async function getNextHistoryQuestion() {
             if (!historySessionId) return;
+
+            const qEl = document.getElementById('history-current-question');
+            qEl.innerText = '⏳ در حال تولید سوال هدفمند...';
 
             try {
                 const response = await fetch(`${BASE_URL}/api/history/question`, {
@@ -4255,20 +4344,25 @@
                 if (!response.ok) {
                     const error = await response.json();
                     if (error.error === 'history_complete') {
-                        // تاریخچه تکمیل شده
+                        // شرح حال گیری تکمیل شده
                         await finishHistoryTaking();
                         return;
                     }
+                    qEl.innerText = 'خطا در دریافت سوال';
                     alert(error.message || 'خطا در دریافت سوال');
                     return;
                 }
 
                 const data = await response.json();
-                historyQuestionCount++;
-                document.getElementById('history-current-question').innerText = data.question;
-                document.getElementById('history-answer-input').value = '';
-                document.getElementById('history-answer-input').focus();
+                hxUpdateProgress(data.phase);
+                historyConversationLog.push({type: 'question', content: data.question, phase: data.phase});
+                qEl.innerText = data.question;
+
+                const input = document.getElementById('history-answer-input');
+                input.value = '';
+                input.focus();
             } catch (error) {
+                qEl.innerText = 'خطا در ارتباط با سرور';
                 alert('خطا: ' + error.message);
             }
         }
@@ -4281,6 +4375,9 @@
                 alert('لطفاً پاسخ خود را وارد کنید.');
                 return;
             }
+
+            hxSetLoading('history-submit-btn', true);
+            document.getElementById('history-submit-btn').innerText = '⏳ در حال ثبت...';
 
             try {
                 const response = await fetch(`${BASE_URL}/api/history/answer`, {
@@ -4304,16 +4401,23 @@
                     type: 'answer',
                     content: answer
                 });
+                hxHaptic('light');
 
                 // دریافت سوال بعدی
                 await getNextHistoryQuestion();
             } catch (error) {
                 alert('خطا: ' + error.message);
+            } finally {
+                hxSetLoading('history-submit-btn', false);
+                document.getElementById('history-submit-btn').innerText = '✅ ارسال پاسخ';
             }
         }
 
         async function finishHistoryTaking() {
             if (!historySessionId) return;
+
+            hxSetLoading('history-finish-btn', true);
+            document.getElementById('history-finish-btn').innerText = '⏳ در حال تنظیم شرح حال بیمارستانی...';
 
             try {
                 const response = await fetch(`${BASE_URL}/api/history/finish`, {
@@ -4327,20 +4431,85 @@
 
                 if (!response.ok) {
                     const error = await response.json();
-                    alert(error.message || 'خطا در پایان تاریخچه‌گیری');
+                    alert(error.message || 'خطا در پایان شرح حال گیری');
                     return;
                 }
 
                 const data = await response.json();
+                historyLastResult = data;
 
                 // نمایش نتیجه
                 document.getElementById('history-active-section').style.display = 'none';
                 document.getElementById('history-result-section').style.display = 'block';
                 document.getElementById('history-final-summary').innerText = data.summary || 'خلاصه‌ای موجود نیست';
                 document.getElementById('history-differential-diagnosis').innerText = data.differential_diagnosis || 'تشخیص‌های احتمالی موجود نیست';
+
+                const workupCard = document.getElementById('history-workup-card');
+                if (data.workup) {
+                    document.getElementById('history-workup').innerText = data.workup;
+                    workupCard.style.display = 'block';
+                } else {
+                    workupCard.style.display = 'none';
+                }
+                hxHaptic('success');
             } catch (error) {
                 alert('خطا: ' + error.message);
+            } finally {
+                hxSetLoading('history-finish-btn', false);
+                document.getElementById('history-finish-btn').innerText = '🏁 پایان و دریافت گزارش';
             }
+        }
+
+        function buildHistoryNote() {
+            let note = '🏥 شرح حال کامل بیمارستانی\n';
+            note += '━━━━━━━━━━━━━━━━━━\n';
+            note += (historyLastResult.summary || '—') + '\n\n';
+            note += '🩺 تشخیص‌های افتراقی\n';
+            note += '━━━━━━━━━━━━━━━━━━\n';
+            note += (historyLastResult.differential_diagnosis || '—') + '\n\n';
+            if (historyLastResult.workup) {
+                note += '🔬 پاراکلینیک پیشنهادی\n';
+                note += '━━━━━━━━━━━━━━━━━━\n';
+                note += historyLastResult.workup;
+            }
+            return note;
+        }
+
+        async function copyHistoryNote() {
+            const note = buildHistoryNote();
+            const btn = document.getElementById('history-copy-btn');
+            let ok = false;
+            try {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    await navigator.clipboard.writeText(note);
+                    ok = true;
+                }
+            } catch (e) {}
+            if (!ok) {
+                try {
+                    const ta = document.createElement('textarea');
+                    ta.value = note;
+                    ta.style.position = 'fixed';
+                    ta.style.opacity = '0';
+                    document.body.appendChild(ta);
+                    ta.select();
+                    ok = document.execCommand('copy');
+                    document.body.removeChild(ta);
+                } catch (e) {}
+            }
+            if (btn) {
+                btn.innerText = ok ? '✅ کپی شد!' : '⚠️ کپی ناموفق — دستی انتخاب کنید';
+                setTimeout(() => { btn.innerText = '📋 کپی کل گزارش برای پرونده'; }, 2000);
+            }
+            if (ok) hxHaptic('success');
+        }
+
+        function fillHistoryAnswer(text) {
+            const input = document.getElementById('history-answer-input');
+            if (!input) return;
+            input.value = input.value.trim() ? input.value.trim() + '، ' + text : text;
+            input.focus();
+            hxHaptic('light');
         }
 
         function resetHistoryTaking() {
@@ -4348,6 +4517,7 @@
             historyPatientData = {};
             historyConversationLog = [];
             historyQuestionCount = 0;
+            historyLastResult = {};
 
             document.getElementById('history-start-section').style.display = 'flex';
             document.getElementById('history-active-section').style.display = 'none';
@@ -4358,6 +4528,8 @@
             document.getElementById('history-chief-complaint').value = '';
             document.getElementById('history-initial-info').value = '';
             document.getElementById('history-answer-input').value = '';
+            const bar = document.getElementById('history-progress-bar');
+            if (bar) bar.style.width = '0%';
         }
 
 
