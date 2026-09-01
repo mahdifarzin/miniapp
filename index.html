@@ -1485,6 +1485,15 @@
             background: rgba(16, 185, 129, 0.14);
             border-color: rgba(16, 185, 129, 0.5);
         }
+        .hx-chip-para {
+            background: rgba(139, 92, 246, 0.08);
+            border-color: rgba(139, 92, 246, 0.35);
+            color: #8b5cf6;
+        }
+        .hx-chip-para:active {
+            background: rgba(139, 92, 246, 0.18);
+            border-color: rgba(139, 92, 246, 0.6);
+        }
 
         /* --- کارت جلسه: نقشه راه + پیشرفت --- */
         .hx-session-card {
@@ -1697,6 +1706,16 @@
         .hx-msg-patient {
             background: var(--secondary-bg);
             border-right: 3px solid var(--hint-color);
+            color: var(--text-color);
+        }
+        .hx-msg-para {
+            background: rgba(139, 92, 246, 0.1);
+            border-right: 3px solid #8b5cf6;
+            color: var(--text-color);
+        }
+        .hx-msg-para-res {
+            background: rgba(2, 132, 199, 0.08);
+            border-right: 3px solid #0284c7;
             color: var(--text-color);
         }
         .hx-msg-who {
@@ -2174,12 +2193,18 @@
                     <div class="hx-q-card">
                         <div class="hx-q-head">💬 سوال بعدی پزشک</div>
                         <div id="history-current-question" class="hx-q-text">در حال دریافت سوال...</div>
-                        <textarea id="history-answer-input" placeholder="پاسخ بیمار را اینجا بنویسید..." rows="3" class="hx-input hx-answer" style="resize:vertical; margin-bottom:10px;"></textarea>
+                        <textarea id="history-answer-input" placeholder="پاسخ بیمار / نتیجهٔ آزمایش را اینجا بنویسید..." rows="3" class="hx-input hx-answer" style="resize:vertical; margin-bottom:10px;"></textarea>
                         <div class="hx-quick-chips">
                             <span class="hx-chip" onclick="fillHistoryAnswer('بله')">بله</span>
                             <span class="hx-chip" onclick="fillHistoryAnswer('خیر')">خیر</span>
                             <span class="hx-chip" onclick="fillHistoryAnswer('منفی است')">منفی است</span>
                             <span class="hx-chip" onclick="fillHistoryAnswer('نمی‌دانم')">نمی‌دانم</span>
+                        </div>
+                        <div class="hx-quick-chips" style="margin-top:6px;">
+                            <span class="hx-chip hx-chip-para" onclick="fillHistoryAnswer('CBC: WBC=12000، Hb=13.2، Plt=310000')">CBC (WBC/Hb/Plt)</span>
+                            <span class="hx-chip hx-chip-para" onclick="fillHistoryAnswer('CRP: مثبت، ESR: 45')">CRP/ESR</span>
+                            <span class="hx-chip hx-chip-para" onclick="fillHistoryAnswer('گزارش گراف قفسه سینه:')">گراف قفسه سینه</span>
+                            <span class="hx-chip hx-chip-para" onclick="fillHistoryAnswer('گزارش CT:')">گزارش CT</span>
                         </div>
                         <div style="display:flex; gap:8px; margin-top:12px;">
                             <button class="hx-btn-primary" id="history-submit-btn" onclick="submitHistoryAnswer()">✅ ارسال پاسخ</button>
@@ -4731,14 +4756,22 @@
             document.querySelectorAll('.hx-road-step').forEach(s => s.classList.remove('hx-done', 'hx-active'));
         }
 
+        const HX_SENDERS = {
+            'doctor':      {cls: 'hx-msg-doctor',   label: '🩺 پزشک'},
+            'patient':     {cls: 'hx-msg-patient',  label: '🧑‍🦱 بیمار'},
+            'para':        {cls: 'hx-msg-para',     label: '🔬 درخواست آزمایش'},
+            'para-result': {cls: 'hx-msg-para-res', label: '📄 نتیجه'}
+        };
+
         function hxAddTranscript(who, text) {
             const body = document.getElementById('history-transcript-body');
             const wrap = document.getElementById('history-transcript-wrap');
             if (!body || !wrap) return;
             wrap.style.display = 'block';
+            const meta = HX_SENDERS[who] || HX_SENDERS.patient;
             const div = document.createElement('div');
-            div.className = 'hx-msg ' + (who === 'doctor' ? 'hx-msg-doctor' : 'hx-msg-patient');
-            div.innerHTML = '<span class="hx-msg-who">' + (who === 'doctor' ? '🩺 پزشک' : '🧑‍🦱 بیمار') + '</span>';
+            div.className = 'hx-msg ' + meta.cls;
+            div.innerHTML = '<span class="hx-msg-who">' + meta.label + '</span>';
             div.appendChild(document.createTextNode(text));
             body.appendChild(div);
             body.scrollTop = body.scrollHeight;
@@ -4849,7 +4882,7 @@
             if (!historySessionId) return;
 
             const qEl = document.getElementById('history-current-question');
-            qEl.innerText = '⏳ در حال تولید سوال هدفمند...';
+            qEl.innerText = '⏳ پزشک هوشمند در حال بررسی پاسخ‌ها...';
 
             try {
                 const response = await fetch(`${BASE_URL}/api/history/question`, {
@@ -4862,7 +4895,7 @@
                 if (!response.ok) {
                     const error = await response.json();
                     if (error.error === 'history_complete') {
-                        // شرح حال گیری تکمیل شده
+                        // شرح حال گیری تکمیل شده (سقف ایمنی)
                         await finishHistoryTaking();
                         return;
                     }
@@ -4872,10 +4905,32 @@
                 }
 
                 const data = await response.json();
+
+                // مدل تشخیص داد شرح حال کافی است → پایان و گزارش
+                if (data.session_complete) {
+                    hxHaptic('success');
+                    tg.showAlert('✅ پزشک هوشمند تشخیص داد شرح حال کافی است. در حال تهیه گزارش...');
+                    await finishHistoryTaking();
+                    return;
+                }
+
+                const isPara = data.type === 'paraclinical_request';
                 hxUpdateProgress(data.phase);
-                historyConversationLog.push({type: 'question', content: data.question, phase: data.phase});
-                qEl.innerText = data.question;
-                hxAddTranscript('doctor', data.question);
+                historyConversationLog.push({
+                    type: isPara ? 'paraclinical_request' : 'question',
+                    content: data.question,
+                    phase: data.phase,
+                    covered: data.covered || [],
+                    gaps: data.gaps || []
+                });
+                qEl.innerText = isPara
+                    ? '🔬 برای باریک‌کردن تشخیص‌ها به این نتیجه نیاز دارم:\n\n' + data.question
+                    : data.question;
+                hxAddTranscript(isPara ? 'para' : 'doctor', data.question);
+
+                // لیبل دکمهٔ ارسال بسته به نوع ترن
+                const submitBtn = document.getElementById('history-submit-btn');
+                if (submitBtn) submitBtn.innerText = isPara ? '📤 ارسال نتیجه' : '✅ ارسال پاسخ';
 
                 const input = document.getElementById('history-answer-input');
                 input.value = '';
@@ -4894,6 +4949,12 @@
                 tg.showAlert('لطفاً پاسخ خود را وارد کنید.');
                 return;
             }
+
+            // نوع آخرین ترن مدل تعیین می‌کند این پاسخ «جواب بیمار» است یا «نتیجهٔ پاراکلینیک»
+            const lastTurnType = historyConversationLog.length
+                ? historyConversationLog[historyConversationLog.length - 1].type
+                : 'question';
+            const isParaResult = lastTurnType === 'paraclinical_request';
 
             hxSetLoading('history-submit-btn', true);
             document.getElementById('history-submit-btn').innerText = '⏳ در حال ثبت...';
@@ -4917,10 +4978,10 @@
                 }
 
                 historyConversationLog.push({
-                    type: 'answer',
+                    type: isParaResult ? 'paraclinical_result' : 'answer',
                     content: answer
                 });
-                hxAddTranscript('patient', answer);
+                hxAddTranscript(isParaResult ? 'para-result' : 'patient', answer);
                 hxHaptic('light');
 
                 // دریافت سوال بعدی
