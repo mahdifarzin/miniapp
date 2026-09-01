@@ -38,26 +38,24 @@
         /* ---------------------------------------------------- */
         /* ۲. متغیرهای تم شب (Dark Mode) */
         /* ---------------------------------------------------- */
-        body.dark-mode, @media (prefers-color-scheme: dark) {
-            :root {
-                --bg-color: #0b1329;
-                --secondary-bg: #152238;
-                --text-color: #f1f5f9;
-                --hint-color: #94a3b8;
-                --med-cyan: #38bdf8;
-                --med-emerald: #34d399;
-                --med-navy: #f8fafc;
-                --med-blue-gradient: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #1e3a8a 100%);
-                --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-                --card-border: 1px solid rgba(255, 255, 255, 0.08);
-                --glass-nav-bg: rgba(21, 34, 56, 0.85);
-                --item-bg: #1e2d4a;
-                --item-border: rgba(255, 255, 255, 0.05);
+        body.dark-mode {
+            --bg-color: #0b1329;
+            --secondary-bg: #152238;
+            --text-color: #f1f5f9;
+            --hint-color: #94a3b8;
+            --med-cyan: #38bdf8;
+            --med-emerald: #34d399;
+            --med-navy: #f8fafc;
+            --med-blue-gradient: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #1e3a8a 100%);
+            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            --card-border: 1px solid rgba(255, 255, 255, 0.08);
+            --glass-nav-bg: rgba(21, 34, 56, 0.85);
+            --item-bg: #1e2d4a;
+            --item-border: rgba(255, 255, 255, 0.05);
 
-                /* پترن پزشکی پس‌زمینه (شب) */
-                --bg-pattern-cross: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 14V26M14 20H26' stroke='%2338bdf8' stroke-width='1.5' stroke-linecap='round' stroke-opacity='0.12'/%3E%3C/svg%3E");
-                --bg-pattern-dots: radial-gradient(rgba(56, 189, 248, 0.12) 1.2px, transparent 1.2px);
-            }
+            /* پترن پزشکی پس‌زمینه (شب) */
+            --bg-pattern-cross: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 14V26M14 20H26' stroke='%2338bdf8' stroke-width='1.5' stroke-linecap='round' stroke-opacity='0.12'/%3E%3C/svg%3E");
+            --bg-pattern-dots: radial-gradient(rgba(56, 189, 248, 0.12) 1.2px, transparent 1.2px);
         }
 
         * {
@@ -1372,6 +1370,416 @@
                 padding: 15px;
             }
         }
+
+        /* ==================================================== */
+        /* بخش شرح حال گیری هوشمند — زبان بصری «پروندهٔ بیمارستانی» */
+        /* ==================================================== */
+
+        /* --- فرم پذیرش (صفحهٔ شروع) --- */
+        .hx-chart {
+            background: var(--item-bg);
+            border: var(--card-border);
+            border-radius: 14px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hx-chart::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; left: 0;
+            height: 4px;
+            background: repeating-linear-gradient(90deg, #10b981 0 14px, transparent 14px 21px);
+            opacity: 0.85;
+        }
+        .hx-chart-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 4px;
+        }
+        .hx-chart-title {
+            font-weight: 800;
+            font-size: 13px;
+            color: var(--text-color);
+        }
+        .hx-chart-badge {
+            font-size: 9.5px;
+            font-weight: 800;
+            color: #059669;
+            background: rgba(16, 185, 129, 0.12);
+            padding: 3px 9px;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+        .hx-field {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .hx-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--hint-color);
+        }
+        .hx-input {
+            width: 100%;
+            padding: 11px 12px;
+            border-radius: 10px;
+            border: var(--card-border);
+            background: var(--secondary-bg);
+            color: var(--text-color);
+            font-size: 12.5px;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .hx-input:focus {
+            border-color: rgba(16, 185, 129, 0.55);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.14);
+        }
+        .hx-start-btn {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #fff;
+            font-family: inherit;
+            font-size: 13.5px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+        }
+        .hx-start-btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.35);
+        }
+        .hx-start-btn:disabled {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        /* --- چیپ‌های پیشنهاد سریع --- */
+        .hx-quick-chips {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 6px;
+        }
+        .hx-chip {
+            background: var(--secondary-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-color);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 6px 13px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.15s ease, border-color 0.15s ease;
+        }
+        .hx-chip:active {
+            background: rgba(16, 185, 129, 0.14);
+            border-color: rgba(16, 185, 129, 0.5);
+        }
+
+        /* --- کارت جلسه: نقشه راه + پیشرفت --- */
+        .hx-session-card {
+            background: var(--item-bg);
+            border: var(--card-border);
+            border-radius: 14px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+        .hx-roadmap {
+            display: flex;
+            gap: 4px;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            margin-bottom: 10px;
+            scrollbar-width: none;
+        }
+        .hx-roadmap::-webkit-scrollbar { display: none; }
+        .hx-road-step {
+            font-size: 9.5px;
+            font-weight: 800;
+            color: var(--hint-color);
+            background: var(--secondary-bg);
+            border: 1px solid var(--card-border);
+            padding: 4px 9px;
+            border-radius: 20px;
+            white-space: nowrap;
+            flex-shrink: 0;
+            transition: all 0.35s ease;
+        }
+        .hx-road-step.hx-done {
+            color: #059669;
+            background: rgba(16, 185, 129, 0.12);
+            border-color: rgba(16, 185, 129, 0.4);
+        }
+        .hx-road-step.hx-active {
+            color: #fff;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-color: transparent;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
+        }
+        .hx-progress-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            gap: 8px;
+        }
+        .hx-phase-badge {
+            background: rgba(16, 185, 129, 0.14);
+            color: #10b981;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 20px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .hx-q-counter {
+            font-size: 10px;
+            font-weight: 800;
+            color: var(--hint-color);
+            white-space: nowrap;
+        }
+        .hx-progress-track {
+            height: 6px;
+            background: var(--secondary-bg);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .hx-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981, #059669);
+            border-radius: 6px;
+            transition: width 0.4s ease;
+        }
+
+        /* --- کارت بیمار --- */
+        .hx-patient-card {
+            background: var(--item-bg);
+            border: var(--card-border);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+        .hx-patient-head {
+            font-weight: 800;
+            font-size: 12px;
+            color: var(--text-color);
+            margin-bottom: 4px;
+        }
+        .hx-patient-body {
+            font-size: 11px;
+            color: var(--hint-color);
+            line-height: 1.8;
+        }
+
+        /* --- کارت سوال و پاسخ --- */
+        .hx-q-card {
+            background: var(--item-bg);
+            border: var(--card-border);
+            border-radius: 14px;
+            padding: 12px;
+        }
+        .hx-q-head {
+            font-weight: 800;
+            font-size: 12px;
+            color: var(--text-color);
+            margin-bottom: 8px;
+        }
+        .hx-q-text {
+            font-size: 13px;
+            color: var(--text-color);
+            line-height: 1.9;
+            background: var(--secondary-bg);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 12px;
+            min-height: 44px;
+            animation: hx-fade-up 0.35s ease;
+        }
+        .hx-answer {
+            margin-bottom: 4px;
+        }
+        .hx-btn-primary {
+            flex: 1.4;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #fff;
+            font-family: inherit;
+            font-size: 12.5px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35);
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+        .hx-btn-ghost {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            background: var(--secondary-bg);
+            color: var(--text-color);
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+        }
+        .hx-btn-primary:active, .hx-btn-ghost:active {
+            transform: translateY(1px);
+        }
+        .hx-btn-primary:disabled, .hx-btn-ghost:disabled {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        /* --- ترنسکریپت گفتگو --- */
+        .hx-transcript {
+            background: var(--item-bg);
+            border: var(--card-border);
+            border-radius: 12px;
+            margin-top: 12px;
+            overflow: hidden;
+        }
+        .hx-transcript-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 11px 12px;
+            font-weight: 800;
+            font-size: 12px;
+            color: var(--text-color);
+            cursor: pointer;
+            user-select: none;
+        }
+        .hx-transcript-caret {
+            transition: transform 0.25s ease;
+            color: var(--hint-color);
+        }
+        .hx-transcript-caret.hx-open {
+            transform: rotate(180deg);
+        }
+        .hx-transcript-body {
+            display: none;
+            padding: 0 12px 12px;
+            max-height: 260px;
+            overflow-y: auto;
+        }
+        .hx-transcript-body.hx-open {
+            display: block;
+        }
+        .hx-msg {
+            font-size: 11.5px;
+            line-height: 1.8;
+            padding: 8px 10px;
+            border-radius: 10px;
+            margin-bottom: 6px;
+            white-space: pre-wrap;
+        }
+        .hx-msg-doctor {
+            background: rgba(16, 185, 129, 0.1);
+            border-right: 3px solid #10b981;
+            color: var(--text-color);
+        }
+        .hx-msg-patient {
+            background: var(--secondary-bg);
+            border-right: 3px solid var(--hint-color);
+            color: var(--text-color);
+        }
+        .hx-msg-who {
+            display: block;
+            font-size: 9.5px;
+            font-weight: 800;
+            opacity: 0.65;
+            margin-bottom: 2px;
+        }
+
+        /* --- صفحهٔ نتیجه --- */
+        .hx-done-banner {
+            position: relative;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #fff;
+            padding: 18px 16px 16px;
+            border-radius: 14px;
+            margin-bottom: 12px;
+            text-align: center;
+            overflow: hidden;
+        }
+        .hx-stamp {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            border: 2px solid rgba(255, 255, 255, 0.85);
+            color: rgba(255, 255, 255, 0.95);
+            padding: 3px 10px;
+            border-radius: 6px;
+            transform: rotate(-8deg);
+            opacity: 0.95;
+        }
+        .hx-copy-btn {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #0284c7, #0ea5e9);
+            color: #fff;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(2, 132, 199, 0.35);
+            transition: transform 0.2s ease, opacity 0.2s ease;
+            margin-bottom: 12px;
+        }
+        .hx-copy-btn:active {
+            transform: translateY(1px);
+        }
+        .hx-note-card {
+            background: var(--item-bg);
+            border: var(--card-border);
+            border-right: 3px solid var(--hint-color);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+        .hx-note-head {
+            font-weight: 800;
+            font-size: 13px;
+            color: var(--text-color);
+            margin-bottom: 8px;
+        }
+        .hx-note-body {
+            font-size: 12px;
+            color: var(--text-color);
+            line-height: 2;
+            white-space: pre-wrap;
+        }
+
+        /* --- انیمیشن عمومی --- */
+        @keyframes hx-fade-up {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .hx-q-text { animation: none; }
+            .hx-road-step, .hx-transcript-caret, .hx-progress-fill { transition: none; }
+        }
     </style>
 </head>
 <body>
@@ -1699,93 +2107,123 @@
 
                 <!-- صفحه شروع -->
                 <div id="history-start-section" style="display:flex; flex-direction:column; gap:12px; margin-top:14px;">
-                    <div style="background:var(--item-bg); padding:12px; border-radius:10px; border-left:3px solid #10b981;">
-                        <div style="font-weight:700; font-size:13px; color:var(--text-color); margin-bottom:6px;">📝 اطلاعات اولیه بیمار</div>
-                        <div style="font-size:11px; color:var(--hint-color); line-height:1.7;">هرچه دقیق‌تر بنویسید، سوالات هوش مصنوعی هدفمندتر می‌شود. در پایان، شرح‌حال کامل بیمارستانی آماده درج در پرونده دریافت می‌کنید.</div>
+                    <div class="hx-chart">
+                        <div class="hx-chart-head">
+                            <span class="hx-chart-title">📋 فرم پذیرش بیمار</span>
+                            <span class="hx-chart-badge">گام ۱ از ۳</span>
+                        </div>
+                        <div class="hx-field">
+                            <label class="hx-label" for="history-patient-age">سن بیمار</label>
+                            <input type="text" id="history-patient-age" placeholder="مثلاً ۳۵" class="hx-input">
+                        </div>
+                        <div class="hx-field">
+                            <label class="hx-label" for="history-patient-sex">جنسیت</label>
+                            <select id="history-patient-sex" class="hx-input">
+                                <option value="">انتخاب کنید</option>
+                                <option value="مرد">مرد</option>
+                                <option value="زن">زن</option>
+                            </select>
+                        </div>
+                        <div class="hx-field">
+                            <label class="hx-label" for="history-chief-complaint">شکایت اصلی (Chief Complaint)</label>
+                            <textarea id="history-chief-complaint" placeholder="مثلاً: سرفه خشک از سه روز پیش همراه با تب خفیف..." rows="2" class="hx-input" style="resize:vertical;"></textarea>
+                            <div class="hx-quick-chips">
+                                <span class="hx-chip" onclick="fillHistoryCC('سرفه خشک')">سرفه خشک</span>
+                                <span class="hx-chip" onclick="fillHistoryCC('درد شکم')">درد شکم</span>
+                                <span class="hx-chip" onclick="fillHistoryCC('تب و لرز')">تب و لرز</span>
+                                <span class="hx-chip" onclick="fillHistoryCC('سردرد')">سردرد</span>
+                            </div>
+                        </div>
+                        <div class="hx-field">
+                            <label class="hx-label" for="history-initial-info">اطلاعات اولیه <span style="font-weight:500; opacity:0.7;">(اختیاری)</span></label>
+                            <textarea id="history-initial-info" placeholder="سابقه پزشکی، داروها، حساسیت‌ها و..." rows="2" class="hx-input" style="resize:vertical;"></textarea>
+                        </div>
+                        <button class="hx-start-btn" id="history-start-btn" onclick="startHistoryTaking()">🚀 شروع مصاحبه بالینی</button>
                     </div>
-
-                    <div style="display:flex; gap:8px;">
-                        <input type="text" id="history-patient-age" placeholder="سن بیمار" style="flex:1; padding:11px; border-radius:10px; border:var(--card-border); background:var(--item-bg); color:var(--text-color); font-size:12px;">
-                        <select id="history-patient-sex" style="flex:1; padding:11px; border-radius:10px; border:var(--card-border); background:var(--item-bg); color:var(--text-color); font-size:12px;">
-                            <option value="">جنسیت</option>
-                            <option value="مرد">مرد</option>
-                            <option value="زن">زن</option>
-                        </select>
-                    </div>
-
-                    <textarea id="history-chief-complaint" placeholder="شکایت اصلی بیمار (Chief Complaint) — مثال: سرفه خشک از سه روز پیش..." rows="3" style="width:100%; border-radius:10px; border:var(--card-border); background:var(--item-bg); color:var(--text-color); padding:11px; font-size:12px; resize:vertical;"></textarea>
-
-                    <textarea id="history-initial-info" placeholder="اطلاعات اولیه: سابقه پزشکی، داروها، حساسیت‌ها و... (اختیاری)" rows="3" style="width:100%; border-radius:10px; border:var(--card-border); background:var(--item-bg); color:var(--text-color); padding:11px; font-size:12px; resize:vertical;"></textarea>
-
-                    <button class="exam-btn" id="history-start-btn" onclick="startHistoryTaking()" style="background:linear-gradient(135deg, #10b981, #059669);">🚀 شروع مصاحبه بالینی</button>
                 </div>
 
                 <!-- صفحه شرح حال گیری فعال -->
                 <div id="history-active-section" style="display:none; margin-top:14px;">
-                    <!-- نوار پیشرفت و فاز جاری -->
-                    <div style="background:var(--item-bg); border:var(--card-border); border-radius:12px; padding:12px; margin-bottom:12px;">
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; gap:8px;">
-                            <span id="history-phase-badge" style="background:rgba(16,185,129,0.14); color:#10b981; font-size:10px; font-weight:800; padding:4px 10px; border-radius:20px;">🏷 شروع مصاحبه</span>
-                            <span id="history-q-counter" style="font-size:10px; font-weight:800; color:var(--hint-color); white-space:nowrap;">سوال ۰ از ۲۰</span>
+                    <div class="hx-session-card">
+                        <div class="hx-roadmap" id="history-roadmap">
+                            <span class="hx-road-step" data-key="hpi">HPI</span>
+                            <span class="hx-road-step" data-key="sys">علائم</span>
+                            <span class="hx-road-step" data-key="pmh">PMH</span>
+                            <span class="hx-road-step" data-key="med">داروها</span>
+                            <span class="hx-road-step" data-key="fh">خانواده</span>
+                            <span class="hx-road-step" data-key="sh">اجتماعی</span>
+                            <span class="hx-road-step" data-key="ros">ROS</span>
+                            <span class="hx-road-step" data-key="ddx">افتراقی</span>
                         </div>
-                        <div style="height:6px; background:var(--secondary-bg); border-radius:6px; overflow:hidden;">
-                            <div id="history-progress-bar" style="height:100%; width:0%; background:linear-gradient(90deg, #10b981, #059669); border-radius:6px; transition:width 0.4s ease;"></div>
+                        <div class="hx-progress-row">
+                            <span id="history-phase-badge" class="hx-phase-badge">🏷 شروع مصاحبه</span>
+                            <span id="history-q-counter" class="hx-q-counter">سوال ۰ از ۲۰</span>
+                        </div>
+                        <div class="hx-progress-track">
+                            <div id="history-progress-bar" class="hx-progress-fill" style="width:0%;"></div>
                         </div>
                     </div>
 
                     <!-- خلاصه بیمار -->
-                    <div style="background:var(--item-bg); border:var(--card-border); border-radius:10px; padding:12px; margin-bottom:12px;">
-                        <div style="font-weight:700; font-size:12px; color:var(--text-color); margin-bottom:4px;">👤 بیمار شما:</div>
-                        <div id="history-patient-summary" style="font-size:11px; color:var(--hint-color); line-height:1.7;"></div>
+                    <div class="hx-patient-card">
+                        <div class="hx-patient-head">👤 بیمار شما</div>
+                        <div id="history-patient-summary" class="hx-patient-body"></div>
                     </div>
 
                     <!-- کارت سوال و پاسخ -->
-                    <div style="background:var(--item-bg); border:var(--card-border); border-radius:12px; padding:12px;">
-                        <div style="font-weight:700; font-size:12px; color:var(--text-color); margin-bottom:8px;">💬 سوال بعدی پزشک:</div>
-                        <div id="history-current-question" style="font-size:13px; color:var(--text-color); line-height:1.9; background:var(--secondary-bg); border-radius:10px; padding:12px; margin-bottom:12px; min-height:44px;">در حال دریافت سوال...</div>
-
-                        <textarea id="history-answer-input" placeholder="پاسخ بیمار را اینجا بنویسید..." rows="3" style="width:100%; border-radius:10px; border:var(--card-border); background:var(--secondary-bg); color:var(--text-color); padding:11px; font-size:12px; resize:vertical; margin-bottom:10px;"></textarea>
-
-                        <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px;">
-                            <span onclick="fillHistoryAnswer('بله')" style="background:var(--secondary-bg); border:1px solid var(--card-border); color:var(--text-color); font-size:11px; font-weight:700; padding:6px 14px; border-radius:20px; cursor:pointer;">بله</span>
-                            <span onclick="fillHistoryAnswer('خیر')" style="background:var(--secondary-bg); border:1px solid var(--card-border); color:var(--text-color); font-size:11px; font-weight:700; padding:6px 14px; border-radius:20px; cursor:pointer;">خیر</span>
-                            <span onclick="fillHistoryAnswer('منفی است')" style="background:var(--secondary-bg); border:1px solid var(--card-border); color:var(--text-color); font-size:11px; font-weight:700; padding:6px 14px; border-radius:20px; cursor:pointer;">منفی است</span>
-                            <span onclick="fillHistoryAnswer('نمی‌دانم')" style="background:var(--secondary-bg); border:1px solid var(--card-border); color:var(--text-color); font-size:11px; font-weight:700; padding:6px 14px; border-radius:20px; cursor:pointer;">نمی‌دانم</span>
+                    <div class="hx-q-card">
+                        <div class="hx-q-head">💬 سوال بعدی پزشک</div>
+                        <div id="history-current-question" class="hx-q-text">در حال دریافت سوال...</div>
+                        <textarea id="history-answer-input" placeholder="پاسخ بیمار را اینجا بنویسید..." rows="3" class="hx-input hx-answer" style="resize:vertical; margin-bottom:10px;"></textarea>
+                        <div class="hx-quick-chips">
+                            <span class="hx-chip" onclick="fillHistoryAnswer('بله')">بله</span>
+                            <span class="hx-chip" onclick="fillHistoryAnswer('خیر')">خیر</span>
+                            <span class="hx-chip" onclick="fillHistoryAnswer('منفی است')">منفی است</span>
+                            <span class="hx-chip" onclick="fillHistoryAnswer('نمی‌دانم')">نمی‌دانم</span>
                         </div>
-
-                        <div style="display:flex; gap:8px;">
-                            <button class="exam-btn" id="history-submit-btn" onclick="submitHistoryAnswer()" style="flex:1.4; background:linear-gradient(135deg, #10b981, #059669);">✅ ارسال پاسخ</button>
-                            <button class="exam-btn" id="history-finish-btn" onclick="finishHistoryTaking()" style="flex:1; background:linear-gradient(135deg, #8b5cf6, #7c3aed);">🏁 پایان و دریافت گزارش</button>
+                        <div style="display:flex; gap:8px; margin-top:12px;">
+                            <button class="hx-btn-primary" id="history-submit-btn" onclick="submitHistoryAnswer()">✅ ارسال پاسخ</button>
+                            <button class="hx-btn-ghost" id="history-finish-btn" onclick="finishHistoryTaking()">🏁 پایان و گزارش</button>
                         </div>
+                    </div>
+
+                    <!-- گفتگوی مصاحبه -->
+                    <div class="hx-transcript" id="history-transcript-wrap" style="display:none;">
+                        <div class="hx-transcript-head" onclick="toggleHistoryTranscript()">
+                            <span>📜 گفتگوی مصاحبه</span>
+                            <span class="hx-transcript-caret" id="history-transcript-caret">▾</span>
+                        </div>
+                        <div class="hx-transcript-body" id="history-transcript-body"></div>
                     </div>
                 </div>
 
                 <!-- صفحه نتیجه -->
                 <div id="history-result-section" style="display:none; margin-top:14px;">
-                    <div style="background:linear-gradient(135deg, #10b981, #059669); color:white; padding:16px; border-radius:12px; margin-bottom:12px; text-align:center;">
-                        <div style="font-size:32px; margin-bottom:8px;">✅</div>
-                        <div style="font-weight:800; font-size:15px;">شرح حال گیری تکمیل شد!</div>
+                    <div class="hx-done-banner">
+                        <span class="hx-stamp">✔ پذیرش شد</span>
+                        <div style="font-size:30px; margin-bottom:6px;">🏥</div>
+                        <div style="font-weight:800; font-size:15px;">شرح حال‌گیری تکمیل شد</div>
                         <div style="font-size:11px; opacity:0.9; margin-top:4px;">گزارش زیر آماده درج در پرونده بیمار است</div>
                     </div>
 
-                    <button class="exam-btn" id="history-copy-btn" onclick="copyHistoryNote()" style="width:100%; margin-bottom:12px; background:linear-gradient(135deg, #0284c7, #0ea5e9);">📋 کپی کل گزارش برای پرونده</button>
+                    <button class="hx-copy-btn" id="history-copy-btn" onclick="copyHistoryNote()">📋 کپی کل گزارش برای پرونده</button>
 
-                    <div style="background:var(--item-bg); border:var(--card-border); border-right:3px solid #10b981; border-radius:10px; padding:12px; margin-bottom:12px;">
-                        <div style="font-weight:800; font-size:13px; color:var(--text-color); margin-bottom:8px;">🏥 شرح حال کامل بیمارستانی</div>
-                        <div id="history-final-summary" style="font-size:12px; color:var(--text-color); line-height:2; white-space:pre-wrap;"></div>
+                    <div class="hx-note-card" style="border-right-color:#10b981;">
+                        <div class="hx-note-head">🏥 شرح حال کامل بیمارستانی</div>
+                        <div id="history-final-summary" class="hx-note-body"></div>
                     </div>
 
-                    <div style="background:var(--item-bg); border:var(--card-border); border-right:3px solid #f59e0b; border-radius:10px; padding:12px; margin-bottom:12px;">
-                        <div style="font-weight:800; font-size:13px; color:var(--text-color); margin-bottom:8px;">🩺 تشخیص‌های افتراقی</div>
-                        <div id="history-differential-diagnosis" style="font-size:12px; color:var(--text-color); line-height:2; white-space:pre-wrap;"></div>
+                    <div class="hx-note-card" style="border-right-color:#f59e0b;">
+                        <div class="hx-note-head">🩺 تشخیص‌های افتراقی</div>
+                        <div id="history-differential-diagnosis" class="hx-note-body"></div>
                     </div>
 
-                    <div id="history-workup-card" style="background:var(--item-bg); border:var(--card-border); border-right:3px solid #8b5cf6; border-radius:10px; padding:12px; margin-bottom:12px;">
-                        <div style="font-weight:800; font-size:13px; color:var(--text-color); margin-bottom:8px;">🔬 پاراکلینیک پیشنهادی</div>
-                        <div id="history-workup" style="font-size:12px; color:var(--text-color); line-height:2; white-space:pre-wrap;"></div>
+                    <div id="history-workup-card" class="hx-note-card" style="border-right-color:#8b5cf6; display:none;">
+                        <div class="hx-note-head">🔬 پاراکلینیک پیشنهادی</div>
+                        <div id="history-workup" class="hx-note-body"></div>
                     </div>
 
-                    <button class="exam-btn" onclick="resetHistoryTaking()" style="width:100%; background:linear-gradient(135deg, #0284c7, #0ea5e9);">🔄 شرح حال گیری جدید</button>
+                    <button class="hx-copy-btn" onclick="confirmHistoryReset()" style="background:linear-gradient(135deg, #0f172a, #1e3a8a);">🔄 شرح حال‌گیری جدید</button>
                 </div>
             </div>
         </div>
@@ -4218,6 +4656,7 @@
         let historyConversationLog = [];
         let historyQuestionCount = 0;
         let historyLastResult = {};
+        let historyLastPhaseKey = null;
         const HISTORY_MAX_QUESTIONS = 20;
 
         function hxFaNum(n) {
@@ -4253,6 +4692,85 @@
             if (counter) counter.innerText = 'سوال ' + hxFaNum(historyQuestionCount) + ' از ' + hxFaNum(HISTORY_MAX_QUESTIONS);
             const badge = document.getElementById('history-phase-badge');
             if (badge && phase) badge.innerText = '🏷 ' + phase;
+            hxUpdateRoadmap(phase);
+        }
+
+        // نگاشت نام فاز فارسیِ مدل به کلیدهای نقشه راه
+        function hxPhaseToKey(phase) {
+            if (!phase) return null;
+            const p = String(phase);
+            if (/HPI|فعلی|حال/i.test(p)) return 'hpi';
+            if (/همراه|سیستمیک|تب/i.test(p)) return 'sys';
+            if (/PMH|قبلی|جراحی/i.test(p)) return 'pmh';
+            if (/دارو|حساسیت|Allerg/i.test(p)) return 'med';
+            if (/خانوادگ|FH/i.test(p)) return 'fh';
+            if (/اجتماعی|شغلی|سیگار|الکل|SH\b/i.test(p)) return 'sh';
+            if (/ROS|مرور/i.test(p)) return 'ros';
+            if (/افتراق|تشخیص/i.test(p)) return 'ddx';
+            return null;
+        }
+
+        function hxUpdateRoadmap(phase) {
+            const key = hxPhaseToKey(phase);
+            if (!key) return;
+            if (historyLastPhaseKey && historyLastPhaseKey !== key) {
+                const prev = document.querySelector('.hx-road-step[data-key="' + historyLastPhaseKey + '"]');
+                if (prev) { prev.classList.remove('hx-active'); prev.classList.add('hx-done'); }
+            }
+            const step = document.querySelector('.hx-road-step[data-key="' + key + '"]');
+            if (step) {
+                step.classList.add('hx-active');
+                step.classList.remove('hx-done');
+                step.scrollIntoView({behavior: 'smooth', inline: 'center', block: 'nearest'});
+            }
+            historyLastPhaseKey = key;
+        }
+
+        function hxResetRoadmap() {
+            historyLastPhaseKey = null;
+            document.querySelectorAll('.hx-road-step').forEach(s => s.classList.remove('hx-done', 'hx-active'));
+        }
+
+        function hxAddTranscript(who, text) {
+            const body = document.getElementById('history-transcript-body');
+            const wrap = document.getElementById('history-transcript-wrap');
+            if (!body || !wrap) return;
+            wrap.style.display = 'block';
+            const div = document.createElement('div');
+            div.className = 'hx-msg ' + (who === 'doctor' ? 'hx-msg-doctor' : 'hx-msg-patient');
+            div.innerHTML = '<span class="hx-msg-who">' + (who === 'doctor' ? '🩺 پزشک' : '🧑‍🦱 بیمار') + '</span>';
+            div.appendChild(document.createTextNode(text));
+            body.appendChild(div);
+            body.scrollTop = body.scrollHeight;
+        }
+
+        function hxResetTranscript() {
+            const body = document.getElementById('history-transcript-body');
+            const wrap = document.getElementById('history-transcript-wrap');
+            if (body) body.innerHTML = '';
+            if (wrap) wrap.style.display = 'none';
+        }
+
+        function toggleHistoryTranscript() {
+            const body = document.getElementById('history-transcript-body');
+            const caret = document.getElementById('history-transcript-caret');
+            if (!body) return;
+            body.classList.toggle('hx-open');
+            if (caret) caret.classList.toggle('hx-open');
+        }
+
+        function fillHistoryCC(text) {
+            const input = document.getElementById('history-chief-complaint');
+            if (!input) return;
+            input.value = text;
+            input.focus();
+            hxHaptic('light');
+        }
+
+        function confirmHistoryReset() {
+            tg.showConfirm('گزارش فعلی پاک می‌شود و یک شرح حال‌گیری تازه شروع می‌شود. مطمئنید؟ (اگر گزارش را کپی نکرده‌اید، اول آن را کپی کنید)', ok => {
+                if (ok) resetHistoryTaking();
+            });
         }
 
         async function startHistoryTaking() {
@@ -4262,7 +4780,7 @@
             const info = document.getElementById('history-initial-info').value.trim();
 
             if (!age || !sex || !cc) {
-                alert('لطفاً سن، جنسیت و شکایت اصلی بیمار را وارد کنید.');
+                tg.showAlert('لطفاً سن، جنسیت و شکایت اصلی بیمار را وارد کنید.');
                 return;
             }
 
@@ -4289,7 +4807,7 @@
 
                 if (!response.ok) {
                     const error = await response.json();
-                    alert(error.message || 'خطا در شروع شرح حال گیری');
+                    tg.showAlert(error.message || 'خطا در شروع شرح حال گیری');
                     return;
                 }
 
@@ -4320,7 +4838,7 @@
                 // دریافت اولین سوال
                 await getNextHistoryQuestion();
             } catch (error) {
-                alert('خطا: ' + error.message);
+                tg.showAlert('خطا: ' + error.message);
             } finally {
                 hxSetLoading('history-start-btn', false);
                 document.getElementById('history-start-btn').innerText = '🚀 شروع مصاحبه بالینی';
@@ -4349,7 +4867,7 @@
                         return;
                     }
                     qEl.innerText = 'خطا در دریافت سوال';
-                    alert(error.message || 'خطا در دریافت سوال');
+                    tg.showAlert(error.message || 'خطا در دریافت سوال');
                     return;
                 }
 
@@ -4357,13 +4875,14 @@
                 hxUpdateProgress(data.phase);
                 historyConversationLog.push({type: 'question', content: data.question, phase: data.phase});
                 qEl.innerText = data.question;
+                hxAddTranscript('doctor', data.question);
 
                 const input = document.getElementById('history-answer-input');
                 input.value = '';
                 input.focus();
             } catch (error) {
                 qEl.innerText = 'خطا در ارتباط با سرور';
-                alert('خطا: ' + error.message);
+                tg.showAlert('خطا: ' + error.message);
             }
         }
 
@@ -4372,7 +4891,7 @@
 
             const answer = document.getElementById('history-answer-input').value.trim();
             if (!answer) {
-                alert('لطفاً پاسخ خود را وارد کنید.');
+                tg.showAlert('لطفاً پاسخ خود را وارد کنید.');
                 return;
             }
 
@@ -4393,7 +4912,7 @@
 
                 if (!response.ok) {
                     const error = await response.json();
-                    alert(error.message || 'خطا در ارسال پاسخ');
+                    tg.showAlert(error.message || 'خطا در ارسال پاسخ');
                     return;
                 }
 
@@ -4401,12 +4920,13 @@
                     type: 'answer',
                     content: answer
                 });
+                hxAddTranscript('patient', answer);
                 hxHaptic('light');
 
                 // دریافت سوال بعدی
                 await getNextHistoryQuestion();
             } catch (error) {
-                alert('خطا: ' + error.message);
+                tg.showAlert('خطا: ' + error.message);
             } finally {
                 hxSetLoading('history-submit-btn', false);
                 document.getElementById('history-submit-btn').innerText = '✅ ارسال پاسخ';
@@ -4431,7 +4951,7 @@
 
                 if (!response.ok) {
                     const error = await response.json();
-                    alert(error.message || 'خطا در پایان شرح حال گیری');
+                    tg.showAlert(error.message || 'خطا در پایان شرح حال گیری');
                     return;
                 }
 
@@ -4453,10 +4973,10 @@
                 }
                 hxHaptic('success');
             } catch (error) {
-                alert('خطا: ' + error.message);
+                tg.showAlert('خطا: ' + error.message);
             } finally {
                 hxSetLoading('history-finish-btn', false);
-                document.getElementById('history-finish-btn').innerText = '🏁 پایان و دریافت گزارش';
+                document.getElementById('history-finish-btn').innerText = '🏁 پایان و گزارش';
             }
         }
 
@@ -4530,6 +5050,12 @@
             document.getElementById('history-answer-input').value = '';
             const bar = document.getElementById('history-progress-bar');
             if (bar) bar.style.width = '0%';
+            const counter = document.getElementById('history-q-counter');
+            if (counter) counter.innerText = 'سوال ۰ از ۲۰';
+            const badge = document.getElementById('history-phase-badge');
+            if (badge) badge.innerText = '🏷 شروع مصاحبه';
+            hxResetRoadmap();
+            hxResetTranscript();
         }
 
 
