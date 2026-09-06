@@ -2578,6 +2578,31 @@
             </div>
         </div>
 
+        <!-- زبانه محاسبات پزشکی -->
+        <div id="tab-calculators" class="tab-content">
+            <div class="card" style="border-right: 4px solid #06b6d4;">
+                <div class="card-title">
+                    <span class="card-title-icon">
+                        <span class="icon-badge" style="background:rgba(6,182,212,0.12); color:#06b6d4;">🧮</span>
+                        معیارها و محاسبات پزشکی
+                    </span>
+                </div>
+                <div class="card-desc" style="margin-bottom:14px;">محاسبات کاربردی بالینی که روزانه در بخش‌ها استفاده می‌شوند</div>
+                <div id="calculators-list" style="display:flex; flex-direction:column; gap:10px;"></div>
+            </div>
+
+            <!-- کارت محاسبه‌گر فعال -->
+            <div id="active-calculator-card" class="card" style="display:none; border-right: 4px solid #06b6d4;">
+                <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+                    <div style="font-weight:800; font-size:15px; color:var(--text-color);" id="active-calculator-title"></div>
+                    <button onclick="closeCalculator()" style="background:var(--item-bg); border:var(--card-border); color:var(--hint-color); padding:6px 12px; border-radius:8px; font-size:11px; cursor:pointer;">بازگشت</button>
+                </div>
+                <div id="active-calculator-form" style="display:flex; flex-direction:column; gap:12px;"></div>
+                <button id="active-calculator-btn" class="hx-btn-primary" style="margin-top:14px; width:100%;">محاسبه کن</button>
+                <div id="active-calculator-result" style="margin-top:14px; display:none;"></div>
+            </div>
+        </div>
+
         <!-- زبانه ۷: پنل ادمین (فقط برای ادمین قابل مشاهده) -->
         <div id="tab-admin" class="tab-content">
             <div class="card" style="border-right: 4px solid #ef4444;">
@@ -2817,6 +2842,10 @@
             <span class="nav-icon">📋</span>
             <span>شرح حال گیری</span>
         </div>
+        <div class="nav-item" onclick="switchTab('calculators', this)">
+            <span class="nav-icon">🧮</span>
+            <span>محاسبات</span>
+        </div>
         <div class="nav-item" id="admin-nav-item" onclick="switchTab('admin', this)" style="display:none;">
             <span class="nav-icon">👑</span>
             <span>ادمین</span>
@@ -2888,6 +2917,16 @@
 
         const BASE_URL = "https://api.apamed.ir";
 
+        function fetchWithAuth(path, options = {}) {
+            const initData = tg.initData || '';
+            const headers = {
+                'Content-Type': 'application/json',
+                'X-Telegram-Init-Data': initData,
+                ...(options.headers || {}),
+            };
+            return fetch(`${BASE_URL}${path}`, { ...options, headers });
+        }
+
         function switchTab(tabName, element) {
             // بررسی اینکه آیا کاربر اجازه دسترسی به این تب را دارد
             if (tabName === 'admin' && !isAdminUser) {
@@ -2922,6 +2961,8 @@
                 loadExamMode();
                 loadExamTopics();
                 console.log('پنل ادمین باز شد');
+            } else if (tabName === 'calculators') {
+                loadCalculatorsList();
             } else if (nightlyStatusPollInterval) {
                 clearInterval(nightlyStatusPollInterval);
                 nightlyStatusPollInterval = null;
@@ -4375,6 +4416,7 @@
         loadAppData();
         loadChallengeTopics();
         loadAiChatHistory();
+        loadCalculatorsList();
 
         // ---------- پنل ادمین ----------
         const ADMIN_CHAT_ID = 1914755688;
@@ -5726,6 +5768,192 @@
             if (badge) badge.innerText = '🏷 شروع مصاحبه';
             hxResetRoadmap();
             hxResetTranscript();
+        }
+
+        // ========== بخش محاسبات پزشکی ==========
+        let calculatorsList = [];
+        let activeCalculatorId = null;
+
+        async function loadCalculatorsList() {
+            const container = document.getElementById('calculators-list');
+            if (!container) return;
+            try {
+                const res = await fetchWithAuth(`${BASE_URL}/api/calculators`);
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.message || 'خطا در دریافت لیست محاسبات');
+                calculatorsList = data.calculators || [];
+                renderCalculatorsList(calculatorsList);
+            } catch (e) {
+                container.innerHTML = `<div style="color:var(--hint-color); font-size:12px;">خطا: ${e.message}</div>`;
+            }
+        }
+
+        function renderCalculatorsList(list) {
+            const container = document.getElementById('calculators-list');
+            if (!container) return;
+            if (!list.length) {
+                container.innerHTML = '<div style="color:var(--hint-color); font-size:12px;">محاسبه‌ای یافت نشد.</div>';
+                return;
+            }
+            container.innerHTML = list.map(item => `
+                <div class="card" style="border-right:4px solid #06b6d4; cursor:pointer; margin-bottom:0;" onclick="openCalculator('${item.id}')">
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <span style="font-size:22px;">${item.icon}</span>
+                        <div>
+                            <div style="font-weight:800; font-size:14px; color:var(--text-color);">${item.title}</div>
+                            <div style="font-size:11px; color:var(--hint-color); line-height:1.5;">${item.description}</div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function openCalculator(id) {
+            const item = calculatorsList.find(c => c.id === id);
+            if (!item) return;
+            activeCalculatorId = id;
+            document.getElementById('active-calculator-title').textContent = `${item.icon} ${item.title}`;
+            const form = document.getElementById('active-calculator-form');
+            form.innerHTML = item.inputs.map(input => {
+                if (input.type === 'select') {
+                    const options = input.options.map(o => `<option value="${o.value}">${o.label}</option>`).join('');
+                    return `
+                        <div class="hx-field">
+                            <label class="hx-label" for="calc-${input.name}">${input.label}</label>
+                            <select id="calc-${input.name}" class="hx-input">${options}</select>
+                        </div>
+                    `;
+                }
+                return `
+                    <div class="hx-field">
+                        <label class="hx-label" for="calc-${input.name}">${input.label}</label>
+                        <input type="number" id="calc-${input.name}" class="hx-input" ${input.min !== undefined ? `min="${input.min}"` : ''} ${input.max !== undefined ? `max="${input.max}"` : ''} ${input.step !== undefined ? `step="${input.step}"` : ''} placeholder="—">
+                    </div>
+                `;
+            }).join('');
+            document.getElementById('active-calculator-result').style.display = 'none';
+            document.getElementById('active-calculator-card').style.display = 'block';
+            document.getElementById('active-calculator-btn').onclick = () => runCalculator(id);
+        }
+
+        function closeCalculator() {
+            activeCalculatorId = null;
+            document.getElementById('active-calculator-card').style.display = 'none';
+            document.getElementById('active-calculator-result').style.display = 'none';
+        }
+
+        async function runCalculator(id) {
+            const body = { calculator_id: id, values: {} };
+            const item = calculatorsList.find(c => c.id === id);
+            if (!item) return;
+            for (const input of item.inputs) {
+                const el = document.getElementById(`calc-${input.name}`);
+                if (!el) continue;
+                let val = el.value.trim();
+                if (input.type === 'number') {
+                    val = val === '' ? null : Number(val);
+                }
+                body.values[input.name] = val;
+            }
+            const btn = document.getElementById('active-calculator-btn');
+            const resultBox = document.getElementById('active-calculator-result');
+            btn.disabled = true;
+            btn.textContent = 'در حال محاسبه...';
+            resultBox.style.display = 'none';
+            try {
+                const res = await fetchWithAuth(`${BASE_URL}/api/calculators/calculate`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body),
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.message || 'خطا در محاسبه');
+                resultBox.style.display = 'block';
+                resultBox.innerHTML = renderCalculatorResult(id, data.result);
+                hxHaptic('success');
+            } catch (e) {
+                resultBox.style.display = 'block';
+                resultBox.innerHTML = `<div style="color:#ef4444; font-size:12px;">خطا: ${e.message}</div>`;
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'محاسبه کن';
+            }
+        }
+
+        function renderCalculatorResult(id, result) {
+            if (id === 'gfr') {
+                return `
+                    <div style="background:var(--item-bg); padding:14px; border-radius:12px; border:var(--card-border);">
+                        <div style="font-size:11px; color:var(--hint-color); margin-bottom:4px;">GFR (CKD-EPI)</div>
+                        <div style="font-size:28px; font-weight:800; color:var(--text-color);">${result.gfr} <span style="font-size:12px; font-weight:700;">mL/min/1.73m²</span></div>
+                        <div style="font-size:12px; color:var(--hint-color); margin-top:4px;">${result.stage}</div>
+                    </div>
+                `;
+            }
+            if (id === 'gcs') {
+                return `
+                    <div style="background:var(--item-bg); padding:14px; border-radius:12px; border:var(--card-border);">
+                        <div style="font-size:11px; color:var(--hint-color); margin-bottom:4px;">GCS Total</div>
+                        <div style="font-size:28px; font-weight:800; color:var(--text-color);">${result.total} <span style="font-size:12px; font-weight:700;">/ 15</span></div>
+                        <div style="font-size:12px; color:var(--hint-color); margin-top:4px;">${result.level}</div>
+                    </div>
+                `;
+            }
+            if (id === 'apgar') {
+                return `
+                    <div style="background:var(--item-bg); padding:14px; border-radius:12px; border:var(--card-border);">
+                        <div style="font-size:11px; color:var(--hint-color); margin-bottom:4px;">Apgar Score</div>
+                        <div style="font-size:28px; font-weight:800; color:var(--text-color);">${result.total} <span style="font-size:12px; font-weight:700;">/ 10</span></div>
+                        <div style="font-size:12px; color:var(--hint-color); margin-top:4px;">${result.interpretation}</div>
+                    </div>
+                `;
+            }
+            if (id === 'bmi') {
+                return `
+                    <div style="background:var(--item-bg); padding:14px; border-radius:12px; border:var(--card-border);">
+                        <div style="font-size:11px; color:var(--hint-color); margin-bottom:4px;">BMI</div>
+                        <div style="font-size:28px; font-weight:800; color:var(--text-color);">${result.bmi} <span style="font-size:12px; font-weight:700;">kg/m²</span></div>
+                        <div style="font-size:12px; color:var(--hint-color); margin-top:4px;">${result.category}</div>
+                    </div>
+                `;
+            }
+            if (id === 'cha2ds2_vasc') {
+                return `
+                    <div style="background:var(--item-bg); padding:14px; border-radius:12px; border:var(--card-border);">
+                        <div style="font-size:11px; color:var(--hint-color); margin-bottom:4px;">CHA₂DS₂-VASc Score</div>
+                        <div style="font-size:28px; font-weight:800; color:var(--text-color);">${result.score}</div>
+                        <div style="font-size:12px; color:var(--hint-color); margin-top:4px;">${result.risk}</div>
+                    </div>
+                `;
+            }
+            if (id === 'curb65') {
+                return `
+                    <div style="background:var(--item-bg); padding:14px; border-radius:12px; border:var(--card-border);">
+                        <div style="font-size:11px; color:var(--hint-color); margin-bottom:4px;">CURB-65 Score</div>
+                        <div style="font-size:28px; font-weight:800; color:var(--text-color);">${result.score}</div>
+                        <div style="font-size:12px; color:var(--hint-color); margin-top:4px;">${result.severity}</div>
+                    </div>
+                `;
+            }
+            if (id === 'qsofa') {
+                return `
+                    <div style="background:var(--item-bg); padding:14px; border-radius:12px; border:var(--card-border);">
+                        <div style="font-size:11px; color:var(--hint-color); margin-bottom:4px;">qSOFA Score</div>
+                        <div style="font-size:28px; font-weight:800; color:var(--text-color);">${result.score} <span style="font-size:12px; font-weight:700;">/ 3</span></div>
+                        <div style="font-size:12px; color:var(--hint-color); margin-top:4px;">${result.positive ? 'مثبت — سپسیس را در نظر بگیر' : 'منفی'}</div>
+                    </div>
+                `;
+            }
+            if (id === 'child_pugh') {
+                return `
+                    <div style="background:var(--item-bg); padding:14px; border-radius:12px; border:var(--card-border);">
+                        <div style="font-size:11px; color:var(--hint-color); margin-bottom:4px;">Child-Pugh Score</div>
+                        <div style="font-size:28px; font-weight:800; color:var(--text-color);">${result.score} <span style="font-size:12px; font-weight:700;">/ 15</span></div>
+                        <div style="font-size:12px; color:var(--hint-color); margin-top:4px;">کلاس ${result.class}</div>
+                    </div>
+                `;
+            }
+            return `<pre style="font-size:12px;">${JSON.stringify(result, null, 2)}</pre>`;
         }
 
 
