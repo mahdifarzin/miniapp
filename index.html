@@ -38,24 +38,26 @@
         /* ---------------------------------------------------- */
         /* ۲. متغیرهای تم شب (Dark Mode) */
         /* ---------------------------------------------------- */
-        body.dark-mode {
-            --bg-color: #0b1329;
-            --secondary-bg: #152238;
-            --text-color: #f1f5f9;
-            --hint-color: #94a3b8;
-            --med-cyan: #38bdf8;
-            --med-emerald: #34d399;
-            --med-navy: #f8fafc;
-            --med-blue-gradient: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #1e3a8a 100%);
-            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-            --card-border: 1px solid rgba(255, 255, 255, 0.08);
-            --glass-nav-bg: rgba(21, 34, 56, 0.85);
-            --item-bg: #1e2d4a;
-            --item-border: rgba(255, 255, 255, 0.05);
+        body.dark-mode, @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #0b1329;
+                --secondary-bg: #152238;
+                --text-color: #f1f5f9;
+                --hint-color: #94a3b8;
+                --med-cyan: #38bdf8;
+                --med-emerald: #34d399;
+                --med-navy: #f8fafc;
+                --med-blue-gradient: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #1e3a8a 100%);
+                --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+                --card-border: 1px solid rgba(255, 255, 255, 0.08);
+                --glass-nav-bg: rgba(21, 34, 56, 0.85);
+                --item-bg: #1e2d4a;
+                --item-border: rgba(255, 255, 255, 0.05);
 
-            /* پترن پزشکی پس‌زمینه (شب) */
-            --bg-pattern-cross: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 14V26M14 20H26' stroke='%2338bdf8' stroke-width='1.5' stroke-linecap='round' stroke-opacity='0.12'/%3E%3C/svg%3E");
-            --bg-pattern-dots: radial-gradient(rgba(56, 189, 248, 0.12) 1.2px, transparent 1.2px);
+                /* پترن پزشکی پس‌زمینه (شب) */
+                --bg-pattern-cross: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 14V26M14 20H26' stroke='%2338bdf8' stroke-width='1.5' stroke-linecap='round' stroke-opacity='0.12'/%3E%3C/svg%3E");
+                --bg-pattern-dots: radial-gradient(rgba(56, 189, 248, 0.12) 1.2px, transparent 1.2px);
+            }
         }
 
         * {
@@ -1370,758 +1372,6 @@
                 padding: 15px;
             }
         }
-
-        /* ==================================================== */
-        /* بخش شرح حال گیری هوشمند — زبان بصری «پروندهٔ بیمارستانی» */
-        /* ==================================================== */
-
-        /* --- فرم پذیرش (صفحهٔ شروع) --- */
-        .hx-chart {
-            background: var(--item-bg);
-            border: var(--card-border);
-            border-radius: 14px;
-            padding: 14px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            position: relative;
-            overflow: hidden;
-        }
-        .hx-chart::before {
-            content: '';
-            position: absolute;
-            top: 0; right: 0; left: 0;
-            height: 4px;
-            background: repeating-linear-gradient(90deg, #10b981 0 14px, transparent 14px 21px);
-            opacity: 0.85;
-        }
-        .hx-chart-head {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 4px;
-        }
-        .hx-chart-title {
-            font-weight: 800;
-            font-size: 13px;
-            color: var(--text-color);
-        }
-        .hx-chart-badge {
-            font-size: 9.5px;
-            font-weight: 800;
-            color: #059669;
-            background: rgba(16, 185, 129, 0.12);
-            padding: 3px 9px;
-            border-radius: 20px;
-            white-space: nowrap;
-        }
-        .hx-field {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-        .hx-label {
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--hint-color);
-        }
-        .hx-input {
-            width: 100%;
-            padding: 11px 12px;
-            border-radius: 10px;
-            border: var(--card-border);
-            background: var(--secondary-bg);
-            color: var(--text-color);
-            font-size: 12.5px;
-            outline: none;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
-        }
-        .hx-input:focus {
-            border-color: rgba(16, 185, 129, 0.55);
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.14);
-        }
-        .hx-start-btn {
-            width: 100%;
-            padding: 13px;
-            border: none;
-            border-radius: 12px;
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: #fff;
-            font-family: inherit;
-            font-size: 13.5px;
-            font-weight: 800;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
-            transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
-        }
-        .hx-start-btn:active {
-            transform: translateY(1px);
-            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.35);
-        }
-        .hx-start-btn:disabled {
-            opacity: 0.6;
-            pointer-events: none;
-        }
-
-        /* --- چیپ‌های پیشنهاد سریع --- */
-        .hx-quick-chips {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-            margin-top: 6px;
-        }
-        .hx-chip {
-            background: var(--secondary-bg);
-            border: 1px solid var(--card-border);
-            color: var(--text-color);
-            font-size: 11px;
-            font-weight: 700;
-            padding: 6px 13px;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: background 0.15s ease, border-color 0.15s ease;
-        }
-        .hx-chip:active {
-            background: rgba(16, 185, 129, 0.14);
-            border-color: rgba(16, 185, 129, 0.5);
-        }
-        .hx-chip-para {
-            background: rgba(139, 92, 246, 0.08);
-            border-color: rgba(139, 92, 246, 0.35);
-            color: #8b5cf6;
-        }
-        .hx-chip-para:active {
-            background: rgba(139, 92, 246, 0.18);
-            border-color: rgba(139, 92, 246, 0.6);
-        }
-
-        /* --- کارت جلسه: نقشه راه + پیشرفت --- */
-        .hx-session-card {
-            background: var(--item-bg);
-            border: var(--card-border);
-            border-radius: 14px;
-            padding: 12px;
-            margin-bottom: 12px;
-        }
-        .hx-roadmap {
-            display: flex;
-            gap: 4px;
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            padding-bottom: 4px;
-            margin-bottom: 10px;
-            scrollbar-width: none;
-        }
-        .hx-roadmap::-webkit-scrollbar { display: none; }
-        .hx-road-step {
-            font-size: 9.5px;
-            font-weight: 800;
-            color: var(--hint-color);
-            background: var(--secondary-bg);
-            border: 1px solid var(--card-border);
-            padding: 4px 9px;
-            border-radius: 20px;
-            white-space: nowrap;
-            flex-shrink: 0;
-            transition: all 0.35s ease;
-        }
-        .hx-road-step.hx-done {
-            color: #059669;
-            background: rgba(16, 185, 129, 0.12);
-            border-color: rgba(16, 185, 129, 0.4);
-        }
-        .hx-road-step.hx-active {
-            color: #fff;
-            background: linear-gradient(135deg, #10b981, #059669);
-            border-color: transparent;
-            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
-        }
-        .hx-progress-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-            gap: 8px;
-        }
-        .hx-phase-badge {
-            background: rgba(16, 185, 129, 0.14);
-            color: #10b981;
-            font-size: 10px;
-            font-weight: 800;
-            padding: 4px 10px;
-            border-radius: 20px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .hx-q-counter {
-            font-size: 10px;
-            font-weight: 800;
-            color: var(--hint-color);
-            white-space: nowrap;
-        }
-        .hx-progress-track {
-            height: 6px;
-            background: var(--secondary-bg);
-            border-radius: 6px;
-            overflow: hidden;
-        }
-        .hx-progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #10b981, #059669);
-            border-radius: 6px;
-            transition: width 0.4s ease;
-        }
-
-        /* --- کارت بیمار --- */
-        .hx-patient-card {
-            background: var(--item-bg);
-            border: var(--card-border);
-            border-radius: 12px;
-            padding: 12px;
-            margin-bottom: 12px;
-        }
-        .hx-patient-head {
-            font-weight: 800;
-            font-size: 12px;
-            color: var(--text-color);
-            margin-bottom: 4px;
-        }
-        .hx-patient-body {
-            font-size: 11px;
-            color: var(--hint-color);
-            line-height: 1.8;
-        }
-
-        /* --- کارت سوال و پاسخ --- */
-        .hx-q-card {
-            background: var(--item-bg);
-            border: var(--card-border);
-            border-radius: 14px;
-            padding: 12px;
-        }
-        .hx-q-head {
-            font-weight: 800;
-            font-size: 12px;
-            color: var(--text-color);
-            margin-bottom: 8px;
-        }
-        .hx-q-text {
-            font-size: 13px;
-            color: var(--text-color);
-            line-height: 1.9;
-            background: var(--secondary-bg);
-            border-radius: 10px;
-            padding: 12px;
-            margin-bottom: 12px;
-            min-height: 44px;
-            animation: hx-fade-up 0.35s ease;
-        }
-        .hx-answer {
-            margin-bottom: 4px;
-        }
-        .hx-btn-primary {
-            flex: 1.4;
-            padding: 12px;
-            border: none;
-            border-radius: 12px;
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: #fff;
-            font-family: inherit;
-            font-size: 12.5px;
-            font-weight: 800;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35);
-            transition: transform 0.2s ease, opacity 0.2s ease;
-        }
-        .hx-btn-ghost {
-            flex: 1;
-            padding: 12px;
-            border: 1px solid var(--card-border);
-            border-radius: 12px;
-            background: var(--secondary-bg);
-            color: var(--text-color);
-            font-family: inherit;
-            font-size: 12px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
-        }
-        .hx-btn-primary:active, .hx-btn-ghost:active {
-            transform: translateY(1px);
-        }
-        .hx-btn-primary:disabled, .hx-btn-ghost:disabled {
-            opacity: 0.6;
-            pointer-events: none;
-        }
-
-        /* --- ترنسکریپت گفتگو --- */
-        .hx-transcript {
-            background: var(--item-bg);
-            border: var(--card-border);
-            border-radius: 12px;
-            margin-top: 12px;
-            overflow: hidden;
-        }
-        .hx-transcript-head {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 11px 12px;
-            font-weight: 800;
-            font-size: 12px;
-            color: var(--text-color);
-            cursor: pointer;
-            user-select: none;
-        }
-        .hx-transcript-caret {
-            transition: transform 0.25s ease;
-            color: var(--hint-color);
-        }
-        .hx-transcript-caret.hx-open {
-            transform: rotate(180deg);
-        }
-        .hx-transcript-body {
-            display: none;
-            padding: 0 12px 12px;
-            max-height: 260px;
-            overflow-y: auto;
-        }
-        .hx-transcript-body.hx-open {
-            display: block;
-        }
-        .hx-msg {
-            font-size: 11.5px;
-            line-height: 1.8;
-            padding: 8px 10px;
-            border-radius: 10px;
-            margin-bottom: 6px;
-            white-space: pre-wrap;
-        }
-        .hx-msg-doctor {
-            background: rgba(16, 185, 129, 0.1);
-            border-right: 3px solid #10b981;
-            color: var(--text-color);
-        }
-        .hx-msg-patient {
-            background: var(--secondary-bg);
-            border-right: 3px solid var(--hint-color);
-            color: var(--text-color);
-        }
-        .hx-msg-para {
-            background: rgba(139, 92, 246, 0.1);
-            border-right: 3px solid #8b5cf6;
-            color: var(--text-color);
-        }
-        .hx-msg-para-res {
-            background: rgba(2, 132, 199, 0.08);
-            border-right: 3px solid #0284c7;
-            color: var(--text-color);
-        }
-        .hx-msg-who {
-            display: block;
-            font-size: 9.5px;
-            font-weight: 800;
-            opacity: 0.65;
-            margin-bottom: 2px;
-        }
-
-        /* --- صفحهٔ نتیجه --- */
-        .hx-done-banner {
-            position: relative;
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: #fff;
-            padding: 18px 16px 16px;
-            border-radius: 14px;
-            margin-bottom: 12px;
-            text-align: center;
-            overflow: hidden;
-        }
-        .hx-stamp {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            font-size: 10px;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-            border: 2px solid rgba(255, 255, 255, 0.85);
-            color: rgba(255, 255, 255, 0.95);
-            padding: 3px 10px;
-            border-radius: 6px;
-            transform: rotate(-8deg);
-            opacity: 0.95;
-        }
-        .hx-copy-btn {
-            width: 100%;
-            padding: 13px;
-            border: none;
-            border-radius: 12px;
-            background: linear-gradient(135deg, #0284c7, #0ea5e9);
-            color: #fff;
-            font-family: inherit;
-            font-size: 13px;
-            font-weight: 800;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(2, 132, 199, 0.35);
-            transition: transform 0.2s ease, opacity 0.2s ease;
-            margin-bottom: 12px;
-        }
-        .hx-copy-btn:active {
-            transform: translateY(1px);
-        }
-        .hx-note-card {
-            background: var(--item-bg);
-            border: var(--card-border);
-            border-right: 3px solid var(--hint-color);
-            border-radius: 12px;
-            padding: 12px;
-            margin-bottom: 12px;
-        }
-        .hx-note-head {
-            font-weight: 800;
-            font-size: 13px;
-            color: var(--text-color);
-            margin-bottom: 8px;
-        }
-        .hx-note-body {
-            font-size: 12px;
-            color: var(--text-color);
-            line-height: 2;
-            white-space: pre-wrap;
-        }
-
-        /* --- انیمیشن عمومی --- */
-        @keyframes hx-fade-up {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @media (prefers-reduced-motion: reduce) {
-            .hx-q-text { animation: none; }
-            .hx-road-step, .hx-transcript-caret, .hx-progress-fill { transition: none; }
-        }
-
-        /* ==================================================== */
-        /* رابط چت هوش مصنوعی — زبان بصری «پیام‌رسان» */
-        /* ==================================================== */
-
-        /* --- هدر چت --- */
-        .chat-shell {
-            display: flex;
-            flex-direction: column;
-            height: calc(100vh - 70px - 95px);
-            min-height: 380px;
-            background: var(--secondary-bg);
-            border: var(--card-border);
-            border-radius: 18px;
-            box-shadow: var(--card-shadow);
-            overflow: hidden;
-        }
-        .chat-head {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 8px;
-            padding: 11px 14px;
-            background: linear-gradient(135deg, rgba(16,185,129,0.14), rgba(5,150,105,0.04));
-            border-bottom: var(--card-border);
-        }
-        .chat-head-title {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 800;
-            font-size: 13px;
-            color: var(--text-color);
-        }
-        .chat-head-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #10b981;
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.18);
-            animation: chat-pulse 2.4s ease infinite;
-        }
-        @keyframes chat-pulse {
-            0%, 100% { box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.18); }
-            50% { box-shadow: 0 0 0 5px rgba(16, 185, 129, 0.07); }
-        }
-        .chat-head-quota {
-            font-size: 10px;
-            font-weight: 700;
-            color: var(--hint-color);
-            line-height: 1.4;
-            text-align: left;
-        }
-        .chat-new-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            border: 1px solid var(--card-border);
-            background: var(--item-bg);
-            color: var(--text-color);
-            font-family: inherit;
-            font-size: 10.5px;
-            font-weight: 700;
-            padding: 6px 10px;
-            border-radius: 20px;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: background 0.2s ease, transform 0.15s ease;
-        }
-        .chat-new-btn:active { transform: translateY(1px); }
-
-        /* --- بدنه پیام‌ها --- */
-        .chat-body {
-            flex: 1;
-            overflow-y: auto;
-            padding: 14px 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            -webkit-overflow-scrolling: touch;
-        }
-        .chat-welcome {
-            text-align: center;
-            padding: 22px 10px 10px;
-        }
-        .chat-welcome-icon {
-            width: 54px;
-            height: 54px;
-            margin: 0 auto 12px;
-            border-radius: 18px;
-            background: linear-gradient(135deg, #10b981, #059669);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 26px;
-            box-shadow: 0 8px 22px rgba(16, 185, 129, 0.35);
-        }
-        .chat-welcome-title {
-            font-size: 15px;
-            font-weight: 800;
-            color: var(--text-color);
-            margin-bottom: 6px;
-        }
-        .chat-welcome-desc {
-            font-size: 11.5px;
-            color: var(--hint-color);
-            line-height: 1.8;
-            margin-bottom: 14px;
-        }
-        .chat-suggest-wrap {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            justify-content: center;
-        }
-        .chat-chip {
-            border: 1px solid var(--card-border);
-            background: var(--item-bg);
-            color: var(--text-color);
-            font-family: inherit;
-            font-size: 11px;
-            font-weight: 700;
-            padding: 7px 11px;
-            border-radius: 18px;
-            cursor: pointer;
-            transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
-        }
-        .chat-chip:active { transform: translateY(1px); }
-        .chat-followups {
-            justify-content: flex-end;
-            margin-top: 4px;
-            padding: 0 4px;
-        }
-        .chat-chip-sm {
-            font-size: 10px;
-            padding: 5px 10px;
-            color: #059669;
-            border-color: rgba(16, 185, 129, 0.35);
-            background: rgba(16, 185, 129, 0.08);
-        }
-        .chat-date-sep {
-            align-self: center;
-            font-size: 9.5px;
-            font-weight: 700;
-            color: var(--hint-color);
-            background: var(--item-bg);
-            border: var(--card-border);
-            padding: 3px 10px;
-            border-radius: 20px;
-            margin: 4px 0;
-        }
-
-        /* --- حباب‌های پیام --- */
-        .chat-row {
-            display: flex;
-            flex-direction: column;
-            max-width: 86%;
-            animation: chat-fade-up 0.3s ease;
-        }
-        .chat-row-user { align-self: flex-start; align-items: flex-start; }
-        .chat-row-ai { align-self: flex-end; align-items: flex-end; }
-        @keyframes chat-fade-up {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .chat-bubble {
-            padding: 10px 13px;
-            font-size: 12.5px;
-            line-height: 1.9;
-            color: var(--text-color);
-            white-space: pre-wrap;
-            word-break: break-word;
-            user-select: text;
-        }
-        .chat-bubble-user {
-            background: linear-gradient(135deg, #0284c7, #0369a1);
-            color: #fff;
-            border-radius: 16px 16px 4px 16px;
-            box-shadow: 0 4px 14px rgba(2, 132, 199, 0.25);
-        }
-        .chat-bubble-ai {
-            background: var(--item-bg);
-            border: var(--card-border);
-            border-radius: 16px 16px 16px 4px;
-        }
-        .chat-who {
-            font-size: 9.5px;
-            font-weight: 700;
-            color: var(--hint-color);
-            margin-bottom: 3px;
-            padding: 0 4px;
-        }
-        .chat-time {
-            font-size: 8.5px;
-            color: var(--hint-color);
-            opacity: 0.7;
-            margin-top: 3px;
-            padding: 0 4px;
-        }
-
-        /* مارک‌داون داخل حباب AI */
-        .chat-bubble-ai .md-b { font-weight: 800; }
-        .chat-bubble-ai .md-h {
-            display: block;
-            font-weight: 800;
-            font-size: 12.5px;
-            margin: 8px 0 3px;
-            color: var(--med-emerald);
-        }
-        .chat-bubble-ai .md-h:first-child { margin-top: 0; }
-        .chat-bubble-ai .md-li {
-            display: block;
-            padding-right: 12px;
-            position: relative;
-        }
-        .chat-bubble-ai .md-li::before {
-            content: '•';
-            position: absolute;
-            right: 2px;
-            color: var(--med-emerald);
-            font-weight: 800;
-        }
-
-        /* --- نشانگر تایپ --- */
-        .chat-typing {
-            align-self: flex-end;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            background: var(--item-bg);
-            border: var(--card-border);
-            border-radius: 16px 16px 16px 4px;
-            padding: 12px 14px;
-        }
-        .chat-typing-dot {
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background: var(--hint-color);
-            animation: chat-blink 1.2s ease infinite;
-        }
-        .chat-typing-dot:nth-child(2) { animation-delay: 0.18s; }
-        .chat-typing-dot:nth-child(3) { animation-delay: 0.36s; }
-        @keyframes chat-blink {
-            0%, 70%, 100% { opacity: 0.3; transform: translateY(0); }
-            35% { opacity: 1; transform: translateY(-3px); }
-        }
-
-        /* --- نوار ورودی --- */
-        .chat-input-bar {
-            display: flex;
-            align-items: flex-end;
-            gap: 8px;
-            padding: 10px;
-            background: var(--secondary-bg);
-            border-top: var(--card-border);
-        }
-        .chat-input {
-            flex: 1;
-            resize: none;
-            border: var(--card-border);
-            background: var(--item-bg);
-            color: var(--text-color);
-            font-family: inherit;
-            font-size: 13px;
-            line-height: 1.7;
-            padding: 10px 13px;
-            border-radius: 16px;
-            outline: none;
-            max-height: 110px;
-            min-height: 41px;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
-            user-select: text;
-        }
-        .chat-input:focus {
-            border-color: rgba(16, 185, 129, 0.55);
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.14);
-        }
-        .chat-send-btn {
-            width: 43px;
-            height: 43px;
-            flex-shrink: 0;
-            border: none;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: #fff;
-            font-size: 17px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35);
-            transition: transform 0.2s ease, opacity 0.2s ease;
-        }
-        .chat-send-btn:active { transform: translateY(2px) scale(0.96); }
-        .chat-send-btn:disabled {
-            opacity: 0.55;
-            pointer-events: none;
-        }
-        .chat-clear-note {
-            font-size: 10px;
-            color: var(--hint-color);
-            text-align: center;
-            padding: 0 12px 10px;
-            line-height: 1.6;
-        }
-        .chat-empty-hint {
-            align-self: center;
-            font-size: 10.5px;
-            color: var(--hint-color);
-            padding: 6px 12px;
-            background: var(--item-bg);
-            border: var(--card-border);
-            border-radius: 14px;
-            margin: 6px 0;
-            text-align: center;
-            line-height: 1.7;
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .chat-row, .chat-welcome-icon { animation: none; }
-            .chat-head-dot, .chat-typing-dot { animation: none; }
-        }
     </style>
 </head>
 <body>
@@ -2407,29 +1657,27 @@
 
         <!-- زبانه ۵: هوش مصنوعی -->
         <div id="tab-ai" class="tab-content">
-            <div class="chat-shell" id="ai-chat-shell">
-                <!-- هدر چت -->
-                <div class="chat-head">
-                    <div class="chat-head-title">
-                        <span class="chat-head-dot"></span>
+            <div class="card card-ai">
+                <div class="card-title">
+                    <span class="card-title-icon">
+                        <span class="icon-badge">💡</span>
                         دستیار هوشمند آپامد
-                    </div>
-                    <div style="display:flex; align-items:center; gap:8px;">
-                        <div class="chat-head-quota" id="ai-quota-text"></div>
-                        <button class="chat-new-btn" id="ai-new-chat-btn" onclick="startNewAiChat()">✨ چت جدید</button>
-                    </div>
+                    </span>
                 </div>
+                <div class="card-desc" id="ai-quota-text" style="margin-bottom:12px;">در حال دریافت اطلاعات...</div>
+                <textarea id="ai-question-input" placeholder="سوال پزشکی خود را اینجا بنویسید..." rows="4"
+                    style="width:100%; border-radius:14px; border:var(--card-border); background:var(--item-bg); color:var(--text-color); padding:12px; font-size:14px; resize:vertical; outline:none;"></textarea>
+                <button class="exam-btn" id="ai-ask-btn" onclick="askAI()" style="margin-top:10px;">🚀 ارسال سوال</button>
+            </div>
 
-                <!-- بدنه پیام‌ها -->
-                <div class="chat-body" id="ai-chat-body"></div>
-
-                <!-- نوار ورودی -->
-                <div class="chat-input-bar">
-                    <textarea id="ai-question-input" class="chat-input" rows="1"
-                        placeholder="سوال پزشکی خود را بنویسید..." onclick="maybeScrollChatToBottom()"></textarea>
-                    <button class="chat-send-btn" id="ai-send-btn" onclick="askAI()" aria-label="ارسال">🚀</button>
+            <div class="card card-ai slide-up" id="ai-answer-card" style="display:none;">
+                <div class="card-title">
+                    <span class="card-title-icon">
+                        <span class="icon-badge">📝</span>
+                        پاسخ دستیار
+                    </span>
                 </div>
-                <div class="chat-clear-note">💬 گفتگوها با حافظه ادامه پیدا می‌کنند و بعد از بستن مینی‌اپ هم می‌مانند.</div>
+                <div class="card-desc" id="ai-answer-text" style="white-space: pre-wrap; line-height: 1.9;"></div>
             </div>
         </div>
 
@@ -2451,155 +1699,94 @@
 
                 <!-- صفحه شروع -->
                 <div id="history-start-section" style="display:flex; flex-direction:column; gap:12px; margin-top:14px;">
-                    <div class="hx-chart">
-                        <div class="hx-chart-head">
-                            <span class="hx-chart-title">📋 فرم پذیرش بیمار</span>
-                            <span class="hx-chart-badge">گام ۱ از ۳</span>
-                        </div>
-                        <div class="hx-field">
-                            <label class="hx-label" for="history-patient-age">سن بیمار</label>
-                            <input type="text" id="history-patient-age" placeholder="مثلاً ۳۵" class="hx-input">
-                        </div>
-                        <div class="hx-field">
-                            <label class="hx-label" for="history-patient-sex">جنسیت</label>
-                            <select id="history-patient-sex" class="hx-input">
-                                <option value="">انتخاب کنید</option>
-                                <option value="مرد">مرد</option>
-                                <option value="زن">زن</option>
-                            </select>
-                        </div>
-                        <div class="hx-field">
-                            <label class="hx-label" for="history-chief-complaint">شکایت اصلی (Chief Complaint)</label>
-                            <textarea id="history-chief-complaint" placeholder="مثلاً: سرفه خشک از سه روز پیش همراه با تب خفیف..." rows="2" class="hx-input" style="resize:vertical;"></textarea>
-                            <div class="hx-quick-chips">
-                                <span class="hx-chip" onclick="fillHistoryCC('سرفه خشک')">سرفه خشک</span>
-                                <span class="hx-chip" onclick="fillHistoryCC('درد شکم')">درد شکم</span>
-                                <span class="hx-chip" onclick="fillHistoryCC('تب و لرز')">تب و لرز</span>
-                                <span class="hx-chip" onclick="fillHistoryCC('سردرد')">سردرد</span>
-                            </div>
-                        </div>
-                        <div class="hx-field">
-                            <label class="hx-label" for="history-initial-info">اطلاعات اولیه <span style="font-weight:500; opacity:0.7;">(اختیاری)</span></label>
-                            <textarea id="history-initial-info" placeholder="سابقه پزشکی، داروها، حساسیت‌ها و..." rows="2" class="hx-input" style="resize:vertical;"></textarea>
-                        </div>
-                        <button class="hx-start-btn" id="history-start-btn" onclick="startHistoryTaking()">🚀 شروع مصاحبه بالینی</button>
+                    <div style="background:var(--item-bg); padding:12px; border-radius:10px; border-left:3px solid #10b981;">
+                        <div style="font-weight:700; font-size:13px; color:var(--text-color); margin-bottom:6px;">📝 اطلاعات اولیه بیمار</div>
+                        <div style="font-size:11px; color:var(--hint-color); line-height:1.7;">هرچه دقیق‌تر بنویسید، سوالات هوش مصنوعی هدفمندتر می‌شود. در پایان، شرح‌حال کامل بیمارستانی آماده درج در پرونده دریافت می‌کنید.</div>
                     </div>
+
+                    <div style="display:flex; gap:8px;">
+                        <input type="text" id="history-patient-age" placeholder="سن بیمار" style="flex:1; padding:11px; border-radius:10px; border:var(--card-border); background:var(--item-bg); color:var(--text-color); font-size:12px;">
+                        <select id="history-patient-sex" style="flex:1; padding:11px; border-radius:10px; border:var(--card-border); background:var(--item-bg); color:var(--text-color); font-size:12px;">
+                            <option value="">جنسیت</option>
+                            <option value="مرد">مرد</option>
+                            <option value="زن">زن</option>
+                        </select>
+                    </div>
+
+                    <textarea id="history-chief-complaint" placeholder="شکایت اصلی بیمار (Chief Complaint) — مثال: سرفه خشک از سه روز پیش..." rows="3" style="width:100%; border-radius:10px; border:var(--card-border); background:var(--item-bg); color:var(--text-color); padding:11px; font-size:12px; resize:vertical;"></textarea>
+
+                    <textarea id="history-initial-info" placeholder="اطلاعات اولیه: سابقه پزشکی، داروها، حساسیت‌ها و... (اختیاری)" rows="3" style="width:100%; border-radius:10px; border:var(--card-border); background:var(--item-bg); color:var(--text-color); padding:11px; font-size:12px; resize:vertical;"></textarea>
+
+                    <button class="exam-btn" id="history-start-btn" onclick="startHistoryTaking()" style="background:linear-gradient(135deg, #10b981, #059669);">🚀 شروع مصاحبه بالینی</button>
                 </div>
 
                 <!-- صفحه شرح حال گیری فعال -->
                 <div id="history-active-section" style="display:none; margin-top:14px;">
-                    <div class="hx-session-card">
-                        <div class="hx-roadmap" id="history-roadmap">
-                            <span class="hx-road-step" data-key="hpi">HPI</span>
-                            <span class="hx-road-step" data-key="sys">علائم</span>
-                            <span class="hx-road-step" data-key="pmh">PMH</span>
-                            <span class="hx-road-step" data-key="med">داروها</span>
-                            <span class="hx-road-step" data-key="fh">خانواده</span>
-                            <span class="hx-road-step" data-key="sh">اجتماعی</span>
-                            <span class="hx-road-step" data-key="ros">ROS</span>
-                            <span class="hx-road-step" data-key="ddx">افتراقی</span>
+                    <!-- نوار پیشرفت و فاز جاری -->
+                    <div style="background:var(--item-bg); border:var(--card-border); border-radius:12px; padding:12px; margin-bottom:12px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; gap:8px;">
+                            <span id="history-phase-badge" style="background:rgba(16,185,129,0.14); color:#10b981; font-size:10px; font-weight:800; padding:4px 10px; border-radius:20px;">🏷 شروع مصاحبه</span>
+                            <span id="history-q-counter" style="font-size:10px; font-weight:800; color:var(--hint-color); white-space:nowrap;">سوال ۰ از ۲۰</span>
                         </div>
-                        <div class="hx-progress-row">
-                            <span id="history-phase-badge" class="hx-phase-badge">🏷 شروع مصاحبه</span>
-                            <span id="history-q-counter" class="hx-q-counter">سوال ۰ از ۲۰</span>
-                        </div>
-                        <div class="hx-progress-track">
-                            <div id="history-progress-bar" class="hx-progress-fill" style="width:0%;"></div>
+                        <div style="height:6px; background:var(--secondary-bg); border-radius:6px; overflow:hidden;">
+                            <div id="history-progress-bar" style="height:100%; width:0%; background:linear-gradient(90deg, #10b981, #059669); border-radius:6px; transition:width 0.4s ease;"></div>
                         </div>
                     </div>
 
                     <!-- خلاصه بیمار -->
-                    <div class="hx-patient-card">
-                        <div class="hx-patient-head">👤 بیمار شما</div>
-                        <div id="history-patient-summary" class="hx-patient-body"></div>
+                    <div style="background:var(--item-bg); border:var(--card-border); border-radius:10px; padding:12px; margin-bottom:12px;">
+                        <div style="font-weight:700; font-size:12px; color:var(--text-color); margin-bottom:4px;">👤 بیمار شما:</div>
+                        <div id="history-patient-summary" style="font-size:11px; color:var(--hint-color); line-height:1.7;"></div>
                     </div>
 
                     <!-- کارت سوال و پاسخ -->
-                    <div class="hx-q-card">
-                        <div class="hx-q-head">💬 سوال بعدی پزشک</div>
-                        <div id="history-current-question" class="hx-q-text">در حال دریافت سوال...</div>
-                        <textarea id="history-answer-input" placeholder="پاسخ بیمار / نتیجهٔ آزمایش را اینجا بنویسید..." rows="3" class="hx-input hx-answer" style="resize:vertical; margin-bottom:10px;"></textarea>
-                        <div class="hx-quick-chips">
-                            <span class="hx-chip" onclick="fillHistoryAnswer('بله')">بله</span>
-                            <span class="hx-chip" onclick="fillHistoryAnswer('خیر')">خیر</span>
-                            <span class="hx-chip" onclick="fillHistoryAnswer('منفی است')">منفی است</span>
-                            <span class="hx-chip" onclick="fillHistoryAnswer('نمی‌دانم')">نمی‌دانم</span>
-                        </div>
-                        <div class="hx-quick-chips" style="margin-top:6px;">
-                            <span class="hx-chip hx-chip-para" onclick="fillHistoryAnswer('CBC: WBC=12000، Hb=13.2، Plt=310000')">CBC (WBC/Hb/Plt)</span>
-                            <span class="hx-chip hx-chip-para" onclick="fillHistoryAnswer('CRP: مثبت، ESR: 45')">CRP/ESR</span>
-                            <span class="hx-chip hx-chip-para" onclick="fillHistoryAnswer('گزارش گراف قفسه سینه:')">گراف قفسه سینه</span>
-                            <span class="hx-chip hx-chip-para" onclick="fillHistoryAnswer('گزارش CT:')">گزارش CT</span>
-                        </div>
-                        <div style="display:flex; gap:8px; margin-top:12px;">
-                            <button class="hx-btn-primary" id="history-submit-btn" onclick="submitHistoryAnswer()">✅ ارسال پاسخ</button>
-                            <button class="hx-btn-ghost" id="history-finish-btn" onclick="finishHistoryTaking()">🏁 پایان و گزارش</button>
-                        </div>
-                    </div>
+                    <div style="background:var(--item-bg); border:var(--card-border); border-radius:12px; padding:12px;">
+                        <div style="font-weight:700; font-size:12px; color:var(--text-color); margin-bottom:8px;">💬 سوال بعدی پزشک:</div>
+                        <div id="history-current-question" style="font-size:13px; color:var(--text-color); line-height:1.9; background:var(--secondary-bg); border-radius:10px; padding:12px; margin-bottom:12px; min-height:44px;">در حال دریافت سوال...</div>
 
-                    <!-- گفتگوی مصاحبه -->
-                    <div class="hx-transcript" id="history-transcript-wrap" style="display:none;">
-                        <div class="hx-transcript-head" onclick="toggleHistoryTranscript()">
-                            <span>📜 گفتگوی مصاحبه</span>
-                            <span class="hx-transcript-caret" id="history-transcript-caret">▾</span>
+                        <textarea id="history-answer-input" placeholder="پاسخ بیمار را اینجا بنویسید..." rows="3" style="width:100%; border-radius:10px; border:var(--card-border); background:var(--secondary-bg); color:var(--text-color); padding:11px; font-size:12px; resize:vertical; margin-bottom:10px;"></textarea>
+
+                        <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px;">
+                            <span onclick="fillHistoryAnswer('بله')" style="background:var(--secondary-bg); border:1px solid var(--card-border); color:var(--text-color); font-size:11px; font-weight:700; padding:6px 14px; border-radius:20px; cursor:pointer;">بله</span>
+                            <span onclick="fillHistoryAnswer('خیر')" style="background:var(--secondary-bg); border:1px solid var(--card-border); color:var(--text-color); font-size:11px; font-weight:700; padding:6px 14px; border-radius:20px; cursor:pointer;">خیر</span>
+                            <span onclick="fillHistoryAnswer('منفی است')" style="background:var(--secondary-bg); border:1px solid var(--card-border); color:var(--text-color); font-size:11px; font-weight:700; padding:6px 14px; border-radius:20px; cursor:pointer;">منفی است</span>
+                            <span onclick="fillHistoryAnswer('نمی‌دانم')" style="background:var(--secondary-bg); border:1px solid var(--card-border); color:var(--text-color); font-size:11px; font-weight:700; padding:6px 14px; border-radius:20px; cursor:pointer;">نمی‌دانم</span>
                         </div>
-                        <div class="hx-transcript-body" id="history-transcript-body"></div>
+
+                        <div style="display:flex; gap:8px;">
+                            <button class="exam-btn" id="history-submit-btn" onclick="submitHistoryAnswer()" style="flex:1.4; background:linear-gradient(135deg, #10b981, #059669);">✅ ارسال پاسخ</button>
+                            <button class="exam-btn" id="history-finish-btn" onclick="finishHistoryTaking()" style="flex:1; background:linear-gradient(135deg, #8b5cf6, #7c3aed);">🏁 پایان و دریافت گزارش</button>
+                        </div>
                     </div>
                 </div>
 
                 <!-- صفحه نتیجه -->
                 <div id="history-result-section" style="display:none; margin-top:14px;">
-                    <div class="hx-done-banner">
-                        <span class="hx-stamp">✔ پذیرش شد</span>
-                        <div style="font-size:30px; margin-bottom:6px;">🏥</div>
-                        <div style="font-weight:800; font-size:15px;">شرح حال‌گیری تکمیل شد</div>
+                    <div style="background:linear-gradient(135deg, #10b981, #059669); color:white; padding:16px; border-radius:12px; margin-bottom:12px; text-align:center;">
+                        <div style="font-size:32px; margin-bottom:8px;">✅</div>
+                        <div style="font-weight:800; font-size:15px;">شرح حال گیری تکمیل شد!</div>
                         <div style="font-size:11px; opacity:0.9; margin-top:4px;">گزارش زیر آماده درج در پرونده بیمار است</div>
                     </div>
 
-                    <button class="hx-copy-btn" id="history-copy-btn" onclick="copyHistoryNote()">📋 کپی کل گزارش برای پرونده</button>
+                    <button class="exam-btn" id="history-copy-btn" onclick="copyHistoryNote()" style="width:100%; margin-bottom:12px; background:linear-gradient(135deg, #0284c7, #0ea5e9);">📋 کپی کل گزارش برای پرونده</button>
 
-                    <div class="hx-note-card" style="border-right-color:#10b981;">
-                        <div class="hx-note-head">🏥 شرح حال کامل بیمارستانی</div>
-                        <div id="history-final-summary" class="hx-note-body"></div>
+                    <div style="background:var(--item-bg); border:var(--card-border); border-right:3px solid #10b981; border-radius:10px; padding:12px; margin-bottom:12px;">
+                        <div style="font-weight:800; font-size:13px; color:var(--text-color); margin-bottom:8px;">🏥 شرح حال کامل بیمارستانی</div>
+                        <div id="history-final-summary" style="font-size:12px; color:var(--text-color); line-height:2; white-space:pre-wrap;"></div>
                     </div>
 
-                    <div class="hx-note-card" style="border-right-color:#f59e0b;">
-                        <div class="hx-note-head">🩺 تشخیص‌های افتراقی</div>
-                        <div id="history-differential-diagnosis" class="hx-note-body"></div>
+                    <div style="background:var(--item-bg); border:var(--card-border); border-right:3px solid #f59e0b; border-radius:10px; padding:12px; margin-bottom:12px;">
+                        <div style="font-weight:800; font-size:13px; color:var(--text-color); margin-bottom:8px;">🩺 تشخیص‌های افتراقی</div>
+                        <div id="history-differential-diagnosis" style="font-size:12px; color:var(--text-color); line-height:2; white-space:pre-wrap;"></div>
                     </div>
 
-                    <div id="history-workup-card" class="hx-note-card" style="border-right-color:#8b5cf6; display:none;">
-                        <div class="hx-note-head">🔬 پاراکلینیک پیشنهادی</div>
-                        <div id="history-workup" class="hx-note-body"></div>
+                    <div id="history-workup-card" style="background:var(--item-bg); border:var(--card-border); border-right:3px solid #8b5cf6; border-radius:10px; padding:12px; margin-bottom:12px;">
+                        <div style="font-weight:800; font-size:13px; color:var(--text-color); margin-bottom:8px;">🔬 پاراکلینیک پیشنهادی</div>
+                        <div id="history-workup" style="font-size:12px; color:var(--text-color); line-height:2; white-space:pre-wrap;"></div>
                     </div>
 
-                    <button class="hx-copy-btn" onclick="confirmHistoryReset()" style="background:linear-gradient(135deg, #0f172a, #1e3a8a);">🔄 شرح حال‌گیری جدید</button>
+                    <button class="exam-btn" onclick="resetHistoryTaking()" style="width:100%; background:linear-gradient(135deg, #0284c7, #0ea5e9);">🔄 شرح حال گیری جدید</button>
                 </div>
-            </div>
-        </div>
-
-        <!-- زبانه محاسبات پزشکی -->
-        <div id="tab-calculators" class="tab-content">
-            <div class="card" style="border-right: 4px solid #06b6d4;">
-                <div class="card-title">
-                    <span class="card-title-icon">
-                        <span class="icon-badge" style="background:rgba(6,182,212,0.12); color:#06b6d4;">🧮</span>
-                        معیارها و محاسبات پزشکی
-                    </span>
-                </div>
-                <div class="card-desc" style="margin-bottom:14px;">محاسبات کاربردی بالینی که روزانه در بخش‌ها استفاده می‌شوند</div>
-                <div id="calculators-list" style="display:flex; flex-direction:column; gap:10px;"></div>
-            </div>
-
-            <!-- کارت محاسبه‌گر فعال -->
-            <div id="active-calculator-card" class="card" style="display:none; border-right: 4px solid #06b6d4;">
-                <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
-                    <div style="font-weight:800; font-size:15px; color:var(--text-color);" id="active-calculator-title"></div>
-                    <button onclick="closeCalculator()" style="background:var(--item-bg); border:var(--card-border); color:var(--hint-color); padding:6px 12px; border-radius:8px; font-size:11px; cursor:pointer;">بازگشت</button>
-                </div>
-                <div id="active-calculator-form" style="display:flex; flex-direction:column; gap:12px;"></div>
-                <button id="active-calculator-btn" class="hx-btn-primary" style="margin-top:14px; width:100%;">محاسبه کن</button>
-                <div id="active-calculator-result" style="margin-top:14px; display:none;"></div>
             </div>
         </div>
 
@@ -2842,10 +2029,6 @@
             <span class="nav-icon">📋</span>
             <span>شرح حال گیری</span>
         </div>
-        <div class="nav-item" onclick="switchTab('calculators', this)">
-            <span class="nav-icon">🧮</span>
-            <span>محاسبات</span>
-        </div>
         <div class="nav-item" id="admin-nav-item" onclick="switchTab('admin', this)" style="display:none;">
             <span class="nav-icon">👑</span>
             <span>ادمین</span>
@@ -2917,16 +2100,6 @@
 
         const BASE_URL = "https://api.apamed.ir";
 
-        function fetchWithAuth(path, options = {}) {
-            const initData = tg.initData || '';
-            const headers = {
-                'Content-Type': 'application/json',
-                'X-Telegram-Init-Data': initData,
-                ...(options.headers || {}),
-            };
-            return fetch(`${BASE_URL}${path}`, { ...options, headers });
-        }
-
         function switchTab(tabName, element) {
             // بررسی اینکه آیا کاربر اجازه دسترسی به این تب را دارد
             if (tabName === 'admin' && !isAdminUser) {
@@ -2953,16 +2126,11 @@
                 loadNightlyStatus();
                 if (nightlyStatusPollInterval) clearInterval(nightlyStatusPollInterval);
                 nightlyStatusPollInterval = setInterval(loadNightlyStatus, 20000);
-            } else if (tabName === 'ai') {
-                loadAiChatHistory();
-                setTimeout(scrollChatToBottom, 150);
             } else if (tabName === 'admin') {
                 // پنل ادمین - لود وضعیت حالت آزمون و موضوعات
                 loadExamMode();
                 loadExamTopics();
                 console.log('پنل ادمین باز شد');
-            } else if (tabName === 'calculators') {
-                loadCalculatorsList();
             } else if (nightlyStatusPollInterval) {
                 clearInterval(nightlyStatusPollInterval);
                 nightlyStatusPollInterval = null;
@@ -3493,210 +2661,7 @@
             document.body.appendChild(errorDiv);
         }
 
-        // ---------- بخش هوش مصنوعی (چت با حافظه) ----------
-        let aiChatHistory = [];      // [{role:'user'|'assistant', content, time}]
-        let aiChatBusy = false;
-        let aiChatLoaded = false;
-
-        const AI_SUGGESTIONS = [
-            'دوز و نحوه تجویز پروپافولون چطوره؟',
-            'تشخیص افتراقی درد قفسه سینه؟',
-            'برای پانکراتیت حاد چیکار کنم؟',
-            'برانکا و خطراتش برای بیمار دیابتی؟'
-        ];
-
-        // تبدیل امن مارک‌داون ساده به HTML (بدون خطر XSS — متن ابتدا escape می‌شود)
-        function escapeHtml(str) {
-            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-                      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-        }
-        function renderAiMarkdown(text) {
-            const escaped = escapeHtml(text);
-            const lines = escaped.split('\n');
-            let html = '';
-            for (const line of lines) {
-                const trimmed = line.trim();
-                const inline = trimmed
-                    .replace(/\*\*(.+?)\*\*/g, '<span class="md-b">$1</span>')
-                    .replace(/\*(.+?)\*/g, '<span class="md-b">$1</span>');
-                if (/^#{1,4}\s+/.test(trimmed)) {
-                    html += `<span class="md-h">${inline.replace(/^#{1,4}\s+/, '')}</span>`;
-                } else if (/^[-*•]\s+/.test(trimmed)) {
-                    html += `<span class="md-li">${inline.replace(/^[-*•]\s+/, '')}</span>`;
-                } else if (trimmed === '') {
-                    html += '<span style="display:block; height:4px;"></span>';
-                } else {
-                    html += `<span style="display:block;">${inline}</span>`;
-                }
-            }
-            return html;
-        }
-
-        function formatChatTime() {
-            const d = new Date();
-            const p = n => n.toString().padStart(2, '0');
-            return `${p(d.getHours())}:${p(d.getMinutes())}`;
-        }
-
-        function scrollChatToBottom(smooth = true) {
-            const body = document.getElementById('ai-chat-body');
-            requestAnimationFrame(() => {
-                body.scrollTo({ top: body.scrollHeight, behavior: smooth ? 'smooth' : 'auto' });
-            });
-        }
-        function maybeScrollChatToBottom() {
-            const body = document.getElementById('ai-chat-body');
-            // فقط اگر کاربر نزدیک پایین است اسکرول کن (وگرنه در حال خواندن بالاست)
-            if (body.scrollHeight - body.scrollTop - body.clientHeight < 140) {
-                scrollChatToBottom(false);
-            }
-        }
-
-        // جدا کردن خط «سوال بعدی:» از پایان پاسخ دستیار
-        function splitAiFollowups(text) {
-            const lines = text.split('\n');
-            let followups = null;
-            while (lines.length) {
-                const last = lines[lines.length - 1].trim();
-                const m = last.match(/^(?:سوال بعدی|سؤال بعدی)\s*[:：]\s*(.+)$/);
-                if (m) {
-                    followups = m[1].split('|').map(s => s.trim()).filter(Boolean).slice(0, 3);
-                    lines.pop();
-                    break; // فقط آخرین خط
-                }
-                if (last !== '') break; // خط غیرخالی غیر از «سوال بعدی» → خط پیشنهادی وجود ندارد
-                lines.pop(); // خطوط خالی انتهایی را رد کن
-            }
-            return { main: lines.join('\n').trimEnd(), followups };
-        }
-
-        function buildChatBubble(msg) {
-            const row = document.createElement('div');
-            const isUser = msg.role === 'user';
-            row.className = `chat-row ${isUser ? 'chat-row-user' : 'chat-row-ai'}`;
-
-            const who = document.createElement('div');
-            who.className = 'chat-who';
-            who.innerText = isUser ? 'شما' : '🤖 دستیار آپامد';
-
-            const bubble = document.createElement('div');
-            bubble.className = `chat-bubble ${isUser ? 'chat-bubble-user' : 'chat-bubble-ai'}`;
-            let followups = null;
-            if (isUser) {
-                bubble.innerText = msg.content;
-            } else {
-                const { main, followups: fu } = splitAiFollowups(msg.content);
-                followups = fu;
-                bubble.innerHTML = renderAiMarkdown(main || msg.content);
-            }
-
-            const time = document.createElement('div');
-            time.className = 'chat-time';
-            time.innerText = msg.time || '';
-
-            row.appendChild(who);
-            row.appendChild(bubble);
-            if (followups && followups.length) {
-                const wrap = document.createElement('div');
-                wrap.className = 'chat-suggest-wrap chat-followups';
-                followups.forEach(q => {
-                    const chip = document.createElement('button');
-                    chip.className = 'chat-chip chat-chip-sm';
-                    chip.innerText = q;
-                    chip.addEventListener('click', () => askAiSuggestion(chip));
-                    wrap.appendChild(chip);
-                });
-                row.appendChild(wrap);
-            }
-            row.appendChild(time);
-            return row;
-        }
-
-        function appendChatMessage(msg, scroll = true) {
-            const body = document.getElementById('ai-chat-body');
-            body.appendChild(buildChatBubble(msg));
-            if (scroll) scrollChatToBottom();
-        }
-
-        function showTypingIndicator() {
-            removeTypingIndicator();
-            const body = document.getElementById('ai-chat-body');
-            const typing = document.createElement('div');
-            typing.className = 'chat-typing';
-            typing.id = 'ai-chat-typing';
-            typing.innerHTML = '<span class="chat-typing-dot"></span><span class="chat-typing-dot"></span><span class="chat-typing-dot"></span>';
-            body.appendChild(typing);
-            scrollChatToBottom();
-        }
-        function removeTypingIndicator() {
-            const t = document.getElementById('ai-chat-typing');
-            if (t) t.remove();
-        }
-
-        function renderChatWelcome() {
-            const body = document.getElementById('ai-chat-body');
-            body.innerHTML = `
-                <div class="chat-welcome">
-                    <div class="chat-welcome-icon">🩺</div>
-                    <div class="chat-welcome-title">دستیار هوشمند آپامد</div>
-                    <div class="chat-welcome-desc">سلام! من مشاور پزشکی شما هستم.<br>سوالت رو بپرس؛ گفتگوی ما با حافظه ادامه پیدا می‌کند.</div>
-                    <div class="chat-suggest-wrap">
-                        ${AI_SUGGESTIONS.map(s => `<button class="chat-chip" onclick="askAiSuggestion(this)">${escapeHtml(s)}</button>`).join('')}
-                    </div>
-                </div>
-            `;
-        }
-
-        function renderChatFromHistory() {
-            const body = document.getElementById('ai-chat-body');
-            body.innerHTML = '';
-            if (!aiChatHistory.length) {
-                renderChatWelcome();
-                return;
-            }
-            aiChatHistory.forEach(msg => body.appendChild(buildChatBubble(msg)));
-            scrollChatToBottom(false);
-        }
-
-        function askAiSuggestion(chipEl) {
-            const input = document.getElementById('ai-question-input');
-            input.value = chipEl.innerText;
-            askAI();
-        }
-
-        function setAiBusy(busy) {
-            aiChatBusy = busy;
-            const sendBtn = document.getElementById('ai-send-btn');
-            sendBtn.disabled = busy;
-            sendBtn.innerText = busy ? '⏳' : '🚀';
-        }
-
-        // بارگذاری تاریخچه چت از سرور (حافظه ماندگار)
-        function loadAiChatHistory() {
-            if (aiChatLoaded) return;
-            aiChatLoaded = true;
-            fetch(`${BASE_URL}/api/ai/history`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Telegram-Init-Data': tg.initData
-                }
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.messages && data.messages.length) {
-                    aiChatHistory = data.messages.map(m => ({ role: m.role, content: m.content, time: '' }));
-                    renderChatFromHistory();
-                } else {
-                    renderChatWelcome();
-                }
-            })
-            .catch(err => {
-                console.error('AI history error:', err);
-                renderChatWelcome();
-            });
-        }
-
+        // ---------- بخش هوش مصنوعی ----------
         function askAI() {
             const input = document.getElementById('ai-question-input');
             const question = input.value.trim();
@@ -3704,20 +2669,13 @@
                 tg.showAlert('لطفاً ابتدا سوال خود را بنویسید.');
                 return;
             }
-            if (aiChatBusy) return;
 
-            setAiBusy(true);
-            input.value = '';
-            input.style.height = 'auto';
+            const btn = document.getElementById('ai-ask-btn');
+            btn.disabled = true;
+            btn.innerText = '⏳ در حال پردازش...';
 
-            // اگر خوش‌آمدگویی یا چیپ‌ها روی صفحه است، پاک شود
-            const body = document.getElementById('ai-chat-body');
-            if (body.querySelector('.chat-welcome')) body.innerHTML = '';
-
-            const msg = { role: 'user', content: question, time: formatChatTime() };
-            aiChatHistory.push(msg);
-            appendChatMessage(msg);
-            showTypingIndicator();
+            const answerCard = document.getElementById('ai-answer-card');
+            answerCard.style.display = 'none';
 
             fetch(`${BASE_URL}/api/ai/ask`, {
                 method: 'POST',
@@ -3729,102 +2687,32 @@
             })
             .then(res => res.json().then(data => ({ status: res.status, data })))
             .then(({ status, data }) => {
-                removeTypingIndicator();
+                btn.disabled = false;
+                btn.innerText = '🚀 ارسال سوال';
 
                 if (status !== 200 || data.error) {
-                    // پیام کاربر را نگه می‌داریم ولی خطا را به‌صورت حباب نمایش می‌دهیم
-                    const errMsg = {
-                        role: 'assistant',
-                        content: '⚠️ ' + (data.message || 'خطایی رخ داد. دوباره تلاش کنید.'),
-                        time: formatChatTime()
-                    };
-                    appendChatMessage(errMsg);
+                    // اگر خطای دسترسی بود، پیام خاص نمایش بده
                     if (data.error === 'access_denied') {
                         tg.showAlert('🚫 ' + data.message);
+                    } else {
+                        tg.showAlert(data.message || 'خطایی رخ داد. دوباره تلاش کنید.');
                     }
-                    setAiBusy(false);
                     return;
                 }
 
-                const reply = { role: 'assistant', content: data.answer, time: formatChatTime() };
-                aiChatHistory.push(reply);
-                appendChatMessage(reply);
-
+                document.getElementById('ai-answer-text').innerText = data.answer;
+                answerCard.style.display = 'block';
                 document.getElementById('ai-quota-text').innerText = data.ai_remaining_text;
                 document.getElementById('ai-text').innerText = data.ai_remaining_text;
-                setAiBusy(false);
-                input.focus();
+                input.value = '';
             })
             .catch(err => {
                 console.error('AI ask error:', err);
-                removeTypingIndicator();
-                const errMsg = {
-                    role: 'assistant',
-                    content: '⚠️ خطا در ارتباط با سرور. اتصال اینترنت خود را بررسی کنید و دوباره تلاش کنید.',
-                    time: formatChatTime()
-                };
-                appendChatMessage(errMsg);
-                setAiBusy(false);
+                btn.disabled = false;
+                btn.innerText = '🚀 ارسال سوال';
+                tg.showAlert('خطا در ارتباط با سرور. اتصال اینترنت خود را بررسی کنید.');
             });
         }
-
-        // شروع چت جدید — با تایید کاربر حافظه پاک می‌شود
-        function aiConfirm(message, onOk) {
-            // showConfirm فقط داخل تلگرام کار می‌کند؛ در مرورگر از confirm استفاده می‌کنیم
-            try {
-                tg.showConfirm(message, ok => onOk(!!ok));
-            } catch (e) {
-                onOk(window.confirm(message));
-            }
-        }
-
-        function startNewAiChat() {
-            if (aiChatBusy) {
-                tg.showAlert('لطفاً تا پایان پاسخ دستیار صبر کنید.');
-                return;
-            }
-            if (!aiChatHistory.length) {
-                renderChatWelcome();
-                return;
-            }
-            aiConfirm('چت جدید شروع شود؟ تاریخچه گفتگوی فعلی پاک خواهد شد.', ok => {
-                if (!ok) return;
-                fetch(`${BASE_URL}/api/ai/clear`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Telegram-Init-Data': tg.initData
-                    }
-                })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.error) {
-                        tg.showAlert(data.message || 'خطا در پاک کردن چت.');
-                        return;
-                    }
-                    aiChatHistory = [];
-                    renderChatWelcome();
-                    scrollChatToBottom(false);
-                })
-                .catch(() => tg.showAlert('خطا در ارتباط با سرور.'));
-            });
-        }
-
-        // Enter برای ارسال (بدون Shift)
-        function initAiChatInput() {
-            const input = document.getElementById('ai-question-input');
-            input.addEventListener('keydown', e => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    askAI();
-                }
-            });
-            input.addEventListener('input', () => {
-                input.style.height = 'auto';
-                input.style.height = Math.min(input.scrollHeight, 110) + 'px';
-            });
-        }
-        initAiChatInput();
 
         // ---------- بخش چالش بالینی ----------
         function loadChallengeTopics() {
@@ -4415,8 +3303,6 @@
 
         loadAppData();
         loadChallengeTopics();
-        loadAiChatHistory();
-        loadCalculatorsList();
 
         // ---------- پنل ادمین ----------
         const ADMIN_CHAT_ID = 1914755688;
@@ -5332,7 +4218,6 @@
         let historyConversationLog = [];
         let historyQuestionCount = 0;
         let historyLastResult = {};
-        let historyLastPhaseKey = null;
         const HISTORY_MAX_QUESTIONS = 20;
 
         function hxFaNum(n) {
@@ -5368,93 +4253,6 @@
             if (counter) counter.innerText = 'سوال ' + hxFaNum(historyQuestionCount) + ' از ' + hxFaNum(HISTORY_MAX_QUESTIONS);
             const badge = document.getElementById('history-phase-badge');
             if (badge && phase) badge.innerText = '🏷 ' + phase;
-            hxUpdateRoadmap(phase);
-        }
-
-        // نگاشت نام فاز فارسیِ مدل به کلیدهای نقشه راه
-        function hxPhaseToKey(phase) {
-            if (!phase) return null;
-            const p = String(phase);
-            if (/HPI|فعلی|حال/i.test(p)) return 'hpi';
-            if (/همراه|سیستمیک|تب/i.test(p)) return 'sys';
-            if (/PMH|قبلی|جراحی/i.test(p)) return 'pmh';
-            if (/دارو|حساسیت|Allerg/i.test(p)) return 'med';
-            if (/خانوادگ|FH/i.test(p)) return 'fh';
-            if (/اجتماعی|شغلی|سیگار|الکل|SH\b/i.test(p)) return 'sh';
-            if (/ROS|مرور/i.test(p)) return 'ros';
-            if (/افتراق|تشخیص/i.test(p)) return 'ddx';
-            return null;
-        }
-
-        function hxUpdateRoadmap(phase) {
-            const key = hxPhaseToKey(phase);
-            if (!key) return;
-            if (historyLastPhaseKey && historyLastPhaseKey !== key) {
-                const prev = document.querySelector('.hx-road-step[data-key="' + historyLastPhaseKey + '"]');
-                if (prev) { prev.classList.remove('hx-active'); prev.classList.add('hx-done'); }
-            }
-            const step = document.querySelector('.hx-road-step[data-key="' + key + '"]');
-            if (step) {
-                step.classList.add('hx-active');
-                step.classList.remove('hx-done');
-                step.scrollIntoView({behavior: 'smooth', inline: 'center', block: 'nearest'});
-            }
-            historyLastPhaseKey = key;
-        }
-
-        function hxResetRoadmap() {
-            historyLastPhaseKey = null;
-            document.querySelectorAll('.hx-road-step').forEach(s => s.classList.remove('hx-done', 'hx-active'));
-        }
-
-        const HX_SENDERS = {
-            'doctor':      {cls: 'hx-msg-doctor',   label: '🩺 پزشک'},
-            'patient':     {cls: 'hx-msg-patient',  label: '🧑‍🦱 بیمار'},
-            'para':        {cls: 'hx-msg-para',     label: '🔬 درخواست آزمایش'},
-            'para-result': {cls: 'hx-msg-para-res', label: '📄 نتیجه'}
-        };
-
-        function hxAddTranscript(who, text) {
-            const body = document.getElementById('history-transcript-body');
-            const wrap = document.getElementById('history-transcript-wrap');
-            if (!body || !wrap) return;
-            wrap.style.display = 'block';
-            const meta = HX_SENDERS[who] || HX_SENDERS.patient;
-            const div = document.createElement('div');
-            div.className = 'hx-msg ' + meta.cls;
-            div.innerHTML = '<span class="hx-msg-who">' + meta.label + '</span>';
-            div.appendChild(document.createTextNode(text));
-            body.appendChild(div);
-            body.scrollTop = body.scrollHeight;
-        }
-
-        function hxResetTranscript() {
-            const body = document.getElementById('history-transcript-body');
-            const wrap = document.getElementById('history-transcript-wrap');
-            if (body) body.innerHTML = '';
-            if (wrap) wrap.style.display = 'none';
-        }
-
-        function toggleHistoryTranscript() {
-            const body = document.getElementById('history-transcript-body');
-            const caret = document.getElementById('history-transcript-caret');
-            if (!body) return;
-            body.classList.toggle('hx-open');
-            if (caret) caret.classList.toggle('hx-open');
-        }
-
-        function fillHistoryCC(text) {
-            const input = document.getElementById('history-chief-complaint');
-            if (!input) return;
-            input.value = text;
-            input.focus();
-            hxHaptic('light');
-        }
-
-        function confirmHistoryReset() {
-            tg.showConfirm('گزارش فعلی پاک می‌شود و یک شرح حال‌گیری تازه شروع می‌شود. مطمئنید؟ (اگر گزارش را کپی نکرده‌اید، اول آن را کپی کنید)', ok => {
-                if (ok) resetHistoryTaking();
-            });
         }
 
         async function startHistoryTaking() {
@@ -5464,7 +4262,7 @@
             const info = document.getElementById('history-initial-info').value.trim();
 
             if (!age || !sex || !cc) {
-                tg.showAlert('لطفاً سن، جنسیت و شکایت اصلی بیمار را وارد کنید.');
+                alert('لطفاً سن، جنسیت و شکایت اصلی بیمار را وارد کنید.');
                 return;
             }
 
@@ -5491,7 +4289,7 @@
 
                 if (!response.ok) {
                     const error = await response.json();
-                    tg.showAlert(error.message || 'خطا در شروع شرح حال گیری');
+                    alert(error.message || 'خطا در شروع شرح حال گیری');
                     return;
                 }
 
@@ -5522,7 +4320,7 @@
                 // دریافت اولین سوال
                 await getNextHistoryQuestion();
             } catch (error) {
-                tg.showAlert('خطا: ' + error.message);
+                alert('خطا: ' + error.message);
             } finally {
                 hxSetLoading('history-start-btn', false);
                 document.getElementById('history-start-btn').innerText = '🚀 شروع مصاحبه بالینی';
@@ -5533,7 +4331,7 @@
             if (!historySessionId) return;
 
             const qEl = document.getElementById('history-current-question');
-            qEl.innerText = '⏳ پزشک هوشمند در حال بررسی پاسخ‌ها...';
+            qEl.innerText = '⏳ در حال تولید سوال هدفمند...';
 
             try {
                 const response = await fetch(`${BASE_URL}/api/history/question`, {
@@ -5546,49 +4344,26 @@
                 if (!response.ok) {
                     const error = await response.json();
                     if (error.error === 'history_complete') {
-                        // شرح حال گیری تکمیل شده (سقف ایمنی)
+                        // شرح حال گیری تکمیل شده
                         await finishHistoryTaking();
                         return;
                     }
                     qEl.innerText = 'خطا در دریافت سوال';
-                    tg.showAlert(error.message || 'خطا در دریافت سوال');
+                    alert(error.message || 'خطا در دریافت سوال');
                     return;
                 }
 
                 const data = await response.json();
-
-                // مدل تشخیص داد شرح حال کافی است → پایان و گزارش
-                if (data.session_complete) {
-                    hxHaptic('success');
-                    tg.showAlert('✅ پزشک هوشمند تشخیص داد شرح حال کافی است. در حال تهیه گزارش...');
-                    await finishHistoryTaking();
-                    return;
-                }
-
-                const isPara = data.type === 'paraclinical_request';
                 hxUpdateProgress(data.phase);
-                historyConversationLog.push({
-                    type: isPara ? 'paraclinical_request' : 'question',
-                    content: data.question,
-                    phase: data.phase,
-                    covered: data.covered || [],
-                    gaps: data.gaps || []
-                });
-                qEl.innerText = isPara
-                    ? '🔬 برای باریک‌کردن تشخیص‌ها به این نتیجه نیاز دارم:\n\n' + data.question
-                    : data.question;
-                hxAddTranscript(isPara ? 'para' : 'doctor', data.question);
-
-                // لیبل دکمهٔ ارسال بسته به نوع ترن
-                const submitBtn = document.getElementById('history-submit-btn');
-                if (submitBtn) submitBtn.innerText = isPara ? '📤 ارسال نتیجه' : '✅ ارسال پاسخ';
+                historyConversationLog.push({type: 'question', content: data.question, phase: data.phase});
+                qEl.innerText = data.question;
 
                 const input = document.getElementById('history-answer-input');
                 input.value = '';
                 input.focus();
             } catch (error) {
                 qEl.innerText = 'خطا در ارتباط با سرور';
-                tg.showAlert('خطا: ' + error.message);
+                alert('خطا: ' + error.message);
             }
         }
 
@@ -5597,15 +4372,9 @@
 
             const answer = document.getElementById('history-answer-input').value.trim();
             if (!answer) {
-                tg.showAlert('لطفاً پاسخ خود را وارد کنید.');
+                alert('لطفاً پاسخ خود را وارد کنید.');
                 return;
             }
-
-            // نوع آخرین ترن مدل تعیین می‌کند این پاسخ «جواب بیمار» است یا «نتیجهٔ پاراکلینیک»
-            const lastTurnType = historyConversationLog.length
-                ? historyConversationLog[historyConversationLog.length - 1].type
-                : 'question';
-            const isParaResult = lastTurnType === 'paraclinical_request';
 
             hxSetLoading('history-submit-btn', true);
             document.getElementById('history-submit-btn').innerText = '⏳ در حال ثبت...';
@@ -5624,21 +4393,20 @@
 
                 if (!response.ok) {
                     const error = await response.json();
-                    tg.showAlert(error.message || 'خطا در ارسال پاسخ');
+                    alert(error.message || 'خطا در ارسال پاسخ');
                     return;
                 }
 
                 historyConversationLog.push({
-                    type: isParaResult ? 'paraclinical_result' : 'answer',
+                    type: 'answer',
                     content: answer
                 });
-                hxAddTranscript(isParaResult ? 'para-result' : 'patient', answer);
                 hxHaptic('light');
 
                 // دریافت سوال بعدی
                 await getNextHistoryQuestion();
             } catch (error) {
-                tg.showAlert('خطا: ' + error.message);
+                alert('خطا: ' + error.message);
             } finally {
                 hxSetLoading('history-submit-btn', false);
                 document.getElementById('history-submit-btn').innerText = '✅ ارسال پاسخ';
@@ -5663,7 +4431,7 @@
 
                 if (!response.ok) {
                     const error = await response.json();
-                    tg.showAlert(error.message || 'خطا در پایان شرح حال گیری');
+                    alert(error.message || 'خطا در پایان شرح حال گیری');
                     return;
                 }
 
@@ -5685,10 +4453,10 @@
                 }
                 hxHaptic('success');
             } catch (error) {
-                tg.showAlert('خطا: ' + error.message);
+                alert('خطا: ' + error.message);
             } finally {
                 hxSetLoading('history-finish-btn', false);
-                document.getElementById('history-finish-btn').innerText = '🏁 پایان و گزارش';
+                document.getElementById('history-finish-btn').innerText = '🏁 پایان و دریافت گزارش';
             }
         }
 
@@ -5762,198 +4530,6 @@
             document.getElementById('history-answer-input').value = '';
             const bar = document.getElementById('history-progress-bar');
             if (bar) bar.style.width = '0%';
-            const counter = document.getElementById('history-q-counter');
-            if (counter) counter.innerText = 'سوال ۰ از ۲۰';
-            const badge = document.getElementById('history-phase-badge');
-            if (badge) badge.innerText = '🏷 شروع مصاحبه';
-            hxResetRoadmap();
-            hxResetTranscript();
-        }
-
-        // ========== بخش محاسبات پزشکی ==========
-        let calculatorsList = [];
-        let activeCalculatorId = null;
-
-        async function loadCalculatorsList() {
-            const container = document.getElementById('calculators-list');
-            if (!container) return;
-            try {
-                const res = await fetchWithAuth(`${BASE_URL}/api/calculators`);
-                const data = await res.json();
-                if (!res.ok) throw new Error(data.message || 'خطا در دریافت لیست محاسبات');
-                calculatorsList = data.calculators || [];
-                renderCalculatorsList(calculatorsList);
-            } catch (e) {
-                container.innerHTML = `<div style="color:var(--hint-color); font-size:12px;">خطا: ${e.message}</div>`;
-            }
-        }
-
-        function renderCalculatorsList(list) {
-            const container = document.getElementById('calculators-list');
-            if (!container) return;
-            if (!list.length) {
-                container.innerHTML = '<div style="color:var(--hint-color); font-size:12px;">محاسبه‌ای یافت نشد.</div>';
-                return;
-            }
-            container.innerHTML = list.map(item => `
-                <div class="card" style="border-right:4px solid #06b6d4; cursor:pointer; margin-bottom:0;" onclick="openCalculator('${item.id}')">
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <span style="font-size:22px;">${item.icon}</span>
-                        <div>
-                            <div style="font-weight:800; font-size:14px; color:var(--text-color);">${item.title}</div>
-                            <div style="font-size:11px; color:var(--hint-color); line-height:1.5;">${item.description}</div>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        async function openCalculator(id) {
-            const item = calculatorsList.find(c => c.id === id);
-            if (!item) return;
-            activeCalculatorId = id;
-            document.getElementById('active-calculator-title').textContent = `${item.icon} ${item.title}`;
-            const form = document.getElementById('active-calculator-form');
-            form.innerHTML = item.inputs.map(input => {
-                if (input.type === 'select') {
-                    const options = input.options.map(o => `<option value="${o.value}">${o.label}</option>`).join('');
-                    return `
-                        <div class="hx-field">
-                            <label class="hx-label" for="calc-${input.name}">${input.label}</label>
-                            <select id="calc-${input.name}" class="hx-input">${options}</select>
-                        </div>
-                    `;
-                }
-                return `
-                    <div class="hx-field">
-                        <label class="hx-label" for="calc-${input.name}">${input.label}</label>
-                        <input type="number" id="calc-${input.name}" class="hx-input" ${input.min !== undefined ? `min="${input.min}"` : ''} ${input.max !== undefined ? `max="${input.max}"` : ''} ${input.step !== undefined ? `step="${input.step}"` : ''} placeholder="—">
-                    </div>
-                `;
-            }).join('');
-            document.getElementById('active-calculator-result').style.display = 'none';
-            document.getElementById('active-calculator-card').style.display = 'block';
-            document.getElementById('active-calculator-btn').onclick = () => runCalculator(id);
-        }
-
-        function closeCalculator() {
-            activeCalculatorId = null;
-            document.getElementById('active-calculator-card').style.display = 'none';
-            document.getElementById('active-calculator-result').style.display = 'none';
-        }
-
-        async function runCalculator(id) {
-            const body = { calculator_id: id, values: {} };
-            const item = calculatorsList.find(c => c.id === id);
-            if (!item) return;
-            for (const input of item.inputs) {
-                const el = document.getElementById(`calc-${input.name}`);
-                if (!el) continue;
-                let val = el.value.trim();
-                if (input.type === 'number') {
-                    val = val === '' ? null : Number(val);
-                }
-                body.values[input.name] = val;
-            }
-            const btn = document.getElementById('active-calculator-btn');
-            const resultBox = document.getElementById('active-calculator-result');
-            btn.disabled = true;
-            btn.textContent = 'در حال محاسبه...';
-            resultBox.style.display = 'none';
-            try {
-                const res = await fetchWithAuth(`${BASE_URL}/api/calculators/calculate`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(body),
-                });
-                const data = await res.json();
-                if (!res.ok) throw new Error(data.message || 'خطا در محاسبه');
-                resultBox.style.display = 'block';
-                resultBox.innerHTML = renderCalculatorResult(id, data.result);
-                hxHaptic('success');
-            } catch (e) {
-                resultBox.style.display = 'block';
-                resultBox.innerHTML = `<div style="color:#ef4444; font-size:12px;">خطا: ${e.message}</div>`;
-            } finally {
-                btn.disabled = false;
-                btn.textContent = 'محاسبه کن';
-            }
-        }
-
-        function renderCalculatorResult(id, result) {
-            if (id === 'gfr') {
-                return `
-                    <div style="background:var(--item-bg); padding:14px; border-radius:12px; border:var(--card-border);">
-                        <div style="font-size:11px; color:var(--hint-color); margin-bottom:4px;">GFR (CKD-EPI)</div>
-                        <div style="font-size:28px; font-weight:800; color:var(--text-color);">${result.gfr} <span style="font-size:12px; font-weight:700;">mL/min/1.73m²</span></div>
-                        <div style="font-size:12px; color:var(--hint-color); margin-top:4px;">${result.stage}</div>
-                    </div>
-                `;
-            }
-            if (id === 'gcs') {
-                return `
-                    <div style="background:var(--item-bg); padding:14px; border-radius:12px; border:var(--card-border);">
-                        <div style="font-size:11px; color:var(--hint-color); margin-bottom:4px;">GCS Total</div>
-                        <div style="font-size:28px; font-weight:800; color:var(--text-color);">${result.total} <span style="font-size:12px; font-weight:700;">/ 15</span></div>
-                        <div style="font-size:12px; color:var(--hint-color); margin-top:4px;">${result.level}</div>
-                    </div>
-                `;
-            }
-            if (id === 'apgar') {
-                return `
-                    <div style="background:var(--item-bg); padding:14px; border-radius:12px; border:var(--card-border);">
-                        <div style="font-size:11px; color:var(--hint-color); margin-bottom:4px;">Apgar Score</div>
-                        <div style="font-size:28px; font-weight:800; color:var(--text-color);">${result.total} <span style="font-size:12px; font-weight:700;">/ 10</span></div>
-                        <div style="font-size:12px; color:var(--hint-color); margin-top:4px;">${result.interpretation}</div>
-                    </div>
-                `;
-            }
-            if (id === 'bmi') {
-                return `
-                    <div style="background:var(--item-bg); padding:14px; border-radius:12px; border:var(--card-border);">
-                        <div style="font-size:11px; color:var(--hint-color); margin-bottom:4px;">BMI</div>
-                        <div style="font-size:28px; font-weight:800; color:var(--text-color);">${result.bmi} <span style="font-size:12px; font-weight:700;">kg/m²</span></div>
-                        <div style="font-size:12px; color:var(--hint-color); margin-top:4px;">${result.category}</div>
-                    </div>
-                `;
-            }
-            if (id === 'cha2ds2_vasc') {
-                return `
-                    <div style="background:var(--item-bg); padding:14px; border-radius:12px; border:var(--card-border);">
-                        <div style="font-size:11px; color:var(--hint-color); margin-bottom:4px;">CHA₂DS₂-VASc Score</div>
-                        <div style="font-size:28px; font-weight:800; color:var(--text-color);">${result.score}</div>
-                        <div style="font-size:12px; color:var(--hint-color); margin-top:4px;">${result.risk}</div>
-                    </div>
-                `;
-            }
-            if (id === 'curb65') {
-                return `
-                    <div style="background:var(--item-bg); padding:14px; border-radius:12px; border:var(--card-border);">
-                        <div style="font-size:11px; color:var(--hint-color); margin-bottom:4px;">CURB-65 Score</div>
-                        <div style="font-size:28px; font-weight:800; color:var(--text-color);">${result.score}</div>
-                        <div style="font-size:12px; color:var(--hint-color); margin-top:4px;">${result.severity}</div>
-                    </div>
-                `;
-            }
-            if (id === 'qsofa') {
-                return `
-                    <div style="background:var(--item-bg); padding:14px; border-radius:12px; border:var(--card-border);">
-                        <div style="font-size:11px; color:var(--hint-color); margin-bottom:4px;">qSOFA Score</div>
-                        <div style="font-size:28px; font-weight:800; color:var(--text-color);">${result.score} <span style="font-size:12px; font-weight:700;">/ 3</span></div>
-                        <div style="font-size:12px; color:var(--hint-color); margin-top:4px;">${result.positive ? 'مثبت — سپسیس را در نظر بگیر' : 'منفی'}</div>
-                    </div>
-                `;
-            }
-            if (id === 'child_pugh') {
-                return `
-                    <div style="background:var(--item-bg); padding:14px; border-radius:12px; border:var(--card-border);">
-                        <div style="font-size:11px; color:var(--hint-color); margin-bottom:4px;">Child-Pugh Score</div>
-                        <div style="font-size:28px; font-weight:800; color:var(--text-color);">${result.score} <span style="font-size:12px; font-weight:700;">/ 15</span></div>
-                        <div style="font-size:12px; color:var(--hint-color); margin-top:4px;">کلاس ${result.class}</div>
-                    </div>
-                `;
-            }
-            return `<pre style="font-size:12px;">${JSON.stringify(result, null, 2)}</pre>`;
         }
 
 
