@@ -1145,6 +1145,189 @@
             -webkit-overflow-scrolling: touch;
         }
 
+        /* استایل‌های ماشین‌حساب‌های پزشکی */
+        .calc-chip {
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            border: 2px solid var(--card-border);
+            background: var(--secondary-bg);
+            color: var(--text-color);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .calc-chip.active {
+            background: linear-gradient(135deg, #0284c7, #0ea5e9);
+            color: white;
+            border-color: #0284c7;
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4);
+        }
+
+        .calc-input-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .calc-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-color);
+            flex: 1;
+        }
+
+        .calc-stepper {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--secondary-bg);
+            border: var(--card-border);
+            border-radius: 10px;
+            padding: 4px;
+        }
+
+        .calc-stepper button {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: none;
+            background: var(--item-bg);
+            color: var(--text-color);
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s ease;
+        }
+
+        .calc-stepper button:active {
+            transform: scale(0.92);
+            background: var(--med-cyan);
+            color: white;
+        }
+
+        .calc-stepper-value {
+            min-width: 36px;
+            text-align: center;
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--text-color);
+            font-family: monospace;
+        }
+
+        .calc-result-box {
+            background: linear-gradient(135deg, rgba(2,132,199,0.08), rgba(14,165,233,0.04));
+            border: 1px solid rgba(2,132,199,0.2);
+            border-radius: 14px;
+            padding: 14px;
+            text-align: center;
+        }
+
+        .calc-result-score {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--med-cyan);
+            font-family: monospace;
+        }
+
+        .calc-result-label {
+            font-size: 11px;
+            color: var(--hint-color);
+            font-weight: 700;
+            margin-top: 4px;
+        }
+
+        .calc-interpretation {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 1.6;
+        }
+
+        .calc-ref {
+            margin-top: 8px;
+            font-size: 10px;
+            color: var(--hint-color);
+            opacity: 0.8;
+        }
+
+        .calc-select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: var(--card-border);
+            background: var(--secondary-bg);
+            color: var(--text-color);
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .calc-yesno {
+            display: flex;
+            gap: 8px;
+        }
+
+        .calc-yesno button {
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            border: 2px solid var(--card-border);
+            background: var(--secondary-bg);
+            color: var(--text-color);
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .calc-yesno button.selected-yes {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border-color: #10b981;
+        }
+
+        .calc-yesno button.selected-no {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border-color: #ef4444;
+        }
+
+        .calc-option-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .calc-option-btn {
+            padding: 10px;
+            border-radius: 10px;
+            border: 2px solid var(--card-border);
+            background: var(--secondary-bg);
+            color: var(--text-color);
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .calc-option-btn.selected {
+            background: linear-gradient(135deg, #0284c7, #0ea5e9);
+            color: white;
+            border-color: #0284c7;
+        }
+
         .quiz-result-icon {
             font-size: 80px;
             margin-bottom: 20px;
@@ -1790,6 +1973,28 @@
             </div>
         </div>
 
+        <!-- زبانه محاسبات پزشکی -->
+        <div id="tab-calculator" class="tab-content">
+            <div class="card" style="border-right: 4px solid #0284c7;">
+                <div class="card-title">
+                    <span class="card-title-icon">
+                        <span class="icon-badge" style="background:rgba(2,132,199,0.12); color:#0284c7;">🧮</span>
+                        ماشین‌حساب‌های پزشکی
+                    </span>
+                </div>
+                <div class="card-desc" style="margin-bottom:14px;">محاسبات سریع bedside: GCS، APGAR، GFR، BMI، CHADS2-VASc، CURB-65، شوک‌ایندکس، Wells، qSOFA و NEWS</div>
+
+                <!-- انتخاب ماشین‌حساب -->
+                <div id="calc-selector" style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;"></div>
+
+                <!-- کارت محاسبه -->
+                <div id="calc-card" style="background:var(--item-bg); border:var(--card-border); border-radius:14px; padding:16px;"></div>
+
+                <!-- نتیجه -->
+                <div id="calc-result" style="display:none; margin-top:14px; background:var(--secondary-bg); border:var(--card-border); border-radius:14px; padding:16px;"></div>
+            </div>
+        </div>
+
         <!-- زبانه ۷: پنل ادمین (فقط برای ادمین قابل مشاهده) -->
         <div id="tab-admin" class="tab-content">
             <div class="card" style="border-right: 4px solid #ef4444;">
@@ -2028,6 +2233,10 @@
         <div class="nav-item" onclick="switchTab('history', this)">
             <span class="nav-icon">📋</span>
             <span>شرح حال گیری</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('calculator', this)">
+            <span class="nav-icon">🧮</span>
+            <span>ماشین‌حساب</span>
         </div>
         <div class="nav-item" id="admin-nav-item" onclick="switchTab('admin', this)" style="display:none;">
             <span class="nav-icon">👑</span>
@@ -4512,7 +4721,464 @@
             hxHaptic('light');
         }
 
-        function resetHistoryTaking() {
+        // ============================================
+        // بخش ماشین‌حساب‌های پزشکی
+        // ============================================
+        let activeCalculator = 'gcs';
+
+        const calculatorConfigs = {
+            gcs: {
+                name: 'GCS',
+                icon: '🧠',
+                inputs: [
+                    { id: 'gcs-eye', label: 'چشمی (Eye)', min: 1, max: 4, step: 1, default: 4 },
+                    { id: 'gcs-verbal', label: 'کلامی (Verbal)', min: 1, max: 5, step: 1, default: 5 },
+                    { id: 'gcs-motor', label: 'حرکتی (Motor)', min: 1, max: 6, step: 1, default: 6 }
+                ],
+                calculate: (v) => v.eye + v.verbal + v.motor,
+                interpret: (score) => {
+                    if (score >= 13) return { text: 'خفیف (轻度)', color: '#10b981' };
+                    if (score >= 9) return { text: 'متوسط (中度)', color: '#f59e0b' };
+                    if (score >= 3) return { text: 'شدید (重度)', color: '#ef4444' };
+                    return { text: 'مرگ مغزی', color: '#7f1d1d' };
+                },
+                unit: 'امتیاز',
+                ref: 'Glasgow Coma Scale — Teasdale & Jennet, 1974'
+            },
+            apgar: {
+                name: 'APGAR',
+                icon: '👶',
+                inputs: [
+                    { id: 'apgar-appearance', label: 'ظاهر (Appearance)', min: 0, max: 2, step: 1, default: 2 },
+                    { id: 'apgar-pulse', label: 'نبض (Pulse)', min: 0, max: 2, step: 1, default: 2 },
+                    { id: 'apgar-grimace', label: 'ریزش (Grimace)', min: 0, max: 2, step: 1, default: 2 },
+                    { id: 'apgar-activity', label: 'فعالیت (Activity)', min: 0, max: 2, step: 1, default: 2 },
+                    { id: 'apgar-respiration', label: 'تنفس (Respiration)', min: 0, max: 2, step: 1, default: 2 }
+                ],
+                calculate: (v) => v.appearance + v.pulse + v.grimace + v.activity + v.respiration,
+                interpret: (score) => {
+                    if (score >= 8) return { text: 'وضعیت عادی', color: '#10b981' };
+                    if (score >= 4) return { text: 'متوسط — نیاز به پایش', color: '#f59e0b' };
+                    return { text: 'شدید — نیاز به مداخله فوری', color: '#ef4444' };
+                },
+                unit: 'امتیاز',
+                ref: 'APGAR Score — Virginia Apgar, 1952'
+            },
+            gfr: {
+                name: 'GFR (CKD-EPI)',
+                icon: '🫘',
+                inputs: [
+                    { id: 'gfr-creatinine', label: 'کراتینین سروم (mg/dL)', min: 0.1, max: 15, step: 0.1, default: 1.0 },
+                    { id: 'gfr-age', label: 'سن (سال)', min: 1, max: 120, step: 1, default: 30 },
+                    { id: 'gfr-sex', label: 'جنسیت', type: 'select', options: ['male', 'female'], default: 'male' }
+                ],
+                calculate: (v) => {
+                    const sc = v.creatinine;
+                    const age = v.age;
+                    const isFemale = v.sex === 'female';
+                    let kappa = isFemale ? 0.7 : 0.9;
+                    let alpha = isFemale ? -0.241 : -0.302;
+                    let factor = isFemale ? 1.012 : 1.0;
+                    if (sc <= kappa) {
+                        return (142 * Math.pow(sc / kappa, alpha) * Math.pow(0.9938, age) * factor).toFixed(1);
+                    }
+                    return (142 * Math.pow(sc / kappa, alpha) * Math.pow(0.9938, age) * factor).toFixed(1);
+                },
+                interpret: (score) => {
+                    const s = parseFloat(score);
+                    if (s >= 90) return { text: 'GFR طبیعی (G1)', color: '#10b981' };
+                    if (s >= 60) return { text: 'کاهش خفیف (G2)', color: '#fbbf24' };
+                    if (s >= 45) return { text: 'کاهش متوسط (G3a)', color: '#f59e0b' };
+                    if (s >= 30) return { text: 'کثیر شدید (G3b)', color: '#f97316' };
+                    if (s >= 15) return { text: 'کشتیر شدید (G4)', color: '#ef4444' };
+                    return { text: 'کشتیر (G5)', color: '#7f1d1d' };
+                },
+                unit: 'mL/min/1.73m²',
+                ref: 'CKD-EPI 2021 (race-free)'
+            },
+            bmi: {
+                name: 'BMI',
+                icon: '⚖️',
+                inputs: [
+                    { id: 'bmi-weight', label: 'وزن (kg)', min: 1, max: 300, step: 0.1, default: 70 },
+                    { id: 'bmi-height', label: 'قد (cm)', min: 30, max: 250, step: 1, default: 170 }
+                ],
+                calculate: (v) => {
+                    const h = v.height / 100;
+                    return (v.weight / (h * h)).toFixed(1);
+                },
+                interpret: (score) => {
+                    const s = parseFloat(score);
+                    if (s < 18.5) return { text: 'کمبود وزن', color: '#3b82f6' };
+                    if (s < 25) return { text: 'طبیعی', color: '#10b981' };
+                    if (s < 30) return { text: 'اضافه وزن', color: '#f59e0b' };
+                    if (s < 35) return { text: 'چاقی درجه I', color: '#f97316' };
+                    if (s < 40) return { text: 'چاقی درجه II', color: '#ef4444' };
+                    return { text: 'چاقی مفرط (درجه III)', color: '#7f1d1d' };
+                },
+                unit: 'kg/m²',
+                ref: 'WHO BMI Classification'
+            },
+            chads2: {
+                name: 'CHADS₂-VASc',
+                icon: '❤️',
+                inputs: [
+                    { id: 'chads2-chf', label: ' CHF / ŠF', type: 'yesno', default: false },
+                    { id: 'chads2-htn', label: 'فشار خون بالا', type: 'yesno', default: false },
+                    { id: 'chads2-age', label: 'سن ≥ 75 سال', type: 'yesno', default: false },
+                    { id: 'chads2-dm', label: 'دیابت mellitus', type: 'yesno', default: false },
+                    { id: 'chads2-stroke', label: 'سکته / TIA قبلی', type: 'yesno', default: false },
+                    { id: 'chads2-vasc', label: 'بیماری عروقی ( CAD, PAD, dessis)', type: 'yesno', default: false },
+                    { id: 'chads2-sex', label: 'جنسیت زن (age 65-74)', type: 'yesno', default: false }
+                ],
+                calculate: (v) => {
+                    let score = 0;
+                    if (v.chf) score += 1;
+                    if (v.htn) score += 1;
+                    if (v.age) score += 1;
+                    if (v.dm) score += 1;
+                    if (v.stroke) score += 2;
+                    if (v.vasc) score += 1;
+                    if (v.sex) score += 1;
+                    return score;
+                },
+                interpret: (score) => {
+                    if (score === 0) return { text: 'خطر خیلی کم', color: '#10b981' };
+                    if (score <= 2) return { text: 'خطر کم تا متوسط', color: '#fbbf24' };
+                    return { text: 'خطر بالا — آنتی‌کوآگولانشن لازم', color: '#ef4444' };
+                },
+                unit: 'امتیاز',
+                ref: 'CHADS₂-VASc — Lane et al., 2022'
+            },
+            curb65: {
+                name: 'CURB-65',
+                icon: '🫁',
+                inputs: [
+                    { id: 'curb-confusion', label: 'سوء بالینی / جابجایی (GCS < 15)', type: 'yesno', default: false },
+                    { id: 'curb-urea', label: 'اوره ≥ 20 mg/dL (7 mmol/L)', type: 'yesno', default: false },
+                    { id: 'curb-rr', label: 'تنفس ≥ 30 / دقیقه', type: 'yesno', default: false },
+                    { id: 'curb-bp', label: 'فشار خون SBP < 90 یا DBP ≤ 60', type: 'yesno', default: false },
+                    { id: 'curb-age', label: 'سن ≥ 65 سال', type: 'yesno', default: false }
+                ],
+                calculate: (v) => {
+                    let score = 0;
+                    if (v.confusion) score += 1;
+                    if (v.urea) score += 1;
+                    if (v.rr) score += 1;
+                    if (v.bp) score += 1;
+                    if (v.age) score += 1;
+                    return score;
+                },
+                interpret: (score) => {
+                    if (score <= 1) return { text: 'خطر کم — درمان outpatient', color: '#10b981' };
+                    if (score === 2) return { text: 'خطر متوسط — بستری ۲-۳ روزه', color: '#fbbf24' };
+                    return { text: 'خطر بالا — بستری ICU', color: '#ef4444' };
+                },
+                unit: 'امتیاز',
+                ref: 'CURB-65 — Lim et al., Thorax 2003'
+            },
+            shock: {
+                name: 'شوک‌ایندکس',
+                icon: '💓',
+                inputs: [
+                    { id: 'shock-hr', label: 'ضربان قلب (/دقیقه)', min: 30, max: 220, step: 1, default: 80 },
+                    { id: 'shock-sbp', label: 'فشار خون سیستولیک (mmHg)', min: 40, max: 260, step: 1, default: 120 }
+                ],
+                calculate: (v) => (v.hr / v.sbp).toFixed(2),
+                interpret: (score) => {
+                    const s = parseFloat(score);
+                    if (s < 0.7) return { text: 'طبیعی', color: '#10b981' };
+                    if (s < 0.9) return { text: 'مرزی — پایش بیشتر', color: '#fbbf24' };
+                    if (s < 1.1) return { text: 'شوک احتمالی', color: '#f97316' };
+                    return { text: 'شوک قطعی — اقدام فوری', color: '#ef4444' };
+                },
+                unit: 'HR/SBP',
+                ref: 'Shock Index — Rokyta et al.'
+            },
+            wells_dvt: {
+                name: 'Wells DVT',
+                icon: '🩸',
+                inputs: [
+                    { id: 'wells-cancer', label: 'بیماری سرطانی فعال', type: 'yesno', default: false },
+                    { id: 'wells-paralysis', label: 'فلج / یبوست اندام تحتانی', type: 'yesno', default: false },
+                    { id: 'wells-bedrest', label: 'استراز more than 3 روز / جراحی اخیر', type: 'yesno', default: false },
+                    { id: 'wells-tenderness', label: 'حساسیت عمیق مسیر ورید', type: 'yesno', default: false },
+                    { id: 'wells-swelling', label: 'تورم کل پا', type: 'yesno', default: false },
+                    { id: 'wells-pitting', label: 'پف‌زنی (pitting edema) سایت‌دار', type: 'yesno', default: false },
+                    { id: 'wells-collateral', label: 'وریدهای براکیال کپلر', type: 'yesno', default: false },
+                    { id: 'wells-alt', label: 'تشخیص جایگزین حداقل به اندازه DVT', type: 'yesno', default: false }
+                ],
+                calculate: (v) => {
+                    let score = 0;
+                    if (v.cancer) score += 1;
+                    if (v.paralysis) score += 1;
+                    if (v.bedrest) score += 1;
+                    if (v.tenderness) score += 1;
+                    if (v.swelling) score += 1;
+                    if (v.pitting) score += 1;
+                    if (v.collateral) score += 1;
+                    if (v.alt) score += -2;
+                    return score;
+                },
+                interpret: (score) => {
+                    if (score <= 0) return { text: 'احتمال کم', color: '#10b981' };
+                    if (score <= 2) return { text: 'احتمال متوسط', color: '#fbbf24' };
+                    return { text: 'احتمال بالا — ultrasound لازم', color: '#ef4444' };
+                },
+                unit: 'امتیاز',
+                ref: 'Wells DVT — Wells et al., 1997'
+            },
+            qsofa: {
+                name: 'qSOFA',
+                icon: '🦠',
+                inputs: [
+                    { id: 'qsofa-rr', label: 'تنفس ≥ 22 / دقیقه', type: 'yesno', default: false },
+                    { id: 'qsofa-bp', label: 'فشار خون SBP ≤ 100 mmHg', type: 'yesno', default: false },
+                    { id: 'qsofa-altered', label: 'تغییر در سطح هوشیاری (Altered mentation)', type: 'yesno', default: false }
+                ],
+                calculate: (v) => {
+                    let score = 0;
+                    if (v.rr) score += 1;
+                    if (v.bp) score += 1;
+                    if (v.altered) score += 1;
+                    return score;
+                },
+                interpret: (score) => {
+                    if (score <= 1) return { text: 'qSOFA منفی', color: '#10b981' };
+                    return { text: 'qSOFA مثبت — بررسی sepsis فوری', color: '#ef4444' };
+                },
+                unit: 'امتیاز',
+                ref: 'qSOFA — Seymour et al., JAMA 2016'
+            },
+            news: {
+                name: 'NEWS',
+                icon: '🚨',
+                inputs: [
+                    { id: 'news-rr', label: 'تنفس (/دقیقه)', min: 3, max: 60, step: 1, default: 16, ranges: [
+                        { min: 3, max: 8, score: 3 }, { min: 9, max: 11, score: 1 },
+                        { min: 12, max: 20, score: 0 }, { min: 21, max: 24, score: 2 }, { min: 25, max: 60, score: 3 }
+                    ]},
+                    { id: 'news-spo2', label: 'SpO₂ (%)', min: 70, max: 100, step: 1, default: 96, ranges: [
+                        { min: 70, max: 83, score: 3 }, { min: 84, max: 85, score: 2 },
+                        { min: 86, max: 87, score: 1 }, { min: 88, max: 92, score: 0 },
+                        { min: 93, max: 94, score: 1 }, { min: 95, max: 96, score: 0 }, { min: 97, max: 100, score: 0 }
+                    ]},
+                    { id: 'news-o2', label: 'اکسیژن اضافی', type: 'yesno', default: false },
+                    { id: 'news-sbp', label: 'فشار خون سیستولیک (mmHg)', min: 50, max: 260, step: 1, default: 120, ranges: [
+                        { min: 50, max: 90, score: 3 }, { min: 91, max: 100, score: 2 },
+                        { min: 101, max: 110, score: 1 }, { min: 111, max: 219, score: 0 },
+                        { min: 220, max: 260, score: 3 }
+                    ]},
+                    { id: 'news-hr', label: 'ضربان قلب (/دقیقه)', min: 25, max: 220, step: 1, default: 70, ranges: [
+                        { min: 25, max: 40, score: 3 }, { min: 41, max: 50, score: 1 },
+                        { min: 51, max: 90, score: 0 }, { min: 91, max: 110, score: 1 },
+                        { min: 111, max: 130, score: 2 }, { min: 131, max: 220, score: 3 }
+                    ]},
+                    { id: 'news-temp', label: 'دمای بدن (°C)', min: 34, max: 42, step: 0.1, default: 36.8, ranges: [
+                        { min: 34, max: 35, score: 3 }, { min: 35.1, max: 36, score: 1 },
+                        { min: 36.1, max: 38, score: 0 }, { min: 38.1, max: 39, score: 1 },
+                        { min: 39.1, max: 42, score: 2 }
+                    ]},
+                    { id: 'news-avpu', label: 'سطح هوشیاری (AVPU)', type: 'select', options: ['A', 'V', 'P', 'U'], default: 'A' }
+                ],
+                calculate: (v) => {
+                    let score = 0;
+                    const rrRanges = [
+                        { min: 3, max: 8, score: 3 }, { min: 9, max: 11, score: 1 },
+                        { min: 12, max: 20, score: 0 }, { min: 21, max: 24, score: 2 }, { min: 25, max: 60, score: 3 }
+                    ];
+                    const spo2Ranges = [
+                        { min: 70, max: 83, score: 3 }, { min: 84, max: 85, score: 2 },
+                        { min: 86, max: 87, score: 1 }, { min: 88, max: 92, score: 0 },
+                        { min: 93, max: 94, score: 1 }, { min: 95, max: 96, score: 0 }, { min: 97, max: 100, score: 0 }
+                    ];
+                    const sbpRanges = [
+                        { min: 50, max: 90, score: 3 }, { min: 91, max: 100, score: 2 },
+                        { min: 101, max: 110, score: 1 }, { min: 111, max: 219, score: 0 },
+                        { min: 220, max: 260, score: 3 }
+                    ];
+                    const hrRanges = [
+                        { min: 25, max: 40, score: 3 }, { min: 41, max: 50, score: 1 },
+                        { min: 51, max: 90, score: 0 }, { min: 91, max: 110, score: 1 },
+                        { min: 111, max: 130, score: 2 }, { min: 131, max: 220, score: 3 }
+                    ];
+                    const tempRanges = [
+                        { min: 34, max: 35, score: 3 }, { min: 35.1, max: 36, score: 1 },
+                        { min: 36.1, max: 38, score: 0 }, { min: 38.1, max: 39, score: 1 },
+                        { min: 39.1, max: 42, score: 2 }
+                    ];
+                    const getScore = (val, ranges) => {
+                        for (const r of ranges) {
+                            if (val >= r.min && val <= r.max) return r.score;
+                        }
+                        return 0;
+                    };
+                    score += getScore(v.rr, rrRanges);
+                    score += getScore(v.spo2, spo2Ranges);
+                    if (v.o2) score += 2;
+                    score += getScore(v.sbp, sbpRanges);
+                    score += getScore(v.hr, hrRanges);
+                    score += getScore(v.temp, tempRanges);
+                    if (v.avpu !== 'A') score += 3;
+                    return score;
+                },
+                interpret: (score) => {
+                    if (score <= 3) return { text: 'خطر کم — پایش معمولی', color: '#10b981' };
+                    if (score <= 5) return { text: 'خطر متوسط — اطلاع به پزشک', color: '#fbbf24' };
+                    if (score <= 8) return { text: 'خطر بالا — ارزیابی اورژانس', color: '#f97316' };
+                    return { text: 'بحران — اقدام فوری ICU', color: '#ef4444' };
+                },
+                unit: 'امتیاز',
+                ref: 'NEWS2 — Royal College of Physicians, 2017'
+            }
+        };
+
+        function renderCalculatorSelector() {
+            const container = document.getElementById('calc-selector');
+            container.innerHTML = '';
+            Object.keys(calculatorConfigs).forEach(key => {
+                const cfg = calculatorConfigs[key];
+                const chip = document.createElement('button');
+                chip.className = 'calc-chip' + (key === activeCalculator ? ' active' : '');
+                chip.innerHTML = `${cfg.icon} ${cfg.name}`;
+                chip.onclick = () => selectCalculator(key);
+                container.appendChild(chip);
+            });
+        }
+
+        function selectCalculator(key) {
+            activeCalculator = key;
+            renderCalculatorSelector();
+            renderCalculatorInputs();
+            document.getElementById('calc-result').style.display = 'none';
+        }
+
+        function renderCalculatorInputs() {
+            const cfg = calculatorConfigs[activeCalculator];
+            const card = document.getElementById('calc-card');
+            let html = '';
+            cfg.inputs.forEach(input => {
+                if (input.type === 'select') {
+                    html += `
+                        <div class="calc-input-row">
+                            <div class="calc-label">${input.label}</div>
+                            <select id="${input.id}" onchange="calculateCurrent()" style="flex:1.5; padding:10px; border-radius:10px; border:var(--card-border); background:var(--secondary-bg); color:var(--text-color); font-size:13px; font-weight:700;">
+                                ${input.options.map(opt => `<option value="${opt}">${opt === 'male' ? 'مرد' : 'زن'}</option>`).join('')}
+                            </select>
+                        </div>`;
+                } else if (input.type === 'yesno') {
+                    html += `
+                        <div class="calc-input-row">
+                            <div class="calc-label">${input.label}</div>
+                            <div class="calc-yesno">
+                                <button type="button" data-id="${input.id}" data-val="1" onclick="toggleYesNo(this)">بله</button>
+                                <button type="button" data-id="${input.id}" data-val="0" onclick="toggleYesNo(this)" class="selected-yes" style="background:linear-gradient(135deg, #10b981, #059669); color:white; border-color:#10b981;">خیر</button>
+                            </div>
+                        </div>`;
+                } else {
+                    html += `
+                        <div class="calc-input-row">
+                            <div class="calc-label">${input.label}</div>
+                            <div class="calc-stepper">
+                                <button type="button" onclick="stepCalc('${input.id}', -${input.step})">−</button>
+                                <div class="calc-stepper-value" id="${input.id}-display">${input.default}</div>
+                                <button type="button" onclick="stepCalc('${input.id}', ${input.step})">+</button>
+                            </div>
+                        </div>`;
+                }
+            });
+            card.innerHTML = html;
+            calculateCurrent();
+        }
+
+        function stepCalc(id, delta) {
+            const cfg = calculatorConfigs[activeCalculator];
+            const input = cfg.inputs.find(i => i.id === id);
+            const display = document.getElementById(id + '-display');
+            let val = parseFloat(display.innerText) + delta;
+            val = Math.max(input.min, Math.min(input.max, parseFloat(val.toFixed(2))));
+            display.innerText = val;
+            calculateCurrent();
+        }
+
+        function toggleYesNo(btn) {
+            const id = btn.dataset.id;
+            const val = btn.dataset.val;
+            const parent = btn.parentElement;
+            parent.querySelectorAll('button').forEach(b => {
+                b.classList.remove('selected-yes', 'selected-no');
+                if (b.dataset.val === '1') {
+                    b.style.background = '';
+                    b.style.color = '';
+                    b.style.borderColor = '';
+                }
+            });
+            if (val === '1') {
+                btn.classList.add('selected-yes');
+                btn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+                btn.style.color = 'white';
+                btn.style.borderColor = '#10b981';
+            } else {
+                btn.classList.add('selected-no');
+                btn.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+                btn.style.color = 'white';
+                btn.style.borderColor = '#ef4444';
+            }
+            calculateCurrent();
+        }
+
+        function getCalcValues() {
+            const cfg = calculatorConfigs[activeCalculator];
+            const vals = {};
+            cfg.inputs.forEach(input => {
+                if (input.type === 'select') {
+                    vals[input.id.replace(/^(gfr|chads2|curb|wells|qsofa|news)-/, '')] = document.getElementById(input.id).value;
+                } else if (input.type === 'yesno') {
+                    const parent = document.querySelector(`button[data-id="${input.id}"].selected-yes, button[data-id="${input.id}"].selected-no`);
+                    const val = parent && parent.classList.contains('selected-yes') ? 1 : 0;
+                    vals[input.id.replace(/^(gfr|chads2|curb|wells|qsofa|news)-/, '')] = val;
+                } else {
+                    const display = document.getElementById(input.id + '-display');
+                    vals[input.id.replace(/^(gfr|chads2|curb|wells|qsofa|news)-/, '')] = parseFloat(display.innerText);
+                }
+            });
+            return vals;
+        }
+
+        function calculateCurrent() {
+            const cfg = calculatorConfigs[activeCalculator];
+            const vals = getCalcValues();
+            const result = cfg.calculate(vals);
+            const interp = cfg.interpret(result);
+
+            const resultDiv = document.getElementById('calc-result');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `
+                <div class="calc-result-box">
+                    <div class="calc-result-score">${result} <span style="font-size:14px; font-weight:600; color:var(--hint-color);">${cfg.unit}</span></div>
+                    <div class="calc-result-label">نتیجه محاسبه</div>
+                    <div class="calc-interpretation" style="background:${interp.color}15; color:${interp.color}; border:1px solid ${interp.color}40; margin-top:10px;">
+                        ${interp.text}
+                    </div>
+                    <div class="calc-ref">منبع: ${cfg.ref}</div>
+                </div>
+            `;
+        }
+
+        // لود اولیه ماشین‌حساب‌ها وقتی تب باز می‌شه
+        function loadCalculatorTab() {
+            renderCalculatorSelector();
+            renderCalculatorInputs();
+        }
+
+        // به‌روزرسانی switchTab برای لود محاسبات
+        const originalSwitchTab = window.switchTab;
+        window.switchTab = function(tabName, element) {
+            originalSwitchTab(tabName, element);
+            if (tabName === 'calculator') {
+                loadCalculatorTab();
+            }
+        };
             historySessionId = null;
             historyPatientData = {};
             historyConversationLog = [];
