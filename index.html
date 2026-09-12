@@ -2336,10 +2336,11 @@
                 if (nightlyStatusPollInterval) clearInterval(nightlyStatusPollInterval);
                 nightlyStatusPollInterval = setInterval(loadNightlyStatus, 20000);
             } else if (tabName === 'admin') {
-                // پنل ادمین - لود وضعیت حالت آزمون و موضوعات
                 loadExamMode();
                 loadExamTopics();
                 console.log('پنل ادمین باز شد');
+            } else if (tabName === 'calculator') {
+                loadCalculatorTab();
             } else if (nightlyStatusPollInterval) {
                 clearInterval(nightlyStatusPollInterval);
                 nightlyStatusPollInterval = null;
@@ -5071,8 +5072,8 @@
                         <div class="calc-input-row">
                             <div class="calc-label">${input.label}</div>
                             <div class="calc-yesno">
-                                <button type="button" data-id="${input.id}" data-val="1" onclick="toggleYesNo(this)">بله</button>
-                                <button type="button" data-id="${input.id}" data-val="0" onclick="toggleYesNo(this)" class="selected-yes" style="background:linear-gradient(135deg, #10b981, #059669); color:white; border-color:#10b981;">خیر</button>
+                                <button type="button" data-id="${input.id}" data-val="1" onclick="toggleYesNo(this)" class="selected-yes" style="background:linear-gradient(135deg, #10b981, #059669); color:white; border-color:#10b981;">بله</button>
+                                <button type="button" data-id="${input.id}" data-val="0" onclick="toggleYesNo(this)" class="selected-no" style="background:linear-gradient(135deg, #ef4444, #dc2626); color:white; border-color:#ef4444;">خیر</button>
                             </div>
                         </div>`;
                 } else {
@@ -5171,14 +5172,7 @@
             renderCalculatorInputs();
         }
 
-        // به‌روزرسانی switchTab برای لود محاسبات
-        const originalSwitchTab = window.switchTab;
-        window.switchTab = function(tabName, element) {
-            originalSwitchTab(tabName, element);
-            if (tabName === 'calculator') {
-                loadCalculatorTab();
-            }
-        };
+        function resetHistoryTaking() {
             historySessionId = null;
             historyPatientData = {};
             historyConversationLog = [];
