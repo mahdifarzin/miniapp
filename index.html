@@ -859,6 +859,16 @@
             background: #10b981;
         }
 
+        .quiz-progress-dot.correct {
+            background: #10b981;
+            box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);
+        }
+
+        .quiz-progress-dot.incorrect {
+            background: #ef4444;
+            box-shadow: 0 0 12px rgba(239, 68, 68, 0.6);
+        }
+
         .quiz-close-btn {
             width: 40px;
             height: 40px;
@@ -997,14 +1007,13 @@
             background: #f8fafc;
             border: 3px solid #e2e8f0;
             color: #0f172a;
-            font-size: 15px;
-            font-weight: 700;
+            font-size: 14px;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            text-align: center;
+            text-align: right;
             display: flex;
             align-items: center;
-            justify-content: center;
             gap: 12px;
         }
 
@@ -1023,21 +1032,59 @@
         }
 
         .quiz-option-letter {
-            width: 32px;
-            height: 32px;
-            border-radius: 10px;
+            width: 36px;
+            height: 36px;
+            flex-shrink: 0;
+            border-radius: 12px;
             background: rgba(2, 132, 199, 0.1);
             color: #0284c7;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 800;
-            font-size: 14px;
+            font-size: 16px;
         }
 
         .quiz-option-btn.selected .quiz-option-letter {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.25);
             color: white;
+        }
+
+        .quiz-option-text {
+            flex: 1;
+            text-align: right;
+            line-height: 1.5;
+            word-break: break-word;
+        }
+
+        /* دکمه‌های سوال تطبیقی */
+        .quiz-mcq-btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 14px;
+            background: #f8fafc;
+            border: 3px solid #e2e8f0;
+            color: #0f172a;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            text-align: right;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quiz-mcq-btn:hover {
+            border-color: #0284c7;
+            background: #f0f9ff;
+        }
+
+        /* مؤشر مرحله سناریوی پیشرونده */
+        .quiz-stage-indicator {
+            font-size: 13px;
+            font-weight: 700;
+            color: #0ea5e9;
         }
 
         /* دکمه بعدی */
@@ -1461,9 +1508,9 @@
             }
 
             .quiz-option-letter {
-                width: 28px;
-                height: 28px;
-                font-size: 13px;
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
             }
 
             .quiz-timer-container {
@@ -1543,6 +1590,16 @@
             flex: 1;
             font-size: 13px;
             line-height: 1.6;
+        }
+
+        .quiz-result-item.correct {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .quiz-result-item.incorrect {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
         }
 
         /* ریسپانسیو برای تبلت */
@@ -2370,6 +2427,7 @@
         let quizSelectedAnswer = null;
         let quizStartTime = null;
         let isAdminQuiz = false; // آیا آزمون توسط ادمین شروع شده
+        let quizResultsData = null; // داده نتایج برای نمایش نقاط پیشرفت
         const QUIZ_TIME_PER_QUESTION = 30;
 
         // زمان مجاز هر نوع سوال (ثانیه) — سوالات تطبیقی و سناریوی پیشرونده به خواندن بیشتری نیاز دارند
@@ -2396,6 +2454,14 @@
             const m = Math.floor((s % 3600) / 60);
             const sec = s % 60;
             return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+        }
+
+        // جلوگیری از XSS در محتوای دینامیک
+        function escapeHtml(str) {
+            if (!str) return '';
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
         }
 
         let nightlyBannerCountdownInterval = null;
@@ -4002,6 +4068,12 @@
             // به‌روزرسانی پیشرفت
             updateProgressDots();
 
+            // اسکرول نرم به سمت بالای مودال
+            const modal = document.getElementById('quiz-modal');
+            if (modal) {
+                modal.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
             const q = nightlyQuestions[index];
             quizSelectedAnswer = null;
             quizMatchingSelection = null;
@@ -4036,18 +4108,20 @@
                 renderCaseProgressionStage(q, textEl, optionsDiv);
             } else {
                 textEl.textContent = q.question;
-                renderMcqOptions(optionsDiv);
+                renderMcqOptions(q, optionsDiv);
             }
         }
 
-        // گزینه‌های چهارگزینه‌ای استاندارد (هم برای mcq و هم برای مرحله نهایی سناریوی پیشرونده استفاده می‌شود)
-        function renderMcqOptions(optionsDiv) {
-            QUIZ_OPTION_LETTERS.forEach((letter) => {
+        // گزینه‌های چهارگزینه‌ای استاندارد — نمایش متن گزینه‌ها
+        function renderMcqOptions(q, optionsDiv) {
+            const options = (q.options && q.options.length === 4) ? q.options : ['', '', '', ''];
+            QUIZ_OPTION_LETTERS.forEach((letter, i) => {
                 const btn = document.createElement('button');
                 btn.className = 'quiz-option-btn';
                 btn.dataset.letter = letter;
+                btn.dataset.qIndex = currentQuizQuestionIndex;
                 btn.onclick = () => selectQuizAnswer(letter, btn);
-                btn.innerHTML = `<span class="quiz-option-letter">${letter}</span>`;
+                btn.innerHTML = `<span class="quiz-option-letter">${letter}</span><span class="quiz-option-text">${options[i] || '—'}</span>`;
                 optionsDiv.appendChild(btn);
             });
         }
@@ -4060,20 +4134,42 @@
             if (isFinalStageDone) {
                 textEl.textContent = q.question;
                 optionsDiv.innerHTML = '';
-                renderMcqOptions(optionsDiv);
+                renderMcqOptions(q, optionsDiv);
                 return;
             }
 
-            textEl.textContent = `📖 مرحله ${quizCaseStageIndex + 1} از ${stages.length}\n\n${stages[quizCaseStageIndex]}`;
+            const stageNum = quizCaseStageIndex + 1;
+            const totalStages = stages.length;
+            textEl.innerHTML = `<div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+                    <span class="quiz-stage-indicator">📖 مرحله ${stageNum} از ${totalStages}</span>
+                </div><div style="font-size:15px; line-height:2; white-space:pre-wrap; word-break:break-word;">${escapeHtml(stages[quizCaseStageIndex])}</div>`;
             optionsDiv.innerHTML = '';
+
+            // Stage progress dots
+            const stageDots = document.createElement('div');
+            stageDots.style.cssText = 'display:flex; gap:6px; justify-content:center; margin-bottom:14px;';
+            for (let i = 0; i < totalStages; i++) {
+                const dot = document.createElement('div');
+                dot.style.cssText = `width:10px; height:10px; border-radius:50%; transition:all 0.3s ease; ${
+                    i === quizCaseStageIndex ? 'background:#0284c7; transform:scale(1.3); box-shadow:0 0 10px rgba(2,132,199,0.5);' :
+                    i < quizCaseStageIndex ? 'background:#10b981;' :
+                    'background:rgba(255,255,255,0.3);'
+                }`;
+                stageDots.appendChild(dot);
+            }
+            optionsDiv.appendChild(stageDots);
 
             const nextStageBtn = document.createElement('button');
             nextStageBtn.className = 'quiz-option-btn';
             nextStageBtn.style.justifyContent = 'center';
-            nextStageBtn.textContent = quizCaseStageIndex < stages.length - 1
+            nextStageBtn.style.background = 'linear-gradient(135deg, #0284c7, #0ea5e9)';
+            nextStageBtn.style.color = 'white';
+            nextStageBtn.style.borderColor = '#0284c7';
+            nextStageBtn.textContent = quizCaseStageIndex < totalStages - 1
                 ? '➡️ ادامه سناریو'
                 : '❓ مشاهده سوال نهایی';
             nextStageBtn.onclick = () => {
+                try { tg.HapticFeedback?.impact('light'); } catch(e) {}
                 quizCaseStageIndex++;
                 renderCaseProgressionStage(q, textEl, optionsDiv);
             };
@@ -4100,46 +4196,53 @@
             const leftRows = [];
             lefts.forEach((leftText, li) => {
                 const row = document.createElement('button');
-                row.className = 'quiz-option-btn';
+                row.className = 'quiz-mcq-btn';
                 row.style.cssText = 'justify-content:space-between; text-align:right; font-size:13px; padding:12px 14px;';
                 row.innerHTML = `<span>${li + 1}) ${leftText}</span><span style="font-weight:800; color:#0284c7; margin-right:8px;">؟</span>`;
                 row.onclick = () => {
-                    leftRows.forEach(r => r.style.borderColor = '#e2e8f0');
+                    try { tg.HapticFeedback?.impact('light'); } catch(e) {}
+                    leftRows.forEach(r => { r.style.borderColor = '#e2e8f0'; r.style.background = ''; });
                     selectedLeftIndex = li;
                     row.style.borderColor = '#0284c7';
+                    row.style.background = 'rgba(37, 99, 235, 0.08)';
                 };
                 leftRows.push(row);
                 leftCol.appendChild(row);
             });
 
             const hint = document.createElement('div');
-            hint.style.cssText = 'font-size:11px; color:#64748b; font-weight:700; text-align:center;';
-            hint.textContent = '👆 اول یک مورد از بالا رو انتخاب کن، بعد گزینه تطبیق‌شونده‌ش رو از پایین بزن';
+            hint.style.cssText = 'font-size:11px; color:var(--hint-color); font-weight:700; text-align:center;';
+            hint.textContent = '👆 ابتدا یک مورد از بالا را انتخاب کنید، سپس گزینه مناسب را از پایین بزنید';
 
             const rightCol = document.createElement('div');
             rightCol.style.cssText = 'display:flex; flex-direction:column; gap:8px;';
             rightsShuffled.forEach((item, ri) => {
                 const btn = document.createElement('button');
-                btn.className = 'quiz-option-btn';
+                btn.className = 'quiz-mcq-btn';
                 btn.style.cssText = 'justify-content:flex-start; text-align:right; font-size:13px; padding:12px 14px;';
-                btn.innerHTML = `<span class="quiz-option-letter">${QUIZ_OPTION_LETTERS[ri] || (ri + 1)}</span><span>${item.text}</span>`;
+                btn.innerHTML = `<span class="quiz-option-letter">${QUIZ_OPTION_LETTERS[ri] || (ri + 1)}</span><span class="quiz-option-text">${item.text}</span>`;
                 btn.onclick = () => {
                     if (selectedLeftIndex === null) {
-                        tg.showAlert('اول یک مورد از ستون بالا رو انتخاب کن، بعد گزینه تطبیق‌شونده رو بزن.');
+                        tg.showAlert('اول یک مورد از ستون بالا را انتخاب کنید، سپس گزینه تطبیق‌شونده را بزنید.');
                         return;
                     }
+                    try { tg.HapticFeedback?.impact('medium'); } catch(e) {}
                     quizMatchingSelection[selectedLeftIndex] = item.text;
                     const targetSpan = leftRows[selectedLeftIndex].lastElementChild;
                     targetSpan.textContent = `${QUIZ_OPTION_LETTERS[ri] || (ri + 1)} ✓`;
                     leftRows[selectedLeftIndex].style.borderColor = '#10b981';
-                    leftRows[selectedLeftIndex].style.background = 'rgba(16,185,129,0.08)';
+                    leftRows[selectedLeftIndex].style.background = 'rgba(16,185,129,0.12)';
                     selectedLeftIndex = null;
 
                     if (quizMatchingSelection.every((v) => v !== null)) {
                         quizSelectedAnswer = quizMatchingSelection;
                         nightlyAnswers[currentQuizQuestionIndex] = quizMatchingSelection;
                         const nextBtn = document.getElementById('quiz-next-btn');
-                        if (nextBtn) nextBtn.disabled = false;
+                        if (nextBtn) {
+                            nextBtn.disabled = false;
+                            nextBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+                            nextBtn.style.boxShadow = '0 8px 25px rgba(16, 185, 129, 0.5)';
+                        }
                     }
                 };
                 rightCol.appendChild(btn);
@@ -4160,7 +4263,10 @@
                 const dot = document.createElement('div');
                 dot.className = 'quiz-progress-dot';
 
-                if (idx < currentQuizQuestionIndex) {
+                if (quizResultsData && quizResultsData[idx]) {
+                    // در حالت نتایج: نمایش صحیح/نادرست
+                    dot.classList.add(quizResultsData[idx].is_correct ? 'correct' : 'incorrect');
+                } else if (idx < currentQuizQuestionIndex) {
                     dot.classList.add('answered');
                 } else if (idx === currentQuizQuestionIndex) {
                     dot.classList.add('active');
@@ -4212,7 +4318,13 @@
 
         // به‌روزرسانی نمایشگر زمان
         function updateTimerDisplay() {
-            document.getElementById('quiz-timer-text').textContent = quizTimeRemaining.toString().padStart(2, '0');
+            const timerText = document.getElementById('quiz-timer-text');
+            timerText.textContent = quizTimeRemaining.toString().padStart(2, '0');
+
+            // Haptic feedback at 10 seconds warning
+            if (quizTimeRemaining === 10 && window.hapticAvailable !== false) {
+                try { tg.HapticFeedback?.impact('medium'); } catch(e) {}
+            }
         }
 
         // به‌روزرسانی دایره تایمر
@@ -4228,7 +4340,7 @@
 
             // تغییر رنگ بر اساس زمان باقی‌مانده
             if (quizTimeRemaining <= 10) {
-                circle.classList.remove('warning', 'danger');
+                circle.classList.remove('warning');
                 circle.classList.add('danger');
             } else if (quizTimeRemaining <= 20) {
                 circle.classList.remove('danger');
@@ -4248,6 +4360,9 @@
                 b.classList.remove('selected');
             });
             btn.classList.add('selected');
+
+            // Haptic feedback
+            try { tg.HapticFeedback?.impact('light'); } catch(e) {}
 
             // توقف تایمر
             clearInterval(quizTimerInterval);
@@ -4323,9 +4438,14 @@
                 .then(res => res.json())
                 .then(statusData => {
                     if (statusData.error) return;
+                    if (statusData.results) {
+                        quizResultsData = statusData.results;
+                    }
                     document.getElementById('quiz-result-screen').innerHTML = generateQuizResultHTML(statusData);
                     document.getElementById('quiz-active-screen').style.display = 'none';
                     document.getElementById('quiz-start-screen').style.display = 'none';
+                    document.getElementById('quiz-result-screen').style.display = 'block';
+                    updateProgressDots();
                 });
                 return;
             }
@@ -4333,10 +4453,16 @@
             // با داده‌های دریافتی
             document.getElementById('quiz-result-screen').innerHTML = generateQuizResultHTML(data);
 
+            // ذخیره نتایج برای نمایش در نقاط پیشرفت
+            if (data.results) {
+                quizResultsData = data.results;
+            }
+
             // تغییر به صفحه نتیجه
             document.getElementById('quiz-active-screen').style.display = 'none';
             document.getElementById('quiz-start-screen').style.display = 'none';
             document.getElementById('quiz-result-screen').style.display = 'block';
+            updateProgressDots();
 
             // به‌روزرسانی نتایج در داشبورد
             document.getElementById('nightly-result-score').innerText = `${formatScore(data.score)} از ${data.total}`;
@@ -4352,14 +4478,31 @@
             return score.toFixed(1);
         }
 
+        // محاسبه درصد
+        function calcPercent(score, total) {
+            if (total === 0) return 0;
+            return Math.round((score / total) * 100);
+        }
+
+        // شکل‌گیری نوار درصد
+        function percentBarColor(pct) {
+            if (pct >= 80) return '#10b981';
+            if (pct >= 60) return '#f59e0b';
+            return '#ef4444';
+        }
+
         // تولید HTML نتایج
         function generateQuizResultHTML(data) {
             const score = data.score || 0;
             const total = data.total || 10;
             const duration = data.duration_seconds || 180;
+            const percent = calcPercent(score, total);
 
             const minutes = Math.floor(duration / 60);
             const seconds = duration % 60;
+
+            const correctCount = data.results ? data.results.filter(r => r.is_correct).length : 0;
+            const wrongCount = total - correctCount;
 
             let title = '';
             if (score === total) {
@@ -4378,9 +4521,29 @@
                 <div class="quiz-result-score">
                     ${formatScore(score)} از ${total}
                 </div>
+
+                <!-- نوار درصد نمره -->
+                <div style="width:100%; max-width:300px; height:12px; background:rgba(255,255,255,0.2); border-radius:10px; margin:16px auto; overflow:hidden;">
+                    <div style="width:${percent}%; height:100%; background:linear-gradient(90,#0284c7,#0ea5e9); border-radius:10px; transition:width 1s ease;"></div>
+                </div>
+                <div class="quiz-result-percent" style="color:${percentBarColor(percent)}; font-size:20px; font-weight:800; margin-bottom:8px;">${percent}%</div>
+
+                <!-- آمار خلاصه -->
                 <div class="quiz-result-time">
                     زمان: ${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')} دقیقه
                 </div>
+                <div style="display:flex; justify-content:center; gap:24px; margin:16px 0; font-size:14px;">
+                    <div style="text-align:center;">
+                        <div style="font-size:20px; color:#10b981;">${correctCount}</div>
+                        <div style="color:rgba(255,255,255,0.7);">✅ صحیح</div>
+                    </div>
+                    <div style="text-align:center;">
+                        <div style="font-size:20px; color:#ef4444;">${wrongCount}</div>
+                        <div style="color:rgba(255,255,255,0.7);">❌ نادرست</div>
+                    </div>
+                </div>
+
+                <!-- جزئیات سؤال به سؤال -->
                 <div class="quiz-result-details">
                     ${data.results ? data.results.map((r, idx) => {
                         if (r.type === 'matching') {
@@ -4390,7 +4553,7 @@
                                 return `${ok ? '✅' : '❌'} ${p.left} ⬅ ${chosen}${ok ? '' : ` (صحیح: ${p.right})`}`;
                             }).join('<br>');
                             return `
-                                <div class="quiz-result-item">
+                                <div class="quiz-result-item ${r.is_correct ? 'correct' : 'incorrect'}">
                                     <span class="quiz-result-item-icon">${r.is_correct ? '✅' : '❌'}</span>
                                     <span class="quiz-result-item-text">
                                         <strong>سوال ${idx + 1}</strong> (${r.topic} — تطبیق)
@@ -4400,11 +4563,12 @@
                                 </div>`;
                         }
                         return `
-                            <div class="quiz-result-item">
+                            <div class="quiz-result-item ${r.is_correct ? 'correct' : 'incorrect'}">
                                 <span class="quiz-result-item-icon">${r.is_correct ? '✅' : '❌'}</span>
                                 <span class="quiz-result-item-text">
                                     <strong>سوال ${idx + 1}</strong> (${r.topic})
                                     ${r.is_correct ? '✅ صحیح' : `❌ نادرست | صحیح: ${r.correct_answer}`}
+                                    ${r.selected_answer && !r.is_correct ? `<br><small style="color:rgba(255,255,255,0.6);">پاسخ شما: ${r.selected_answer}</small>` : ''}
                                     <br><small>💡 ${r.explanation}</small>
                                 </span>
                             </div>`;
