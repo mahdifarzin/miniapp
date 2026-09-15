@@ -4902,9 +4902,9 @@
                 ],
                 calculate: (v) => v.eye + v.verbal + v.motor,
                 interpret: (score) => {
-                    if (score >= 13) return { text: 'خفیف (轻度)', color: '#10b981' };
-                    if (score >= 9) return { text: 'متوسط (中度)', color: '#f59e0b' };
-                    if (score >= 3) return { text: 'شدید (重度)', color: '#ef4444' };
+                    if (score >= 13) return { text: 'خفیف', color: '#10b981' };
+                    if (score >= 9) return { text: 'متوسط', color: '#f59e0b' };
+                    if (score >= 3) return { text: 'شدید', color: '#ef4444' };
                     return { text: 'مرگ مغزی', color: '#7f1d1d' };
                 },
                 unit: 'امتیاز',
@@ -4947,16 +4947,16 @@
                     if (sc <= kappa) {
                         return (142 * Math.pow(sc / kappa, alpha) * Math.pow(0.9938, age) * factor).toFixed(1);
                     }
-                    return (142 * Math.pow(sc / kappa, alpha) * Math.pow(0.9938, age) * factor).toFixed(1);
+                    return (142 * (sc / 14) * Math.pow(0.9938, age) * factor).toFixed(1);
                 },
                 interpret: (score) => {
                     const s = parseFloat(score);
                     if (s >= 90) return { text: 'GFR طبیعی (G1)', color: '#10b981' };
                     if (s >= 60) return { text: 'کاهش خفیف (G2)', color: '#fbbf24' };
                     if (s >= 45) return { text: 'کاهش متوسط (G3a)', color: '#f59e0b' };
-                    if (s >= 30) return { text: 'کثیر شدید (G3b)', color: '#f97316' };
-                    if (s >= 15) return { text: 'کشتیر شدید (G4)', color: '#ef4444' };
-                    return { text: 'کشتیر (G5)', color: '#7f1d1d' };
+                    if (s >= 30) return { text: 'کاهش شدید (G3b)', color: '#f97316' };
+                    if (s >= 15) return { text: 'کاهش بسیار شدید (G4)', color: '#ef4444' };
+                    return { text: 'ناکافی کلیوی (G5)', color: '#7f1d1d' };
                 },
                 unit: 'mL/min/1.73m²',
                 ref: 'CKD-EPI 2021 (race-free)'
@@ -4988,13 +4988,13 @@
                 name: 'CHADS₂-VASc',
                 icon: '❤️',
                 inputs: [
-                    { id: 'chads2-chf', label: ' CHF / ŠF', type: 'yesno', default: false },
+                    { id: 'chads2-chf', label: 'CHF / شریان‌های کورونری', type: 'yesno', default: false },
                     { id: 'chads2-htn', label: 'فشار خون بالا', type: 'yesno', default: false },
                     { id: 'chads2-age', label: 'سن ≥ 75 سال', type: 'yesno', default: false },
-                    { id: 'chads2-dm', label: 'دیابت mellitus', type: 'yesno', default: false },
+                    { id: 'chads2-dm', label: 'دیابت', type: 'yesno', default: false },
                     { id: 'chads2-stroke', label: 'سکته / TIA قبلی', type: 'yesno', default: false },
-                    { id: 'chads2-vasc', label: 'بیماری عروقی ( CAD, PAD, dessis)', type: 'yesno', default: false },
-                    { id: 'chads2-sex', label: 'جنسیت زن (age 65-74)', type: 'yesno', default: false }
+                    { id: 'chads2-vasc', label: 'بیماری عروقی (CAD, PAD، سکته قبلی)', type: 'yesno', default: false },
+                    { id: 'chads2-sex', label: 'جنسیت زن (سن ≥ 65)', type: 'yesno', default: false }
                 ],
                 calculate: (v) => {
                     let score = 0;
@@ -5065,13 +5065,13 @@
                 icon: '🩸',
                 inputs: [
                     { id: 'wells-cancer', label: 'بیماری سرطانی فعال', type: 'yesno', default: false },
-                    { id: 'wells-paralysis', label: 'فلج / یبوست اندام تحتانی', type: 'yesno', default: false },
-                    { id: 'wells-bedrest', label: 'استراز more than 3 روز / جراحی اخیر', type: 'yesno', default: false },
-                    { id: 'wells-tenderness', label: 'حساسیت عمیق مسیر ورید', type: 'yesno', default: false },
+                    { id: 'wells-paralysis', label: 'فلج / بی‌حسی اندام تحتانی', type: 'yesno', default: false },
+                    { id: 'wells-bedrest', label: 'استراحت بیش از ۳ روز / جراحی اخیر', type: 'yesno', default: false },
+                    { id: 'wells-tenderness', label: 'حساسیت عمیق مسیر وریدی', type: 'yesno', default: false },
                     { id: 'wells-swelling', label: 'تورم کل پا', type: 'yesno', default: false },
-                    { id: 'wells-pitting', label: 'پف‌زنی (pitting edema) سایت‌دار', type: 'yesno', default: false },
-                    { id: 'wells-collateral', label: 'وریدهای براکیال کپلر', type: 'yesno', default: false },
-                    { id: 'wells-alt', label: 'تشخیص جایگزین حداقل به اندازه DVT', type: 'yesno', default: false }
+                    { id: 'wells-pitting', label: 'پف‌زنی (پیتینگ ادم) سیت‌دار', type: 'yesno', default: false },
+                    { id: 'wells-collateral', label: 'وریدهای کلاترال کپلر', type: 'yesno', default: false },
+                    { id: 'wells-alt', label: 'تشخیص جایگزین به اندازه DVT محتمل', type: 'yesno', default: false }
                 ],
                 calculate: (v) => {
                     let score = 0;
@@ -5223,21 +5223,27 @@
             const card = document.getElementById('calc-card');
             let html = '';
             cfg.inputs.forEach(input => {
-                if (input.type === 'select') {
+                 if (input.type === 'select') {
+                    const selectedOpt = input.default;
+                    const optionMap = {
+                        'male': 'مرد', 'female': 'زن',
+                        'A': 'آگاه (A)', 'V': 'واکنش (V)', 'P': 'درد (P)', 'U': 'ناآگاه (U)'
+                    };
                     html += `
                         <div class="calc-input-row">
                             <div class="calc-label">${input.label}</div>
-                            <select id="${input.id}" onchange="calculateCurrent()" style="flex:1.5; padding:10px; border-radius:10px; border:var(--card-border); background:var(--secondary-bg); color:var(--text-color); font-size:13px; font-weight:700;">
-                                ${input.options.map(opt => `<option value="${opt}">${opt === 'male' ? 'مرد' : 'زن'}</option>`).join('')}
+                            <select id="${input.id}" onchange="calculateCurrent()" class="calc-select">
+                                ${input.options.map(opt => `<option value="${opt}" ${opt === selectedOpt ? 'selected' : ''}>${optionMap[opt] || opt}</option>`).join('')}
                             </select>
                         </div>`;
                 } else if (input.type === 'yesno') {
+                    const isYes = input.default === true;
                     html += `
                         <div class="calc-input-row">
                             <div class="calc-label">${input.label}</div>
                             <div class="calc-yesno">
-                                <button type="button" data-id="${input.id}" data-val="1" onclick="toggleYesNo(this)" class="selected-yes" style="background:linear-gradient(135deg, #10b981, #059669); color:white; border-color:#10b981;">بله</button>
-                                <button type="button" data-id="${input.id}" data-val="0" onclick="toggleYesNo(this)" class="selected-no" style="background:linear-gradient(135deg, #ef4444, #dc2626); color:white; border-color:#ef4444;">خیر</button>
+                                <button type="button" data-id="${input.id}" data-val="1" onclick="toggleYesNo(this)" class="${isYes ? 'selected-yes' : ''}">بله</button>
+                                <button type="button" data-id="${input.id}" data-val="0" onclick="toggleYesNo(this)" class="${!isYes ? 'selected-no' : ''}">خیر</button>
                             </div>
                         </div>`;
                 } else {
@@ -5262,7 +5268,7 @@
             const display = document.getElementById(id + '-display');
             let val = parseFloat(display.innerText) + delta;
             val = Math.max(input.min, Math.min(input.max, parseFloat(val.toFixed(2))));
-            display.innerText = val;
+            display.innerText = val % 1 === 0 ? val : val.toFixed(1);
             calculateCurrent();
         }
 
@@ -5272,11 +5278,9 @@
             const parent = btn.parentElement;
             parent.querySelectorAll('button').forEach(b => {
                 b.classList.remove('selected-yes', 'selected-no');
-                if (b.dataset.val === '1') {
-                    b.style.background = '';
-                    b.style.color = '';
-                    b.style.borderColor = '';
-                }
+                b.style.background = '';
+                b.style.color = '';
+                b.style.borderColor = '';
             });
             if (val === '1') {
                 btn.classList.add('selected-yes');
@@ -5294,17 +5298,18 @@
 
         function getCalcValues() {
             const cfg = calculatorConfigs[activeCalculator];
+            const prefix = activeCalculator + '-';
             const vals = {};
             cfg.inputs.forEach(input => {
+                const key = input.id.replace(prefix, '');
                 if (input.type === 'select') {
-                    vals[input.id.replace(/^(gfr|chads2|curb|wells|qsofa|news)-/, '')] = document.getElementById(input.id).value;
+                    vals[key] = document.getElementById(input.id).value;
                 } else if (input.type === 'yesno') {
-                    const parent = document.querySelector(`button[data-id="${input.id}"].selected-yes, button[data-id="${input.id}"].selected-no`);
-                    const val = parent && parent.classList.contains('selected-yes') ? 1 : 0;
-                    vals[input.id.replace(/^(gfr|chads2|curb|wells|qsofa|news)-/, '')] = val;
+                    const selBtn = document.querySelector(`button[data-id="${input.id}"].selected-yes`);
+                    vals[key] = selBtn ? 1 : 0;
                 } else {
                     const display = document.getElementById(input.id + '-display');
-                    vals[input.id.replace(/^(gfr|chads2|curb|wells|qsofa|news)-/, '')] = parseFloat(display.innerText);
+                    vals[key] = parseFloat(display.innerText);
                 }
             });
             return vals;
