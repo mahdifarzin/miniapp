@@ -5064,14 +5064,14 @@
                 name: 'Wells DVT',
                 icon: '🩸',
                 inputs: [
-                    { id: 'wells-cancer', label: 'بیماری سرطانی فعال', type: 'yesno', default: false },
-                    { id: 'wells-paralysis', label: 'فلج / بی‌حسی اندام تحتانی', type: 'yesno', default: false },
-                    { id: 'wells-bedrest', label: 'استراحت بیش از ۳ روز / جراحی اخیر', type: 'yesno', default: false },
-                    { id: 'wells-tenderness', label: 'حساسیت عمیق مسیر وریدی', type: 'yesno', default: false },
-                    { id: 'wells-swelling', label: 'تورم کل پا', type: 'yesno', default: false },
-                    { id: 'wells-pitting', label: 'پف‌زنی (پیتینگ ادم) سیت‌دار', type: 'yesno', default: false },
-                    { id: 'wells-collateral', label: 'وریدهای کلاترال کپلر', type: 'yesno', default: false },
-                    { id: 'wells-alt', label: 'تشخیص جایگزین به اندازه DVT محتمل', type: 'yesno', default: false }
+                    { id: 'wells_dvt-cancer', label: 'بیماری سرطانی فعال', type: 'yesno', default: false },
+                    { id: 'wells_dvt-paralysis', label: 'فلج / بی‌حسی اندام تحتانی', type: 'yesno', default: false },
+                    { id: 'wells_dvt-bedrest', label: 'استراحت بیش از ۳ روز / جراحی اخیر', type: 'yesno', default: false },
+                    { id: 'wells_dvt-tenderness', label: 'حساسیت عمیق مسیر وریدی', type: 'yesno', default: false },
+                    { id: 'wells_dvt-swelling', label: 'تورم کل پا', type: 'yesno', default: false },
+                    { id: 'wells_dvt-pitting', label: 'پف‌زنی (پیتینگ ادم) سیت‌دار', type: 'yesno', default: false },
+                    { id: 'wells_dvt-collateral', label: 'وریدهای کلاترال کپلر', type: 'yesno', default: false },
+                    { id: 'wells_dvt-alt', label: 'تشخیص جایگزین به اندازه DVT محتمل', type: 'yesno', default: false }
                 ],
                 calculate: (v) => {
                     let score = 0;
@@ -5298,10 +5298,10 @@
 
         function getCalcValues() {
             const cfg = calculatorConfigs[activeCalculator];
-            const prefix = activeCalculator + '-';
+            const prefix = activeCalculator.replace(/_/g, '-') + '-';
             const vals = {};
             cfg.inputs.forEach(input => {
-                const key = input.id.replace(prefix, '');
+                const key = input.id.startsWith(prefix) ? input.id.slice(prefix.length) : input.id;
                 if (input.type === 'select') {
                     vals[key] = document.getElementById(input.id).value;
                 } else if (input.type === 'yesno') {
