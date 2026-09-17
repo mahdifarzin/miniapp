@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <!-- اسکریپت رسمی تلگرام -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script async src="https://telegram.org/js/telegram-web-app.js"></script>
     
     <style>
         /* ---------------------------------------------------- */
@@ -2302,9 +2302,18 @@
     </div>
 
     <script>
-        const tg = window.Telegram.WebApp;
-        tg.ready();
-        tg.expand();
+        function initTelegram() {
+            if (!window.Telegram || !window.Telegram.WebApp) return false;
+            const tg = window.Telegram.WebApp;
+            tg.ready();
+            tg.expand();
+            return true;
+        }
+        if (!initTelegram()) {
+            const tgInterval = setInterval(() => {
+                if (initTelegram()) clearInterval(tgInterval);
+            }, 100);
+        }
 
         // 🌓 سیستم مدیریت تم (دارک مود و لایت مود)
         let currentTheme = localStorage.getItem('theme') || 'auto';
@@ -2323,7 +2332,7 @@
                 themeBtn.title = 'تغییر به حالت تاریک';
             } else {
                 // حالت خودکار - بر اساس تم تلگرام
-                if (tg.colorScheme === 'dark') {
+                if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.colorScheme === 'dark') {
                     document.body.classList.add('dark-mode');
                     themeBtn.textContent = '☀️';
                     themeBtn.title = 'تغییر به حالت روشن';
@@ -2358,11 +2367,18 @@
         applyTheme(currentTheme);
 
         // گوش دادن به تغییرات تم تلگرام (فقط اگه کاربر دستی تغییر نداده باشه)
-        tg.onEvent('themeChanged', () => {
-            if (!localStorage.getItem('userManualTheme')) {
-                applyTheme('auto');
+        function listenThemeChanged() {
+            if (window.Telegram && window.Telegram.WebApp) {
+                window.Telegram.WebApp.onEvent('themeChanged', () => {
+                    if (!localStorage.getItem('userManualTheme')) {
+                        applyTheme('auto');
+                    }
+                });
+            } else {
+                setTimeout(listenThemeChanged, 200);
             }
-        });
+        }
+        listenThemeChanged();
 
         const BASE_URL = "https://api.apamed.ir";
 
@@ -3493,28 +3509,6 @@
         // بازنویسی تابع renderNightlyLeaderboard
         window.renderNightlyLeaderboard = renderEnhancedLeaderboard;
 
-        // ---------- بهبود رنگ‌بندی کارت‌ها ----------
-        function applyCardColors() {
-            // کارت AI
-            const aiCards = document.querySelectorAll('.card:has(#ai-count)');
-            aiCards.forEach(card => card.classList.add('card-ai'));
-
-            // کارت چالش
-            const challengeCards = document.querySelectorAll('.card:has(#challenge-text)');
-            challengeCards.forEach(card => card.classList.add('card-challenge'));
-
-            // کارت ردیاب
-            const trackerCards = document.querySelectorAll('.card:has(#total-time)');
-            trackerCards.forEach(card => card.classList.add('card-tracker'));
-
-            // کارت آپالیگ
-            const nightlyCards = document.querySelectorAll('.card:has(#nightly-entry-fee)');
-            nightlyCards.forEach(card => card.classList.add('card-nightly'));
-        }
-
-        // اعمال رنگ‌ها بعد از بارگذاری
-        setTimeout(applyCardColors, 100);
-
         // ---------- تشخیص نفر اول و نمایش تبریک ----------
         let hasShownCelebration = false;
 
@@ -3567,18 +3561,26 @@
 
         // ---------- افکت‌های متحرک برای بخش‌ها ----------
         function addAnimationToElements() {
-            // اضافه کردن کلاس slide-up به کارت‌ها
-            document.querySelectorAll('.card').forEach((card, idx) => {
-                card.style.animationDelay = `${idx * 0.1}s`;
+            document.querySelectorAll('.card:not(.slide-up)').forEach((card, idx) => {
+                card.style.animationDelay = `${idx * 0.06}s`;
                 card.classList.add('slide-up');
             });
         }
 
-        // اجرای افکت‌ها بعد از بارگذاری
-        window.addEventListener('load', addAnimationToElements);
+        // اجرای افکت‌ها به‌صورت lazy بعد از رندر اولیه
+        requestAnimationFrame(() => {
+            setTimeout(addAnimationToElements, 50);
+        });
 
-        loadAppData();
-        loadChallengeTopics();
+        // اجرای افکت‌ها به‌صورت lazy بعد از رندر اولیه
+        requestAnimationFrame(() => {
+            setTimeout(addAnimationToElements, 50);
+        });
+
+        // بارگذاری داده‌ها بعد از رندر اولیه (non-blocking)
+        requestAnimationFrame(() => {
+            setTimeout(() => { loadAppData(); loadChallengeTopics(); }, 100);
+        });
 
         // ---------- پنل ادمین ----------
         const ADMIN_CHAT_ID = 1914755688;
