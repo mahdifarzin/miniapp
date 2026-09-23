@@ -5,9 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Apamed Medical Mini App</title>
     <!-- فونت Vazirmatn -->
+    <!-- فونت Vazirmatn — بدون بلوکه کردن رندر اولیه (async load) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap"></noscript>
     <!-- اسکریپت رسمی تلگرام -->
     <script async src="https://telegram.org/js/telegram-web-app.js"></script>
     
@@ -1612,6 +1615,178 @@
                 padding: 15px;
             }
         }
+
+        /* ============================================ */
+        /* استایل‌های چت‌بات هوش مصنوعی */
+        /* ============================================ */
+        .ai-chat-wrap {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 190px);
+            min-height: 380px;
+        }
+
+        .ai-chat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .ai-clear-btn {
+            background: transparent;
+            border: 1px solid var(--card-border);
+            color: var(--hint-color);
+            font-size: 12px;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s ease;
+        }
+
+        .ai-clear-btn:active {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            border-color: rgba(239, 68, 68, 0.4);
+        }
+
+        .ai-chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 4px 2px 10px;
+        }
+
+        .ai-msg {
+            max-width: 86%;
+            padding: 10px 14px;
+            border-radius: 16px;
+            font-size: 13.5px;
+            line-height: 1.9;
+            white-space: pre-wrap;
+            word-break: break-word;
+            animation: aiMsgIn 0.25s ease-out;
+        }
+
+        @keyframes aiMsgIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* پیام دستیار — سمت راست (شروع در RTL) */
+        .ai-msg.bot {
+            align-self: flex-start;
+            background: var(--item-bg);
+            border: var(--card-border);
+            border-bottom-right-radius: 5px;
+        }
+
+        /* پیام کاربر — سمت چپ (پایان در RTL) */
+        .ai-msg.user {
+            align-self: flex-end;
+            background: linear-gradient(135deg, #0284c7, #1e3a8a);
+            color: #fff;
+            border-bottom-left-radius: 5px;
+        }
+
+        .ai-msg-time {
+            display: block;
+            font-size: 10px;
+            opacity: 0.7;
+            margin-top: 4px;
+            text-align: inherit;
+        }
+
+        /* نشانگر «در حال نوشتن» */
+        .ai-typing {
+            align-self: flex-start;
+            display: flex;
+            gap: 5px;
+            padding: 14px 18px;
+            background: var(--item-bg);
+            border: var(--card-border);
+            border-radius: 16px;
+            border-bottom-right-radius: 5px;
+            width: fit-content;
+        }
+
+        .ai-typing span {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--med-cyan);
+            opacity: 0.4;
+            animation: aiTypingBlink 1.2s infinite;
+        }
+
+        .ai-typing span:nth-child(2) { animation-delay: 0.2s; }
+        .ai-typing span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes aiTypingBlink {
+            0%, 80%, 100% { opacity: 0.3; transform: translateY(0); }
+            40% { opacity: 1; transform: translateY(-3px); }
+        }
+
+        .ai-chat-empty {
+            text-align: center;
+            color: var(--hint-color);
+            font-size: 13px;
+            margin: auto;
+            padding: 20px;
+            line-height: 2;
+        }
+
+        .ai-chat-input-row {
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+            margin-top: 10px;
+        }
+
+        .ai-chat-input {
+            flex: 1;
+            border-radius: 22px;
+            border: var(--card-border);
+            background: var(--item-bg);
+            color: var(--text-color);
+            padding: 11px 16px;
+            font-size: 14px;
+            resize: none;
+            outline: none;
+            font-family: inherit;
+            max-height: 110px;
+            line-height: 1.7;
+        }
+
+        .ai-chat-input:focus {
+            border-color: var(--med-cyan);
+        }
+
+        .ai-send-btn {
+            width: 44px;
+            height: 44px;
+            min-width: 44px;
+            border: none;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0284c7, #1e3a8a);
+            color: #fff;
+            font-size: 19px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35);
+            transition: transform 0.15s ease, opacity 0.2s ease;
+        }
+
+        .ai-send-btn:active { transform: scale(0.92); }
+        .ai-send-btn:disabled { opacity: 0.55; cursor: default; }
+    </style>
     </style>
 </head>
 <body>
@@ -1897,27 +2072,17 @@
 
         <!-- زبانه ۵: هوش مصنوعی -->
         <div id="tab-ai" class="tab-content">
-            <div class="card card-ai">
-                <div class="card-title">
-                    <span class="card-title-icon">
-                        <span class="icon-badge">💡</span>
-                        دستیار هوشمند آپامد
-                    </span>
+            <div class="card card-ai ai-chat-wrap">
+                <div class="ai-chat-header">
+                    <div class="card-desc" id="ai-quota-text" style="margin:0; font-size:12px;">در حال دریافت اطلاعات...</div>
+                    <button class="ai-clear-btn" id="ai-clear-btn" onclick="clearAIChat()">🗑 پاک کردن</button>
                 </div>
-                <div class="card-desc" id="ai-quota-text" style="margin-bottom:12px;">در حال دریافت اطلاعات...</div>
-                <textarea id="ai-question-input" placeholder="سوال پزشکی خود را اینجا بنویسید..." rows="4"
-                    style="width:100%; border-radius:14px; border:var(--card-border); background:var(--item-bg); color:var(--text-color); padding:12px; font-size:14px; resize:vertical; outline:none;"></textarea>
-                <button class="exam-btn" id="ai-ask-btn" onclick="askAI()" style="margin-top:10px;">🚀 ارسال سوال</button>
-            </div>
-
-            <div class="card card-ai slide-up" id="ai-answer-card" style="display:none;">
-                <div class="card-title">
-                    <span class="card-title-icon">
-                        <span class="icon-badge">📝</span>
-                        پاسخ دستیار
-                    </span>
+                <div class="ai-chat-messages" id="ai-chat-messages"></div>
+                <div class="ai-chat-input-row">
+                    <textarea id="ai-question-input" class="ai-chat-input" rows="1"
+                        placeholder="سوال پزشکی خود را بنویسید..."></textarea>
+                    <button class="ai-send-btn" id="ai-send-btn" onclick="sendAIMessage()" aria-label="ارسال">🚀</button>
                 </div>
-                <div class="card-desc" id="ai-answer-text" style="white-space: pre-wrap; line-height: 1.9;"></div>
             </div>
         </div>
 
@@ -2416,6 +2581,8 @@
                 console.log('پنل ادمین باز شد');
             } else if (tabName === 'calculator') {
                 loadCalculatorTab();
+            } else if (tabName === 'ai') {
+                loadAIChat();
             } else if (nightlyStatusPollInterval) {
                 clearInterval(nightlyStatusPollInterval);
                 nightlyStatusPollInterval = null;
@@ -2955,21 +3122,103 @@
             document.body.appendChild(errorDiv);
         }
 
-        // ---------- بخش هوش مصنوعی ----------
-        function askAI() {
+        // ---------- بخش چت‌بات هوش مصنوعی ----------
+        let aiChatLoaded = false;
+        let aiChatSending = false;
+
+        function escapeHtmlText(text) {
+            return (text || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+        }
+
+        function formatAITime(dateStr) {
+            try {
+                const d = dateStr ? new Date(dateStr.replace(' ', 'T')) : new Date();
+                return d.toLocaleTimeString('fa-IR', { hour: '2-digit', minute: '2-digit' });
+            } catch (e) {
+                return '';
+            }
+        }
+
+        function appendAIMessage(role, text, timeStr) {
+            const container = document.getElementById('ai-chat-messages');
+            const empty = container.querySelector('.ai-chat-empty');
+            if (empty) empty.remove();
+
+            const div = document.createElement('div');
+            div.className = 'ai-msg ' + (role === 'user' ? 'user' : 'bot');
+            div.innerHTML = escapeHtmlText(text) +
+                `<span class="ai-msg-time">${timeStr || formatAITime()}</span>`;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+            return div;
+        }
+
+        function showAITyping() {
+            const container = document.getElementById('ai-chat-messages');
+            const div = document.createElement('div');
+            div.className = 'ai-typing';
+            div.id = 'ai-typing-indicator';
+            div.innerHTML = '<span></span><span></span><span></span>';
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function removeAITyping() {
+            const el = document.getElementById('ai-typing-indicator');
+            if (el) el.remove();
+        }
+
+        function loadAIChat() {
+            const container = document.getElementById('ai-chat-messages');
+            if (!container || aiChatLoaded) return;
+            aiChatLoaded = true;
+            container.innerHTML = '<div class="ai-chat-empty">💬 سوال پزشکی خود را بپرسید.<br>دستیار، زمینه گفتگوهای قبلی را به‌خاطر می‌سپارد.</div>';
+
+            fetch(`${BASE_URL}/api/ai/history`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Telegram-Init-Data': tg.initData
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.error || !data.messages) return;
+                if (data.messages.length) {
+                    const empty = container.querySelector('.ai-chat-empty');
+                    if (empty) empty.remove();
+                    data.messages.forEach(m => appendAIMessage(m.role, m.content, formatAITime(m.created_at)));
+                    container.scrollTop = container.scrollHeight;
+                }
+            })
+            .catch(err => console.error('AI history error:', err));
+        }
+
+        function sendAIMessage() {
+            if (aiChatSending) return;
             const input = document.getElementById('ai-question-input');
-            const question = input.value.trim();
+            const question = (input.value || '').trim();
             if (!question) {
                 tg.showAlert('لطفاً ابتدا سوال خود را بنویسید.');
                 return;
             }
+            if (!tg.initData) {
+                tg.showAlert('خطا در احراز هویت. مینی‌اپ را دوباره باز کنید.');
+                return;
+            }
 
-            const btn = document.getElementById('ai-ask-btn');
-            btn.disabled = true;
-            btn.innerText = '⏳ در حال پردازش...';
+            aiChatSending = true;
+            const sendBtn = document.getElementById('ai-send-btn');
+            sendBtn.disabled = true;
+            input.value = '';
+            input.style.height = 'auto';
 
-            const answerCard = document.getElementById('ai-answer-card');
-            answerCard.style.display = 'none';
+            appendAIMessage('user', question);
+            showAITyping();
+            hxHaptic('light');
 
             fetch(`${BASE_URL}/api/ai/ask`, {
                 method: 'POST',
@@ -2981,30 +3230,74 @@
             })
             .then(res => res.json().then(data => ({ status: res.status, data })))
             .then(({ status, data }) => {
-                btn.disabled = false;
-                btn.innerText = '🚀 ارسال سوال';
-
+                removeAITyping();
                 if (status !== 200 || data.error) {
-                    // اگر خطای دسترسی بود، پیام خاص نمایش بده
                     if (data.error === 'access_denied') {
                         tg.showAlert('🚫 ' + data.message);
+                    } else if (data.error === 'quota_exceeded') {
+                        tg.showAlert('⛔ ' + data.message);
                     } else {
                         tg.showAlert(data.message || 'خطایی رخ داد. دوباره تلاش کنید.');
                     }
                     return;
                 }
-
-                document.getElementById('ai-answer-text').innerText = data.answer;
-                answerCard.style.display = 'block';
-                document.getElementById('ai-quota-text').innerText = data.ai_remaining_text;
-                document.getElementById('ai-text').innerText = data.ai_remaining_text;
-                input.value = '';
+                appendAIMessage('bot', data.answer);
+                if (data.ai_remaining_text) {
+                    document.getElementById('ai-quota-text').innerText = data.ai_remaining_text;
+                    const headerQuota = document.getElementById('ai-text');
+                    if (headerQuota) headerQuota.innerText = data.ai_remaining_text;
+                }
+                hxHaptic('success');
             })
             .catch(err => {
                 console.error('AI ask error:', err);
-                btn.disabled = false;
-                btn.innerText = '🚀 ارسال سوال';
+                removeAITyping();
                 tg.showAlert('خطا در ارتباط با سرور. اتصال اینترنت خود را بررسی کنید.');
+            })
+            .finally(() => {
+                aiChatSending = false;
+                sendBtn.disabled = false;
+            });
+        }
+
+        function clearAIChat() {
+            tg.showConfirm('تمام تاریخچه گفتگو پاک شود؟ دستیار حافظه خود را از دست می‌دهد.', (confirmed) => {
+                if (!confirmed) return;
+                fetch(`${BASE_URL}/api/ai/clear`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Telegram-Init-Data': tg.initData
+                    },
+                    body: JSON.stringify({})
+                })
+                .then(res => res.json())
+                .then(() => {
+                    const container = document.getElementById('ai-chat-messages');
+                    container.innerHTML = '<div class="ai-chat-empty">💬 سوال پزشکی خود را بپرسید.<br>دستیار، زمینه گفتگوهای قبلی را به‌خاطر می‌سپارد.</div>';
+                    tg.showAlert('🗑 تاریخچه چت پاک شد.');
+                    hxHaptic('success');
+                })
+                .catch(err => {
+                    console.error('AI clear error:', err);
+                    tg.showAlert('خطا در ارتباط با سرور.');
+                });
+            });
+        }
+
+        // ارسال با دکمه Enter (بدون Shift) و بزرگ‌شدن خودکار textarea
+        function initAIChatInput() {
+            const input = document.getElementById('ai-question-input');
+            if (!input) return;
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendAIMessage();
+                }
+            });
+            input.addEventListener('input', () => {
+                input.style.height = 'auto';
+                input.style.height = Math.min(input.scrollHeight, 110) + 'px';
             });
         }
 
@@ -3581,7 +3874,7 @@
 
         // بارگذاری داده‌ها بعد از رندر اولیه (non-blocking)
         requestAnimationFrame(() => {
-            setTimeout(() => { loadAppData(); loadChallengeTopics(); }, 100);
+            setTimeout(() => { loadAppData(); loadChallengeTopics(); initAIChatInput(); }, 100);
         });
 
         // ---------- پنل ادمین ----------
@@ -4895,6 +5188,10 @@
         // ============================================
         let activeCalculator = 'gcs';
 
+        function formatScore(score) {
+            return String(score).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+        }
+
         const calculatorConfigs = {
             gcs: {
                 name: 'GCS',
@@ -5300,10 +5597,12 @@
 
         function getCalcValues() {
             const cfg = calculatorConfigs[activeCalculator];
-            const prefix = activeCalculator.replace(/_/g, '-') + '-';
             const vals = {};
             cfg.inputs.forEach(input => {
-                const key = input.id.startsWith(prefix) ? input.id.slice(prefix.length) : input.id;
+                // کلید همیشه از خود آیدی ورودی گرفته می‌شود (بخش بعد از اولین خط تیره)
+                // تا آیدی‌هایی مثل wells_dvt-cancer یا curb-confusion درست نگاشت شوند
+                const dashIndex = input.id.indexOf('-');
+                const key = dashIndex !== -1 ? input.id.slice(dashIndex + 1) : input.id;
                 if (input.type === 'select') {
                     vals[key] = document.getElementById(input.id).value;
                 } else if (input.type === 'yesno') {
