@@ -2302,9 +2302,11 @@
     </div>
 
     <script>
+        let tg = null;
+
         function initTelegram() {
             if (!window.Telegram || !window.Telegram.WebApp) return false;
-            const tg = window.Telegram.WebApp;
+            tg = window.Telegram.WebApp;
             tg.ready();
             tg.expand();
             return true;
