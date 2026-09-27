@@ -4553,14 +4553,75 @@
             } else if (q.type === 'case_progression') {
                 renderCaseProgressionStage(q, textEl, optionsDiv);
             } else {
-                textEl.textContent = q.question;
+                const parts = getMcqParts(q);
+                textEl.textContent = parts.stem || q.question;
                 renderMcqOptions(q, optionsDiv);
             }
         }
 
+        // استخراج صورت سوال و ۴ گزینه: اولویت با options ساختاریافته از بک‌اند؛
+        // در نبود آن (سوالات قدیمی)، گزینه‌ها از دل متن سوال (الگوی الف) ... ب) ...) پارس می‌شوند
+        function parseOptionsFromText(text) {
+            if (!text || text.length < 30) return null;
+            const labels = ['الف', 'ب', 'ج', 'د'];
+            const stripLabel = (s) => s.replace(/^(الف|ب|ج|د)\s*[\)\(\.:\-–—،]\s*/, '').trim();
+
+            // حالت ۱: هر گزینه در یک خط جدا
+            const lines = text.split(/\n+/).map(l => l.trim()).filter(Boolean);
+            const labelStart = (line, lab) => new RegExp('^' + lab + '\\s*[\\)\\(\\.:\\-–—،]').test(line);
+            for (let i = 0; i + 3 < lines.length; i++) {
+                if (labelStart(lines[i], labels[0]) && labelStart(lines[i + 1], labels[1]) &&
+                    labelStart(lines[i + 2], labels[2]) && labelStart(lines[i + 3], labels[3])) {
+                    const stem = lines.slice(0, i).join('\n').trim();
+                    const options = [0, 1, 2, 3].map(k => stripLabel(lines[i + k]));
+                    if (stem && options.every(o => o)) return { stem, options };
+                    return null;
+                }
+            }
+
+            // حالت ۲: گزینه‌ها در ادامه‌ی همان پاراگراف (الف) ... ب) ...)
+            const markerRe = /(^|[\s«"'])(الف|ب|ج|د)\s*[\)\.:\-–—،]/g;
+            const marks = [];
+            let m;
+            while ((m = markerRe.exec(text)) !== null) {
+                marks.push({ label: m[2], textStart: m.index + m[1].length, contentStart: m.index + m[0].length });
+            }
+            for (let i = 0; i + 3 < marks.length; i++) {
+                if (marks[i].label === 'الف' && marks[i + 1].label === 'ب' &&
+                    marks[i + 2].label === 'ج' && marks[i + 3].label === 'د') {
+                    const stem = text.slice(0, marks[i].textStart).trim();
+                    const options = [
+                        text.slice(marks[i].contentStart, marks[i + 1].textStart),
+                        text.slice(marks[i + 1].contentStart, marks[i + 2].textStart),
+                        text.slice(marks[i + 2].contentStart, marks[i + 3].textStart),
+                        text.slice(marks[i + 3].contentStart),
+                    ].map(s => s.trim());
+                    if (stem && options.every(o => o)) return { stem, options };
+                    return null;
+                }
+            }
+            return null;
+        }
+
+        function getMcqParts(q) {
+            if (q.__mcqParts) return q.__mcqParts;
+            let stem = (q.question || '').trim();
+            let options = Array.isArray(q.options)
+                ? q.options.map(o => (o == null ? '' : String(o).trim())).filter(Boolean)
+                : [];
+            if (options.length !== 4) {
+                const parsed = parseOptionsFromText(stem);
+                if (parsed) { stem = parsed.stem; options = parsed.options; }
+            }
+            if (options.length !== 4) options = [];
+            q.__mcqParts = { stem, options };
+            return q.__mcqParts;
+        }
+
         // گزینه‌های چهارگزینه‌ای استاندارد — نمایش متن گزینه‌ها
         function renderMcqOptions(q, optionsDiv) {
-            const options = (q.options && q.options.length === 4) ? q.options : ['', '', '', ''];
+            const parts = getMcqParts(q);
+            const options = parts.options.length === 4 ? parts.options : ['', '', '', ''];
             QUIZ_OPTION_LETTERS.forEach((letter, i) => {
                 const btn = document.createElement('button');
                 btn.className = 'quiz-option-btn';
@@ -4578,7 +4639,8 @@
             const isFinalStageDone = quizCaseStageIndex >= stages.length;
 
             if (isFinalStageDone) {
-                textEl.textContent = q.question;
+                const parts = getMcqParts(q);
+                textEl.textContent = parts.stem || q.question;
                 optionsDiv.innerHTML = '';
                 renderMcqOptions(q, optionsDiv);
                 return;
