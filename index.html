@@ -41,26 +41,27 @@
         /* ---------------------------------------------------- */
         /* ۲. متغیرهای تم شب (Dark Mode) */
         /* ---------------------------------------------------- */
-        body.dark-mode, @media (prefers-color-scheme: dark) {
-            :root {
-                --bg-color: #0b1329;
-                --secondary-bg: #152238;
-                --text-color: #f1f5f9;
-                --hint-color: #94a3b8;
-                --med-cyan: #38bdf8;
-                --med-emerald: #34d399;
-                --med-navy: #f8fafc;
-                --med-blue-gradient: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #1e3a8a 100%);
-                --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-                --card-border: 1px solid rgba(255, 255, 255, 0.08);
-                --glass-nav-bg: rgba(21, 34, 56, 0.85);
-                --item-bg: #1e2d4a;
-                --item-border: rgba(255, 255, 255, 0.05);
+        /* ---------------------------------------------------- */
+        /* ۲. متغیرهای تم شب (Dark Mode) */
+        /* ---------------------------------------------------- */
+        body.dark-mode {
+            --bg-color: #0b1329;
+            --secondary-bg: #152238;
+            --text-color: #f1f5f9;
+            --hint-color: #94a3b8;
+            --med-cyan: #38bdf8;
+            --med-emerald: #34d399;
+            --med-navy: #f8fafc;
+            --med-blue-gradient: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #1e3a8a 100%);
+            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            --card-border: 1px solid rgba(255, 255, 255, 0.08);
+            --glass-nav-bg: rgba(21, 34, 56, 0.85);
+            --item-bg: #1e2d4a;
+            --item-border: rgba(255, 255, 255, 0.05);
 
-                /* پترن پزشکی پس‌زمینه (شب) */
-                --bg-pattern-cross: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 14V26M14 20H26' stroke='%2338bdf8' stroke-width='1.5' stroke-linecap='round' stroke-opacity='0.12'/%3E%3C/svg%3E");
-                --bg-pattern-dots: radial-gradient(rgba(56, 189, 248, 0.12) 1.2px, transparent 1.2px);
-            }
+            /* پترن پزشکی پس‌زمینه (شب) */
+            --bg-pattern-cross: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 14V26M14 20H26' stroke='%2338bdf8' stroke-width='1.5' stroke-linecap='round' stroke-opacity='0.12'/%3E%3C/svg%3E");
+            --bg-pattern-dots: radial-gradient(rgba(56, 189, 248, 0.12) 1.2px, transparent 1.2px);
         }
 
         * {
