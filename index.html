@@ -1792,6 +1792,54 @@
             border-color: rgba(239, 68, 68, 0.4);
         }
 
+        /* منوی کشویی حالت‌های چت */
+        .ai-mode-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .ai-mode-select {
+            flex: 1;
+            padding: 9px 10px;
+            border-radius: 10px;
+            border: 1px solid var(--card-border);
+            background: var(--item-bg);
+            color: var(--text-color);
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        .ai-mode-select:focus {
+            border-color: var(--med-cyan);
+        }
+
+        .ai-mode-select.mode-active {
+            border-color: rgba(2, 132, 199, 0.55);
+            background: rgba(2, 132, 199, 0.10);
+            color: var(--med-cyan);
+        }
+
+        /* یادداشت کوچک تغییر حالت داخل جریان چت */
+        .ai-mode-note {
+            align-self: center;
+            max-width: 90%;
+            background: rgba(2, 132, 199, 0.10);
+            border: 1px dashed rgba(2, 132, 199, 0.35);
+            color: var(--med-cyan);
+            font-size: 10.5px;
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 20px;
+            text-align: center;
+            animation: aiMsgIn 0.25s ease-out;
+        }
+
         .ai-chat-messages {
             flex: 1;
             overflow-y: auto;
@@ -2218,6 +2266,17 @@
                     <button class="ai-clear-btn" id="ai-clear-btn" onclick="clearAIChat()">🗑 پاک کردن</button>
                 </div>
                 <div class="ai-chat-messages" id="ai-chat-messages"></div>
+                <div class="ai-mode-row">
+                    <select id="ai-mode-select" class="ai-mode-select" onchange="changeAIMode(this.value)" aria-label="حالت چت">
+                        <option value="free">💬 چت آزاد</option>
+                        <option value="lab">🧪 تفسیر آزمایش</option>
+                        <option value="dose">💊 دوز و مصرف دارو</option>
+                        <option value="ddx">🎯 تشخیص افتراقی</option>
+                        <option value="sidefx">⚠️ عوارض دارویی</option>
+                        <option value="guideline">📖 راهنمای بالینی</option>
+                        <option value="report">📝 نامه و گزارش بالینی</option>
+                    </select>
+                </div>
                 <div class="ai-chat-input-row">
                     <textarea id="ai-question-input" class="ai-chat-input" rows="1"
                         placeholder="سوال پزشکی خود را بنویسید..."></textarea>
@@ -3429,10 +3488,71 @@
             if (el) el.remove();
         }
 
+        // --- حالت‌های چت (منوی کشویی) ---
+        let aiActiveMode = 'free';
+
+        const AI_MODE_HINTS = {
+            free: 'سوال پزشکی خود را بنویسید...',
+            lab: 'مقادیر آزمایش را بفرستید (مثلاً: Hb=10.2، WBC=14000، Cr=1.8...)',
+            dose: 'نام دارو و مشخصات بیمار (سن، وزن، وضعیت کلیه/کبد...)',
+            ddx: 'یافته‌های بالینی بیمار را بنویسید...',
+            sidefx: 'دارو و عارضه مورد نظر را بنویسید...',
+            guideline: 'بیماری یا موضوع مورد نظر را بنویسید...',
+            report: 'نوع گزارش و اطلاعات بیمار را بنویسید...'
+        };
+
+        const AI_MODE_LABELS = {
+            free: '💬 چت آزاد',
+            lab: '🧪 تفسیر آزمایش',
+            dose: '💊 دوز و مصرف دارو',
+            ddx: '🎯 تشخیص افتراقی',
+            sidefx: '⚠️ عوارض دارویی',
+            guideline: '📖 راهنمای بالینی',
+            report: '📝 نامه و گزارش بالینی'
+        };
+
+        function appendAIModeNote(text) {
+            const container = document.getElementById('ai-chat-messages');
+            if (!container) return;
+            const empty = container.querySelector('.ai-chat-empty');
+            if (empty) empty.remove();
+            const div = document.createElement('div');
+            div.className = 'ai-mode-note';
+            div.innerText = text;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function applyAIMode(mode, withNote) {
+            if (!AI_MODE_HINTS[mode]) mode = 'free';
+            const changed = mode !== aiActiveMode;
+            aiActiveMode = mode;
+
+            const input = document.getElementById('ai-question-input');
+            if (input) input.placeholder = AI_MODE_HINTS[mode];
+
+            const sel = document.getElementById('ai-mode-select');
+            if (sel) {
+                sel.value = mode;
+                sel.classList.toggle('mode-active', mode !== 'free');
+            }
+
+            if (withNote && changed) {
+                appendAIModeNote('حالت ' + AI_MODE_LABELS[mode] + ' فعال شد');
+            }
+            return changed;
+        }
+
+        function changeAIMode(mode) {
+            const changed = applyAIMode(mode, true);
+            if (changed) hxHaptic('light');
+        }
+
         function loadAIChat() {
             const container = document.getElementById('ai-chat-messages');
             if (!container || aiChatLoaded) return;
             aiChatLoaded = true;
+            applyAIMode(aiActiveMode, false);
             container.innerHTML = '<div class="ai-chat-empty">💬 سوال پزشکی خود را بپرسید.<br>دستیار، زمینه گفتگوهای قبلی را به‌خاطر می‌سپارد.</div>';
 
             fetch(`${BASE_URL}/api/ai/history`, {
@@ -3484,7 +3604,7 @@
                     'Content-Type': 'application/json',
                     'X-Telegram-Init-Data': tg.initData
                 },
-                body: JSON.stringify({ question })
+                body: JSON.stringify({ question, mode: aiActiveMode })
             })
             .then(res => res.json().then(data => ({ status: res.status, data })))
             .then(({ status, data }) => {
