@@ -768,15 +768,17 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
             color: var(--hint-color);
-            font-size: 11px;
+            font-size: 10px;
+            line-height: 1.25;
             font-weight: 600;
             cursor: pointer;
-            width: 20%;
-            padding: 6px 0;
+            width: 16%;
+            padding: 5px 0;
             border-radius: 16px;
             transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            text-align: center;
         }
 
         .nav-item.active {
@@ -790,7 +792,7 @@
         }
 
         .nav-icon {
-            font-size: 20px;
+            font-size: 18px;
         }
 
         /* ============================================ */
@@ -2333,6 +2335,113 @@
             </div>
         </div>
 
+        <!-- زبانه: تشخیص و اوردر -->
+        <div id="tab-orders" class="tab-content">
+            <div class="card" style="border-right: 4px solid #8b5cf6;">
+                <div class="card-title">
+                    <span class="card-title-icon">
+                        <span class="icon-badge" style="background:rgba(139, 92, 246, 0.14); color:#8b5cf6;">🧾</span>
+                        تشخیص و اوردر
+                    </span>
+                </div>
+                <div class="card-desc" style="margin-bottom:10px;">متن شرح حال را بدهید؛ تشخیص‌های احتمالی و اوردرهای مناسب را دریافت کنید و در صورت نیاز سوال پیگیری بپرسید</div>
+                <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                    <span style="background:rgba(139,92,246,0.12); color:#8b5cf6; font-size:10px; font-weight:700; padding:4px 10px; border-radius:20px;">🎯 تشخیص رتبه‌بندی‌شده</span>
+                    <span style="background:rgba(139,92,246,0.12); color:#8b5cf6; font-size:10px; font-weight:700; padding:4px 10px; border-radius:20px;">📋 اوردرهای گروه‌بندی‌شده</span>
+                    <span style="background:rgba(139,92,246,0.12); color:#8b5cf6; font-size:10px; font-weight:700; padding:4px 10px; border-radius:20px;">❓ پیگیری سوالی</span>
+                </div>
+
+                <!-- حالت ورودی -->
+                <div id="orders-input-section" style="display:flex; flex-direction:column; gap:12px; margin-top:14px;">
+                    <div style="background:var(--item-bg); padding:12px; border-radius:10px; border-left:3px solid #8b5cf6;">
+                        <div style="font-weight:700; font-size:13px; color:var(--text-color); margin-bottom:6px;">📝 متن شرح حال</div>
+                        <div style="font-size:11px; color:var(--hint-color); line-height:1.7;">شرح حال را کامل وارد کنید (شکایت اصلی، تاریخچه، یافته‌ها و...). هرچه دقیق‌تر باشد، تشخیص و اوردرها دقیق‌تر می‌شود.</div>
+                    </div>
+
+                    <textarea id="orders-history-text" placeholder="متن شرح حال بیمار را اینجا بچسبانید یا بنویسید..." rows="8" style="width:100%; border-radius:10px; border:var(--card-border); background:var(--item-bg); color:var(--text-color); padding:11px; font-size:12px; resize:vertical; line-height:1.9;"></textarea>
+
+                    <div style="display:flex; gap:8px;">
+                        <input type="text" id="orders-patient-age" placeholder="سن (اختیاری)" style="flex:1; padding:11px; border-radius:10px; border:var(--card-border); background:var(--item-bg); color:var(--text-color); font-size:12px;">
+                        <select id="orders-patient-sex" style="flex:1; padding:11px; border-radius:10px; border:var(--card-border); background:var(--item-bg); color:var(--text-color); font-size:12px;">
+                            <option value="">جنسیت (اختیاری)</option>
+                            <option value="مرد">مرد</option>
+                            <option value="زن">زن</option>
+                        </select>
+                    </div>
+
+                    <select id="orders-setting" style="width:100%; padding:11px; border-radius:10px; border:var(--card-border); background:var(--item-bg); color:var(--text-color); font-size:12px;">
+                        <option value="">تنظیم بالینی (اختیاری)</option>
+                        <option value="بستری">بستری (Ward)</option>
+                        <option value="اورژانس">اورژانس (Emergency)</option>
+                        <option value="سرپایی">سرپایی (Outpatient)</option>
+                        <option value="ICU">آی‌سی‌یو (ICU)</option>
+                    </select>
+
+                    <div id="orders-quota-text" style="font-size:11px; color:var(--hint-color); text-align:center;"></div>
+
+                    <button class="exam-btn" id="orders-analyze-btn" onclick="analyzeOrders()" style="background:linear-gradient(135deg, #8b5cf6, #7c3aed);">🔍 تحلیل تشخیصی و اوردر</button>
+                </div>
+
+                <!-- حالت نتیجه -->
+                <div id="orders-result-section" style="display:none; margin-top:14px;">
+
+                    <!-- خلاصه -->
+                    <div style="background:var(--item-bg); border:var(--card-border); border-radius:10px; padding:12px; margin-bottom:12px; border-right:3px solid #8b5cf6;">
+                        <div style="font-weight:800; font-size:12px; color:var(--text-color); margin-bottom:6px;">📌 خلاصه بالینی</div>
+                        <div id="orders-summary" style="font-size:12px; color:var(--text-color); line-height:1.9;"></div>
+                    </div>
+
+                    <!-- تشخیص‌ها -->
+                    <div style="background:var(--item-bg); border:var(--card-border); border-radius:10px; padding:12px; margin-bottom:12px;">
+                        <div style="font-weight:800; font-size:13px; color:var(--text-color); margin-bottom:8px;">🎯 تشخیص‌های احتمالی</div>
+                        <div id="orders-diagnoses" style="display:flex; flex-direction:column; gap:8px;"></div>
+                    </div>
+
+                    <!-- اوردرهای فوری -->
+                    <div id="orders-urgent-card" style="display:none; background:rgba(239,68,68,0.06); border:1px solid rgba(239,68,68,0.25); border-radius:10px; padding:12px; margin-bottom:12px; border-right:3px solid #ef4444;">
+                        <div style="font-weight:800; font-size:13px; color:#ef4444; margin-bottom:8px;">🚨 اوردرهای فوری (نباید عقب بیفتد)</div>
+                        <div id="orders-urgent" style="display:flex; flex-direction:column; gap:8px;"></div>
+                    </div>
+
+                    <!-- اوردرها -->
+                    <div style="background:var(--item-bg); border:var(--card-border); border-radius:10px; padding:12px; margin-bottom:12px;">
+                        <div style="font-weight:800; font-size:13px; color:var(--text-color); margin-bottom:10px;">🧾 اوردرهای پیشنهادی</div>
+                        <div id="orders-groups" style="display:flex; flex-direction:column; gap:12px;"></div>
+                        <div style="display:flex; gap:8px; margin-top:12px;">
+                            <button class="exam-btn" onclick="copyOrders('selected')" style="flex:1; background:linear-gradient(135deg, #0284c7, #0ea5e9); font-size:12px;">📋 کپی انتخاب‌ها</button>
+                            <button class="exam-btn" onclick="copyOrders('all')" style="flex:1; background:linear-gradient(135deg, #64748b, #475569); font-size:12px;">📋 کپی همه</button>
+                        </div>
+                    </div>
+
+                    <!-- پرچم‌های قرمز -->
+                    <div id="orders-flags-card" style="display:none; background:rgba(245,158,11,0.08); border:1px solid rgba(245,158,11,0.3); border-radius:10px; padding:12px; margin-bottom:12px; border-right:3px solid #f59e0b;">
+                        <div style="font-weight:800; font-size:13px; color:#d97706; margin-bottom:8px;">🚩 پرچم‌های قرمز</div>
+                        <div id="orders-flags" style="display:flex; flex-direction:column; gap:6px;"></div>
+                    </div>
+
+                    <!-- اطلاعات ناقص -->
+                    <div id="orders-missing-card" style="display:none; background:var(--secondary-bg); border:var(--card-border); border-radius:10px; padding:12px; margin-bottom:12px;">
+                        <div style="font-weight:800; font-size:13px; color:var(--hint-color); margin-bottom:8px;">⚠️ اطلاعات ناقص در شرح حال</div>
+                        <div id="orders-missing" style="display:flex; flex-direction:column; gap:6px;"></div>
+                    </div>
+
+                    <!-- پیگیری -->
+                    <div style="background:var(--item-bg); border:var(--card-border); border-radius:10px; padding:12px; margin-bottom:12px;">
+                        <div style="font-weight:800; font-size:13px; color:var(--text-color); margin-bottom:8px;">❓ پیگیری و سوال</div>
+                        <div id="orders-followup-list" style="display:flex; flex-direction:column; gap:10px; margin-bottom:10px;"></div>
+                        <div style="display:flex; gap:8px;">
+                            <textarea id="orders-followup-input" rows="2" placeholder="مثلاً: چرا CRP خواستی؟ اوردر دیگه لازم نیست؟" style="flex:1; border-radius:10px; border:var(--card-border); background:var(--secondary-bg); color:var(--text-color); padding:10px; font-size:12px; resize:vertical;"></textarea>
+                            <button class="exam-btn" id="orders-followup-btn" onclick="sendOrdersFollowup()" style="width:74px; background:linear-gradient(135deg, #8b5cf6, #7c3aed); font-size:12px;">ارسال</button>
+                        </div>
+                    </div>
+
+                    <div id="orders-quota-text-2" style="font-size:11px; color:var(--hint-color); text-align:center; margin-bottom:12px;"></div>
+
+                    <button class="exam-btn" onclick="resetOrders()" style="width:100%; background:linear-gradient(135deg, #0284c7, #0ea5e9);">🔄 شرح حال جدید</button>
+                </div>
+            </div>
+        </div>
+
         <!-- زبانه محاسبات پزشکی -->
         <div id="tab-calculator" class="tab-content">
             <div class="card" style="border-right: 4px solid #0284c7;">
@@ -2599,6 +2708,10 @@
             <span class="nav-icon">📋</span>
             <span>شرح حال گیری</span>
         </div>
+        <div class="nav-item" onclick="switchTab('orders', this)">
+            <span class="nav-icon">🧾</span>
+            <span>اوردر</span>
+        </div>
         <div class="nav-item" onclick="switchTab('calculator', this)">
             <span class="nav-icon">🧮</span>
             <span>ماشین‌حساب</span>
@@ -2726,6 +2839,8 @@
                 loadCalculatorTab();
             } else if (tabName === 'ai') {
                 loadAIChat();
+            } else if (tabName === 'orders') {
+                loadOrdersTab();
             } else if (nightlyStatusPollInterval) {
                 clearInterval(nightlyStatusPollInterval);
                 nightlyStatusPollInterval = null;
@@ -5887,6 +6002,446 @@
             document.getElementById('history-answer-input').value = '';
             const bar = document.getElementById('history-progress-bar');
             if (bar) bar.style.width = '0%';
+        }
+
+
+        // ========== بخش تشخیص و اوردر ==========
+        let ordersSessionId = null;
+        let ordersAnalysis = null;
+        let ordersFollowupLog = [];
+        let ordersSending = false;
+
+        const ORDER_GROUPS = [
+            { key: 'labs', label: 'آزمایش‌ها', icon: '🧪' },
+            { key: 'imaging', label: 'تصویربرداری', icon: '🖼' },
+            { key: 'cardio', label: 'قلبی / ECG', icon: '❤️' },
+            { key: 'medications', label: 'داروها', icon: '💊' },
+            { key: 'clinical', label: 'اقدامات بالینی', icon: '🏥' },
+        ];
+
+        function setOrdersView(view) {
+            const inputEl = document.getElementById('orders-input-section');
+            const resultEl = document.getElementById('orders-result-section');
+            if (!inputEl || !resultEl) return;
+            if (view === 'result') {
+                inputEl.style.display = 'none';
+                resultEl.style.display = 'block';
+            } else {
+                inputEl.style.display = 'flex';
+                resultEl.style.display = 'none';
+            }
+        }
+
+        function setOrdersQuota(text) {
+            if (!text) return;
+            const a = document.getElementById('orders-quota-text');
+            if (a) a.innerText = text;
+            const b = document.getElementById('orders-quota-text-2');
+            if (b) b.innerText = text;
+        }
+
+        function setOrdersLoading(btnId, loading, loadingText) {
+            const btn = document.getElementById(btnId);
+            if (!btn) return;
+            if (loading) {
+                btn.dataset.prevText = btn.innerText;
+                btn.disabled = true;
+                btn.style.opacity = '0.6';
+                btn.innerText = loadingText;
+            } else {
+                btn.disabled = false;
+                btn.style.opacity = '1';
+                if (btn.dataset.prevText) btn.innerText = btn.dataset.prevText;
+            }
+        }
+
+        async function analyzeOrders() {
+            if (ordersSending) return;
+            const history = (document.getElementById('orders-history-text').value || '').trim();
+            if (history.length < 20) {
+                tg.showAlert('متن شرح حال باید حداقل ۲۰ کاراکتر باشد. متن کامل‌تری وارد کنید.');
+                return;
+            }
+            if (!tg.initData) {
+                tg.showAlert('خطا در احراز هویت. مینی‌اپ را دوباره باز کنید.');
+                return;
+            }
+
+            ordersSending = true;
+            setOrdersLoading('orders-analyze-btn', true, '⏳ در حال تحلیل شرح حال...');
+            hxHaptic('light');
+
+            try {
+                const response = await fetch(`${BASE_URL}/api/orders/analyze`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Telegram-Init-Data': tg.initData
+                    },
+                    body: JSON.stringify({
+                        history_text: history,
+                        patient_age: (document.getElementById('orders-patient-age').value || '').trim(),
+                        patient_sex: document.getElementById('orders-patient-sex').value || '',
+                        setting: document.getElementById('orders-setting').value || ''
+                    })
+                });
+                const data = await response.json();
+
+                if (response.status !== 200 || data.error) {
+                    if (data.error === 'access_denied') {
+                        tg.showAlert('🚫 ' + data.message);
+                    } else if (data.error === 'quota_exceeded') {
+                        tg.showAlert('⛔ ' + data.message);
+                    } else {
+                        tg.showAlert(data.message || 'خطایی رخ داد. دوباره تلاش کنید.');
+                    }
+                    return;
+                }
+
+                ordersSessionId = data.session_id;
+                ordersAnalysis = data.analysis;
+                ordersFollowupLog = [];
+                renderOrdersResult();
+                renderOrdersFollowup();
+                setOrdersView('result');
+                setOrdersQuota(data.ai_remaining_text);
+                hxHaptic('success');
+            } catch (err) {
+                console.error('orders analyze error:', err);
+                tg.showAlert('خطا در ارتباط با سرور. اتصال اینترنت خود را بررسی کنید.');
+            } finally {
+                ordersSending = false;
+                setOrdersLoading('orders-analyze-btn', false);
+            }
+        }
+
+        function renderOrdersResult() {
+            const a = ordersAnalysis;
+            if (!a) return;
+
+            const summaryEl = document.getElementById('orders-summary');
+            if (summaryEl) summaryEl.innerText = a.summary || '—';
+
+            // تشخیص‌ها
+            const dWrap = document.getElementById('orders-diagnoses');
+            dWrap.innerHTML = '';
+            const probColors = {
+                'زیاد': ['#dc2626', 'rgba(220,38,38,0.12)'],
+                'متوسط': ['#d97706', 'rgba(217,119,6,0.12)'],
+                'کم': ['#64748b', 'rgba(100,116,139,0.12)']
+            };
+            (a.diagnoses || []).forEach(d => {
+                const row = document.createElement('div');
+                row.style.cssText = 'background:var(--secondary-bg); border:var(--card-border); border-radius:10px; padding:10px;';
+                const colors = probColors[d.probability] || probColors['متوسط'];
+                row.innerHTML =
+                    '<div style="display:flex; align-items:center; gap:8px; margin-bottom:4px; flex-wrap:wrap;">' +
+                        '<span style="background:#8b5cf6; color:#fff; font-size:10px; font-weight:800; min-width:20px; height:20px; padding:0 5px; border-radius:10px; display:flex; align-items:center; justify-content:center;">' + escapeHtml(hxFaNum(d.rank)) + '</span>' +
+                        '<span style="font-weight:800; font-size:13px; color:var(--text-color);">' + escapeHtml(d.name) + '</span>' +
+                        '<span style="background:' + colors[1] + '; color:' + colors[0] + '; font-size:10px; font-weight:800; padding:2px 8px; border-radius:12px;">احتمال: ' + escapeHtml(d.probability) + '</span>' +
+                    '</div>' +
+                    (d.reasoning ? '<div style="font-size:11px; color:var(--hint-color); line-height:1.8; padding-right:28px;">' + escapeHtml(d.reasoning) + '</div>' : '');
+                dWrap.appendChild(row);
+            });
+
+            // اوردرهای فوری
+            const urgentCard = document.getElementById('orders-urgent-card');
+            const uWrap = document.getElementById('orders-urgent');
+            uWrap.innerHTML = '';
+            if ((a.urgent || []).length) {
+                urgentCard.style.display = 'block';
+                a.urgent.forEach(u => {
+                    const div = document.createElement('div');
+                    div.style.cssText = 'font-size:12px; color:var(--text-color); line-height:1.8;';
+                    div.innerHTML = '<b>• ' + escapeHtml(u.item) + '</b>' +
+                        (u.why ? '<div style="font-size:11px; color:var(--hint-color);">' + escapeHtml(u.why) + '</div>' : '');
+                    uWrap.appendChild(div);
+                });
+            } else {
+                urgentCard.style.display = 'none';
+            }
+
+            // اوردرها با چک‌باکس
+            const gWrap = document.getElementById('orders-groups');
+            gWrap.innerHTML = '';
+            ORDER_GROUPS.forEach(g => {
+                const items = (a.orders && a.orders[g.key]) || [];
+                if (!items.length) return;
+                const block = document.createElement('div');
+                block.style.cssText = 'background:var(--secondary-bg); border:var(--card-border); border-radius:10px; padding:10px;';
+                let inner = '<div style="font-weight:800; font-size:12px; color:var(--text-color); margin-bottom:8px;">' +
+                    g.icon + ' ' + escapeHtml(g.label) + '</div>';
+                items.forEach((item, idx) => {
+                    const cbId = 'order-cb-' + g.key + '-' + idx;
+                    inner +=
+                        '<label for="' + cbId + '" style="display:flex; align-items:flex-start; gap:8px; padding:5px 0; font-size:12px; color:var(--text-color); line-height:1.7; cursor:pointer;">' +
+                            '<input type="checkbox" id="' + cbId + '" checked style="margin-top:3px; accent-color:#8b5cf6; width:15px; height:15px; flex-shrink:0;">' +
+                            '<span>' + escapeHtml(item) + '</span>' +
+                        '</label>';
+                });
+                block.innerHTML = inner;
+                gWrap.appendChild(block);
+            });
+
+            // پرچم‌های قرمز
+            const flagsCard = document.getElementById('orders-flags-card');
+            const fWrap = document.getElementById('orders-flags');
+            fWrap.innerHTML = '';
+            if ((a.red_flags || []).length) {
+                flagsCard.style.display = 'block';
+                a.red_flags.forEach(f => {
+                    const div = document.createElement('div');
+                    div.style.cssText = 'font-size:12px; color:var(--text-color); line-height:1.8;';
+                    div.textContent = '• ' + f;
+                    fWrap.appendChild(div);
+                });
+            } else {
+                flagsCard.style.display = 'none';
+            }
+
+            // اطلاعات ناقص
+            const missingCard = document.getElementById('orders-missing-card');
+            const mWrap = document.getElementById('orders-missing');
+            mWrap.innerHTML = '';
+            if ((a.missing_info || []).length) {
+                missingCard.style.display = 'block';
+                a.missing_info.forEach(m => {
+                    const div = document.createElement('div');
+                    div.style.cssText = 'font-size:12px; color:var(--hint-color); line-height:1.8;';
+                    div.textContent = '• ' + m;
+                    mWrap.appendChild(div);
+                });
+            } else {
+                missingCard.style.display = 'none';
+            }
+        }
+
+        function renderOrdersFollowup() {
+            const wrap = document.getElementById('orders-followup-list');
+            if (!wrap) return;
+            wrap.innerHTML = '';
+            (ordersFollowupLog || []).forEach(entry => {
+                const q = document.createElement('div');
+                q.style.cssText = 'background:rgba(139,92,246,0.10); border-right:3px solid #8b5cf6; border-radius:8px; padding:8px 10px; font-size:12px; color:var(--text-color); line-height:1.8;';
+                q.innerHTML = '<div style="font-size:10px; font-weight:800; color:#8b5cf6; margin-bottom:3px;">❓ شما پرسیدید</div>' + escapeHtml(entry.question);
+                wrap.appendChild(q);
+
+                const a = document.createElement('div');
+                a.style.cssText = 'background:var(--secondary-bg); border:var(--card-border); border-radius:8px; padding:8px 10px; font-size:12px; color:var(--text-color); line-height:1.9; white-space:pre-wrap;';
+                a.innerHTML = '<div style="font-size:10px; font-weight:800; color:var(--hint-color); margin-bottom:3px;">💬 پاسخ</div>' + escapeHtml(entry.answer);
+                wrap.appendChild(a);
+            });
+        }
+
+        async function sendOrdersFollowup() {
+            if (ordersSending) return;
+            if (!ordersSessionId) {
+                tg.showAlert('ابتدا یک تحلیل بگیرید.');
+                return;
+            }
+            const input = document.getElementById('orders-followup-input');
+            const question = (input.value || '').trim();
+            if (!question) {
+                tg.showAlert('لطفاً سوال خود را بنویسید.');
+                return;
+            }
+            if (!tg.initData) {
+                tg.showAlert('خطا در احراز هویت. مینی‌اپ را دوباره باز کنید.');
+                return;
+            }
+
+            ordersSending = true;
+            setOrdersLoading('orders-followup-btn', true, '⏳');
+            hxHaptic('light');
+
+            try {
+                const response = await fetch(`${BASE_URL}/api/orders/followup`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Telegram-Init-Data': tg.initData
+                    },
+                    body: JSON.stringify({ session_id: ordersSessionId, question })
+                });
+                const data = await response.json();
+
+                if (response.status !== 200 || data.error) {
+                    if (data.error === 'access_denied') {
+                        tg.showAlert('🚫 ' + data.message);
+                    } else if (data.error === 'quota_exceeded') {
+                        tg.showAlert('⛔ ' + data.message);
+                    } else {
+                        tg.showAlert(data.message || 'خطایی رخ داد. دوباره تلاش کنید.');
+                    }
+                    return;
+                }
+
+                ordersFollowupLog = ordersFollowupLog || [];
+                ordersFollowupLog.push({ question, answer: data.answer });
+                input.value = '';
+                renderOrdersFollowup();
+                setOrdersQuota(data.ai_remaining_text);
+                hxHaptic('success');
+            } catch (err) {
+                console.error('orders followup error:', err);
+                tg.showAlert('خطا در ارتباط با سرور. اتصال اینترنت خود را بررسی کنید.');
+            } finally {
+                ordersSending = false;
+                setOrdersLoading('orders-followup-btn', false);
+            }
+        }
+
+        function buildOrdersText(mode) {
+            const a = ordersAnalysis;
+            if (!a) return '';
+            const lines = [];
+
+            if (mode === 'selected') {
+                ORDER_GROUPS.forEach(g => {
+                    const items = [];
+                    ((a.orders && a.orders[g.key]) || []).forEach((item, idx) => {
+                        const cb = document.getElementById('order-cb-' + g.key + '-' + idx);
+                        if (cb && cb.checked) items.push(item);
+                    });
+                    if (items.length) {
+                        lines.push(g.label + ':');
+                        items.forEach(it => lines.push('  - ' + it));
+                        lines.push('');
+                    }
+                });
+                if (!lines.length) return 'هیچ اوردری انتخاب نشده است.';
+                return lines.join('\n').trim();
+            }
+
+            lines.push('📌 خلاصه بالینی:');
+            lines.push(a.summary || '-');
+            lines.push('');
+
+            lines.push('🎯 تشخیص‌های احتمالی:');
+            (a.diagnoses || []).forEach(d => {
+                lines.push(d.rank + '. ' + d.name + ' (احتمال: ' + d.probability + ')' + (d.reasoning ? ' — ' + d.reasoning : ''));
+            });
+            lines.push('');
+
+            if ((a.urgent || []).length) {
+                lines.push('🚨 اوردرهای فوری:');
+                a.urgent.forEach(u => lines.push('  - ' + u.item + (u.why ? ' — ' + u.why : '')));
+                lines.push('');
+            }
+
+            lines.push('🧾 اوردرها:');
+            ORDER_GROUPS.forEach(g => {
+                const items = (a.orders && a.orders[g.key]) || [];
+                if (!items.length) return;
+                lines.push(g.label + ':');
+                items.forEach(it => lines.push('  - ' + it));
+            });
+            lines.push('');
+
+            if ((a.red_flags || []).length) {
+                lines.push('🚩 پرچم‌های قرمز:');
+                a.red_flags.forEach(f => lines.push('  - ' + f));
+                lines.push('');
+            }
+
+            if ((a.missing_info || []).length) {
+                lines.push('⚠️ اطلاعات ناقص:');
+                a.missing_info.forEach(m => lines.push('  - ' + m));
+            }
+
+            return lines.join('\n').trim();
+        }
+
+        async function copyOrders(mode) {
+            const text = buildOrdersText(mode);
+            let ok = false;
+            try {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    await navigator.clipboard.writeText(text);
+                    ok = true;
+                }
+            } catch (e) {}
+            if (!ok) {
+                try {
+                    const ta = document.createElement('textarea');
+                    ta.value = text;
+                    ta.style.position = 'fixed';
+                    ta.style.opacity = '0';
+                    document.body.appendChild(ta);
+                    ta.select();
+                    ok = document.execCommand('copy');
+                    document.body.removeChild(ta);
+                } catch (e) {}
+            }
+            if (ok) {
+                hxHaptic('success');
+                tg.showAlert('✅ کپی شد.');
+            } else {
+                tg.showAlert('⚠️ کپی ناموفق — متن را دستی انتخاب کنید.');
+            }
+        }
+
+        async function resetOrders() {
+            ordersSessionId = null;
+            ordersAnalysis = null;
+            ordersFollowupLog = [];
+
+            document.getElementById('orders-history-text').value = '';
+            document.getElementById('orders-patient-age').value = '';
+            document.getElementById('orders-patient-sex').value = '';
+            document.getElementById('orders-setting').value = '';
+            const fu = document.getElementById('orders-followup-input');
+            if (fu) fu.value = '';
+            renderOrdersFollowup();
+            setOrdersView('input');
+            hxHaptic('light');
+
+            // بستن جلسه فعال در سرور (بدون مسدود کردن UI)
+            if (tg.initData) {
+                try {
+                    await fetch(`${BASE_URL}/api/orders/reset`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Telegram-Init-Data': tg.initData
+                        },
+                        body: JSON.stringify({})
+                    });
+                } catch (e) {}
+            }
+        }
+
+        async function loadOrdersTab() {
+            // اگر در همین نشست تحلیلی داریم، همان را نگه می‌داریم
+            if (ordersSessionId && ordersAnalysis) return;
+
+            try {
+                const response = await fetch(`${BASE_URL}/api/orders/active`, {
+                    headers: { 'X-Telegram-Init-Data': tg.initData }
+                });
+                const data = await response.json();
+                setOrdersQuota(data.ai_remaining_text);
+
+                if (data.session) {
+                    ordersSessionId = data.session.session_id;
+                    ordersAnalysis = data.session.analysis;
+                    ordersFollowupLog = data.session.followup_log || [];
+
+                    document.getElementById('orders-history-text').value = data.session.history_text || '';
+                    document.getElementById('orders-patient-age').value = data.session.patient_age || '';
+                    document.getElementById('orders-patient-sex').value = data.session.patient_sex || '';
+                    document.getElementById('orders-setting').value = data.session.setting || '';
+
+                    renderOrdersResult();
+                    renderOrdersFollowup();
+                    setOrdersView('result');
+                } else {
+                    setOrdersView('input');
+                }
+            } catch (err) {
+                console.error('orders active error:', err);
+                setOrdersView('input');
+            }
         }
 
 
