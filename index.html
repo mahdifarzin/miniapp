@@ -1974,171 +1974,10 @@
 
         .ai-send-btn:active { transform: scale(0.92); }
         .ai-send-btn:disabled { opacity: 0.55; cursor: default; }
-
-        /* ============================================================
-           صفحه لود اولیه مینی‌اپ (Splash Loader)
-           ============================================================ */
-        .app-loader {
-            position: fixed;
-            inset: 0;
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #0b1f3a;
-            background-image: var(--bg-pattern-cross), linear-gradient(160deg, #0f172a 0%, #0b2a4a 55%, #0e4a6e 100%);
-            background-size: 40px 40px, cover;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
-        }
-
-        .app-loader.hide {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
-
-        .loader-inner {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            padding: 24px;
-            animation: loaderIn 0.55s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        @keyframes loaderIn {
-            from { opacity: 0; transform: translateY(16px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .loader-logo {
-            width: 78px;
-            height: 78px;
-            border-radius: 24px;
-            background: rgba(255, 255, 255, 0.10);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 36px;
-            margin-bottom: 24px;
-            box-shadow: 0 12px 40px rgba(2, 132, 199, 0.4);
-            animation: logoPulse 2.1s ease-in-out infinite;
-        }
-
-        @keyframes logoPulse {
-            0%, 100% { transform: scale(1); box-shadow: 0 12px 40px rgba(2, 132, 199, 0.4); }
-            50% { transform: scale(1.06); box-shadow: 0 16px 52px rgba(56, 189, 248, 0.55); }
-        }
-
-        /* خط نوار قلب (ECG) متحرک */
-        .loader-ecg {
-            width: min(250px, 76vw);
-            height: 54px;
-            margin-bottom: 18px;
-            overflow: visible;
-        }
-
-        .loader-ecg-path {
-            fill: none;
-            stroke: #38bdf8;
-            stroke-width: 2.4;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-            stroke-dasharray: 100;
-            stroke-dashoffset: 100;
-            filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.85));
-            animation: ecgDraw 1.9s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-        }
-
-        @keyframes ecgDraw {
-            0% { stroke-dashoffset: 100; opacity: 1; }
-            62% { stroke-dashoffset: 0; opacity: 1; }
-            84% { stroke-dashoffset: 0; opacity: 1; }
-            94% { stroke-dashoffset: 0; opacity: 0; }
-            95% { stroke-dashoffset: 100; opacity: 0; }
-            100% { stroke-dashoffset: 100; opacity: 1; }
-        }
-
-        .loader-brand {
-            color: #ffffff;
-            font-size: 23px;
-            font-weight: 800;
-            letter-spacing: 0.4px;
-            margin-bottom: 5px;
-        }
-
-        .loader-tagline {
-            color: rgba(255, 255, 255, 0.62);
-            font-size: 12.5px;
-            font-weight: 600;
-            margin-bottom: 26px;
-        }
-
-        .loader-dots {
-            display: flex;
-            gap: 7px;
-            margin-bottom: 12px;
-        }
-
-        .loader-dots span {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #38bdf8;
-            box-shadow: 0 0 8px rgba(56, 189, 248, 0.7);
-            animation: dotBounce 1.25s ease-in-out infinite;
-        }
-
-        .loader-dots span:nth-child(2) { animation-delay: 0.16s; }
-        .loader-dots span:nth-child(3) { animation-delay: 0.32s; }
-
-        @keyframes dotBounce {
-            0%, 60%, 100% { transform: translateY(0); opacity: 0.35; }
-            30% { transform: translateY(-8px); opacity: 1; }
-        }
-
-        .loader-status {
-            color: rgba(255, 255, 255, 0.78);
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        /* اسپینر کوچک کنار متن‌های «در حال دریافت...» */
-        .is-loading-text::after {
-            content: '';
-            display: inline-block;
-            width: 11px;
-            height: 11px;
-            border: 2px solid rgba(2, 132, 199, 0.22);
-            border-top-color: var(--med-cyan);
-            border-radius: 50%;
-            margin-right: 6px;
-            vertical-align: -1px;
-            animation: loadingSpin 0.8s linear infinite;
-        }
-
-        @keyframes loadingSpin {
-            to { transform: rotate(360deg); }
-        }
     </style>
     </style>
 </head>
 <body>
-
-    <!-- صفحه لود اولیه مینی‌اپ -->
-    <div id="app-loader" class="app-loader">
-        <div class="loader-inner">
-            <div class="loader-logo">🩺</div>
-            <svg class="loader-ecg" viewBox="0 0 240 60" preserveAspectRatio="none" aria-hidden="true">
-                <path class="loader-ecg-path" pathLength="100" d="M0,30 L40,30 Q46,20 53,30 L70,30 L76,40 L82,6 L88,50 L94,30 L118,30 Q132,14 146,30 L240,30" />
-            </svg>
-            <div class="loader-brand">آپامد</div>
-            <div class="loader-tagline">آکادمی هوشمند پزشکی</div>
-            <div class="loader-dots"><span></span><span></span><span></span></div>
-            <div class="loader-status">در حال آماده‌سازی...</div>
-        </div>
-    </div>
 
     <!-- هدر بالای صفحه -->
     <div class="app-header">
@@ -2181,7 +2020,7 @@
                     <span style="font-size: 11px; color: var(--med-emerald); font-weight:700;">فعال</span>
                 </div>
                 <div class="card-value" id="ai-count">0 پرامپت</div>
-                <div class="card-desc is-loading-text" id="ai-text">در حال دریافت اطلاعات از سرور...</div>
+                <div class="card-desc" id="ai-text">در حال دریافت اطلاعات از سرور...</div>
             </div>
 
             <div class="card card-challenge">
@@ -2191,7 +2030,7 @@
                         چالش‌های بالینی روزانه
                     </span>
                 </div>
-                <div class="card-desc is-loading-text" id="challenge-text" style="margin-bottom:12px;">در حال دریافت...</div>
+                <div class="card-desc" id="challenge-text" style="margin-bottom:12px;">در حال دریافت...</div>
                 <div class="stats-grid">
                     <div class="stat-box">
                         <div class="num" id="ch-total" style="color:var(--text-color);">0</div>
@@ -2378,7 +2217,7 @@
                         چالش بالینی
                     </span>
                 </div>
-                <div class="card-desc is-loading-text" id="challenge-quota-text">در حال دریافت اطلاعات...</div>
+                <div class="card-desc" id="challenge-quota-text">در حال دریافت اطلاعات...</div>
             </div>
 
             <!-- انتخاب رشته -->
@@ -2423,7 +2262,7 @@
         <div id="tab-ai" class="tab-content">
             <div class="card card-ai ai-chat-wrap">
                 <div class="ai-chat-header">
-                    <div class="card-desc is-loading-text" id="ai-quota-text" style="margin:0; font-size:12px;">در حال دریافت اطلاعات...</div>
+                    <div class="card-desc" id="ai-quota-text" style="margin:0; font-size:12px;">در حال دریافت اطلاعات...</div>
                     <button class="ai-clear-btn" id="ai-clear-btn" onclick="clearAIChat()">🗑 پاک کردن</button>
                 </div>
                 <div class="ai-chat-messages" id="ai-chat-messages"></div>
@@ -3518,25 +3357,6 @@
         }
 
         // فراخوانی داده‌ها
-        // --- صفحه لود اولیه ---
-        let appLoaderHidden = false;
-
-        function hideAppLoader() {
-            if (appLoaderHidden) return;
-            appLoaderHidden = true;
-            const el = document.getElementById('app-loader');
-            if (!el) return;
-            el.classList.add('hide');
-            setTimeout(() => { el.style.display = 'none'; }, 550);
-        }
-
-        function clearLoadingPlaceholders() {
-            ['ai-text', 'challenge-text', 'ai-quota-text', 'challenge-quota-text', 'ai-count'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.classList.remove('is-loading-text');
-            });
-        }
-
         function loadAppData() {
             fetch(`${BASE_URL}/api/init`, {
                 method: 'GET',
@@ -3575,11 +3395,8 @@
                 if (data.chat_id) {
                     checkAdminAccess(data.chat_id);
                 }
-
-                clearLoadingPlaceholders();
             })
-            .catch(err => console.error("Error Loading App Data:", err))
-            .finally(() => hideAppLoader());
+            .catch(err => console.error("Error Loading App Data:", err));
         }
 
         function showAccessDeniedMessage(message) {
@@ -4437,9 +4254,6 @@
         requestAnimationFrame(() => {
             setTimeout(() => { loadAppData(); loadChallengeTopics(); initAIChatInput(); }, 100);
         });
-
-        // تایم‌اوت ایمن: اگر به هر دلیلی پاسخی نرسید، لودر حداکثر ۹ ثانیه بعد بسته می‌شود
-        setTimeout(hideAppLoader, 9000);
 
         // ---------- پنل ادمین ----------
         const ADMIN_CHAT_ID = 1914755688;
